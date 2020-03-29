@@ -1,0 +1,17 @@
+.main-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.main-page button {
+    width: 40vw;
+    height: 20vh;
+    margin-bottom: 10vh;
+    font-size: 8vh;
+}
+
+.main-page button:last-child {
+    margin-bottom: 0;
+}

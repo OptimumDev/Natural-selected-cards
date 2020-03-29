@@ -1,0 +1,13 @@
+.app {
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr 10fr;
+}
+
+header {
+    border-bottom: black solid 1px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
