@@ -19,7 +19,7 @@ export default class App extends React.Component {
     render() {
         return (
             <div className="app">
-                <header>
+                <header className='shadow main-color'>
                     <AppName onClick={() => this.setPageName(PageNames.MAIN)}/>
                     <User userId={123}/>
                 </header>

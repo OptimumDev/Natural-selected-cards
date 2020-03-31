@@ -10,6 +10,7 @@
     height: 20vh;
     margin-bottom: 10vh;
     font-size: 8vh;
+    font-weight: 100;
 }
 
 .main-page button:last-child {
