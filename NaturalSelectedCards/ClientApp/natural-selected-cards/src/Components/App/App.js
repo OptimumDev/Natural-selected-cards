@@ -7,6 +7,8 @@ import MainPage from "../Pages/MainPage/MainPage";
 import DecksPage from "../Pages/DecksPage/DecksPage";
 import GamePage from "../Pages/GamePage/GamePage";
 
+const user = {id: 123, name: 'Артемий', surname: 'Изаков'};
+
 export default class App extends React.Component {
     constructor(props) {
         super(props);
@@ -21,7 +23,7 @@ export default class App extends React.Component {
             <div className="app">
                 <header className='shadow main-color'>
                     <AppName onClick={() => this.setPageName(PageNames.MAIN)}/>
-                    <User userId={123}/>
+                    <User user={user}/>
                 </header>
                 {this.getPage()}
             </div>
