@@ -1,3 +1,27 @@
 .decks {
     display: flex;
 }
+
+.deck-container {
+    height: 50vh;
+    width: 35vh;
+    margin-left: 5vw;
+    perspective: 1000px;
+}
+
+.create-button {
+    border: #bbbbbb 5px dashed;
+    box-sizing: border-box;
+    color: #bbbbbb;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30vh;
+    font-weight: 900;
+    user-select: none;
+}
+
+.create-button:hover {
+    border-color: #999999;
+    color: #999999;
+}

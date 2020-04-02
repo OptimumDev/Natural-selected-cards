@@ -1,9 +1,9 @@
 import React from "react";
 import './Deck.css'
 
-export default function Deck({deck}) {
+export default function Deck({deck, onPlay}) {
     return (
-        <div className='deck-container' key={deck.id}>
+        <div className='deck-container'>
             <div className='deck shadow'>
                 <div className='deck-cover main-color'>
                     <div className='deck-name'>
@@ -22,7 +22,7 @@ export default function Deck({deck}) {
                         <button className='edit-button main-color shadow'>Изменить</button>
                         <button className='delete-button main-color shadow'>Удалить</button>
                     </div>
-                    <button className='play-button main-color shadow'>Играть</button>
+                    <button className='play-button main-color shadow' onClick={onPlay}>Играть</button>
                 </div>
             </div>
         </div>

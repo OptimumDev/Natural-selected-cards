@@ -1,18 +1,9 @@
 import React from "react";
 import Deck from "../../Deck/Deck";
 import './DeckPage.css'
+import {myDecks, standardDecks} from "../../../deckExamples";
 
-const myDecks = [
-    {name: 'Words', id: 'id-my-words'},
-    {name: 'Cars', id: 'id-my-cars'}
-];
-
-const standardDecks = [
-    {name: 'Family', id: 'id-standard-family'},
-    {name: 'School', id: 'id-standard-school'}
-];
-
-export default function Decks({isMine, onPlay}) {
+export default function Decks({isMine, onPlay, onCreate}) {
     const decks = isMine ? myDecks : standardDecks;
     return (
         <div>
@@ -20,7 +11,8 @@ export default function Decks({isMine, onPlay}) {
                 {isMine ? 'My Decks' : 'Standard Decks'}
             </div>
             <div className='decks'>
-                {decks.map(d => <Deck deck={d} />)}
+                {decks.map(d => <Deck deck={d} onPlay={() => onPlay(d.id)}/>)}
+                {isMine && <div className='create-button deck-container' onClick={onCreate}>+</div>}
             </div>
         </div>
     );
