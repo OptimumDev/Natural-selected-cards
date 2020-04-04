@@ -50,6 +50,7 @@ export default class GamePage extends React.Component {
 
     render() {
         const shift = Math.max(-(1 + this.state.cardIndex) * 150, -(1 + this.deck.cards.length) * 150);
+        const isLast = this.state.cardIndex === this.deck.cards.length;
 
         return (
             <div className='page game-page'>
@@ -67,7 +68,7 @@ export default class GamePage extends React.Component {
                             </button>
                         </div>
                     </div>
-                    <div className='buttons'>
+                    <div className='buttons' style={isLast ? {transform: `translateY(100vh)`} : {}}>
                         <button className='main-color shadow' onClick={this.flip}>
                             Перевернуть
                         </button>
