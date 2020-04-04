@@ -7,9 +7,15 @@
     cursor: default;
 }
 
+.page {
+    display: grid;
+    grid-template-rows: 2fr 10fr;
+}
+
 .page-name {
-    text-align: center;
-    margin: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     font-size: 30px;
 }
 
