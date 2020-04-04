@@ -1,5 +1,6 @@
 .app {
     height: 100vh;
+    overflow: hidden;
     display: grid;
     grid-template-rows: 1fr 10fr;
     font-family: Roboto, sans-serif;
