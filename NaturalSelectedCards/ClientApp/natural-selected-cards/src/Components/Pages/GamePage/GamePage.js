@@ -59,24 +59,24 @@ export default class GamePage extends React.Component {
         if (this.isCurrentCardFlipped()) {
             if (this.state.knewCurrentCard) {
                 return [
-                    this.createButton('Действительно помню', this.actuallyKnowButtonHandle),
-                    this.createButton('Все-таки не помню', this.actuallyDontKnowHandle, 'red')
+                    this.createButton('Действительно помню', this.actuallyKnowButtonHandle, '', 1),
+                    this.createButton('Все-таки не помню', this.actuallyDontKnowHandle, 'red', 2)
                 ]
             } else {
                 return [
-                    this.createButton('Теперь запомню', this.moveToNextCard)
+                    this.createButton('Теперь запомню', this.moveToNextCard,'', 3)
                 ]
             }
         } else {
             return [
-                this.createButton('Помню', this.knowButtonHandle),
-                this.createButton('Не помню', this.dontKnowButtonHandle, 'red')
+                this.createButton('Помню', this.knowButtonHandle, '', 4),
+                this.createButton('Не помню', this.dontKnowButtonHandle, 'red', 5)
             ]
         }
     };
 
-    createButton = (label, handle, className = '') => (
-        <button className={`main-color shadow ${className}`} onClick={handle}>
+    createButton = (label, handle, className = '', key) => (
+        <button className={`main-color shadow ${className}`} onClick={handle} key={key}>
             {label}
         </button>
     );
