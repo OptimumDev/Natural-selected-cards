@@ -1,0 +1,58 @@
+.cards-carousel {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.cards {
+    height: 100%;
+    display: flex;
+    transition: transform 500ms;
+    margin-left: 50vw;
+}
+
+.buttons {
+    height: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 1000ms;
+}
+
+.cards-container, .flip-container, .buttons {
+    width: 50vw;
+}
+
+.cards-container, .flip-container {
+    height: 20vw;
+}
+
+.flip-container {
+    flex-shrink: 0;
+    height: 100%;
+}
+
+.flip-container {
+    margin-left: 100vw;
+}
+
+.buttons button {
+    height: 50%;
+    width: 45%;
+    font-size: 100%;
+}
+
+.buttons button:only-child {
+    margin: 0 auto;
+}
+
+.back-button {
+    flex-shrink: 0;
+    height: 10vw;
+    width: 30vw;
+    margin-left: 110vw;
+    margin-top: 5vw;
+    font-size: 200%;
+}
