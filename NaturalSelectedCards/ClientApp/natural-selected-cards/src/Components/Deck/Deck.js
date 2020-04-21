@@ -19,8 +19,8 @@ export default function Deck({deck, onPlay}) {
                         Процент правильных ответов: 42%<br/>
                     </div>
                     <div className='settings-buttons'>
-                        <button className='edit-button main-color shadow'>Изменить</button>
-                        <button className='delete-button main-color shadow'>Удалить</button>
+                        <button className='edit-button yellow shadow'>Изменить</button>
+                        <button className='delete-button red shadow'>Удалить</button>
                     </div>
                     <button className='play-button main-color shadow' onClick={onPlay}>Играть</button>
                 </div>
