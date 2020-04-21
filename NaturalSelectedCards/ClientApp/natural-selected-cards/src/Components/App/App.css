@@ -46,3 +46,11 @@ button:active {
 .main-color {
     background-color: #7cb342;
 }
+
+.red {
+    background-color: tomato;
+}
+
+.yellow {
+    background-color: gold;
+}

@@ -2,6 +2,7 @@ import React from "react";
 import {standardDecks, myDecks} from "../../../deckExamples";
 import FlipCard from "../../FlipCard/FlipCard";
 import './GamePage.css'
+import CardCarousel from "../../CardCarousel/CardsCorusel";
 
 function CardSide({label}) {
     return (
@@ -31,53 +32,80 @@ export default class GamePage extends React.Component {
         this.state = {
             cardIndex: 0,
             flipped: this.deck.cards.map(_ => false),
+            knewCurrentCard: false
         };
     }
 
-    flip = () => {
-        this.setState({
-            flipped: this.state.flipped.map(
-                (f, i) => i === this.state.cardIndex ? true : f
-            )
-        });
-    };
-
-    next = () => {
-        this.setState({
-            cardIndex: this.state.cardIndex + 1
-        });
-    };
-
     render() {
-        const shift = Math.max(-(1 + this.state.cardIndex) * 150, -(1 + this.deck.cards.length) * 150);
-        const isLast = this.state.cardIndex === this.deck.cards.length;
-
         return (
             <div className='page game-page'>
                 <div className='page-name'>
                     {this.deck.name}
                 </div>
-                <div className='game-area'>
-                    <div className='cards-container'>
-                        <div className='cards' style={{transform: `translate(${shift}vw)`}}>
-                            {this.deck.cards.map((card, i) => (
-                                <Card flipped={this.state.flipped[i]} card={card}/>
-                            ))}
-                            <button onClick={this.props.onEnd} className='main-color shadow back-button'>
-                                Вернуться
-                            </button>
-                        </div>
-                    </div>
-                    <div className='buttons' style={isLast ? {transform: `translateY(100vh)`} : {}}>
-                        <button className='main-color shadow' onClick={this.flip}>
-                            Перевернуть
-                        </button>
-                        <button className='main-color shadow' onClick={this.next}>
-                            Дальше
-                        </button>
-                    </div>
-                </div>
+                <CardCarousel
+                    cardIndex={this.state.cardIndex}
+                    backButton={this.createButton('Вернуться', this.props.onEnd, 'back-button')}
+                    buttons={this.getButtons()}
+                >
+                    {this.deck.cards.map((card, i) => (
+                        <Card flipped={this.state.flipped[i]} card={card} key={i}/>
+                    ))}
+                </CardCarousel>
             </div>
         );
     }
+
+    getButtons = () => {
+        if (this.isCurrentCardFlipped()) {
+            if (this.state.knewCurrentCard) {
+                return [
+                    this.createButton('Действительно помню', this.actuallyKnowButtonHandle),
+                    this.createButton('Все-таки не помню', this.actuallyDontKnowHandle, 'red')
+                ]
+            } else {
+                return [
+                    this.createButton('Теперь запомню', this.moveToNextCard)
+                ]
+            }
+        } else {
+            return [
+                this.createButton('Помню', this.knowButtonHandle),
+                this.createButton('Не помню', this.dontKnowButtonHandle, 'red')
+            ]
+        }
+    };
+
+    createButton = (label, handle, className = '') => (
+        <button className={`main-color shadow ${className}`} onClick={handle}>
+            {label}
+        </button>
+    );
+
+    knowButtonHandle = () => {
+        this.setState({
+            flipped: this.updateFlipped(),
+            knewCurrentCard: true
+        });
+    };
+
+    dontKnowButtonHandle = () => {
+        this.setState({
+            flipped: this.updateFlipped(),
+            knewCurrentCard: false
+        });
+    };
+
+    actuallyKnowButtonHandle = () => {
+        this.moveToNextCard();
+    };
+
+    actuallyDontKnowHandle = () => {
+        this.moveToNextCard();
+    };
+
+    isCurrentCardFlipped = () => this.state.flipped[this.state.cardIndex];
+
+    updateFlipped = () => this.state.flipped.map((f, i) => i === this.state.cardIndex ? true : f);
+
+    moveToNextCard = () => this.setState({cardIndex: this.state.cardIndex + 1});
 }
