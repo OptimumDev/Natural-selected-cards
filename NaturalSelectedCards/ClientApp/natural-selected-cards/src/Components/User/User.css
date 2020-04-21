@@ -5,22 +5,17 @@
 }
 
 .user-image {
-    height: 40px;
-    width: 40px;
-    box-sizing: border-box;
     margin-right: 5px;
 
     border-radius: 50%;
     border: #888888 1px solid;
-    background-color: white;
+    background-color: #004400;
 
     display: flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
 
-    font-size: 40px;
-    padding-top: 6px;
     overflow: hidden;
     user-select: none;
 }

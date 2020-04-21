@@ -1,10 +1,11 @@
 import React from "react";
 import './User.css'
+import userIcon from '../../images/account_circle-white-48dp.svg'
 
 export default function User({user}) {
     return (
         <div className='user'>
-            <span className='user-image' role='img' aria-label='avatar'>👤</span>
+            <img src={userIcon} alt='👤' className='user-image' draggable={false} />
             <span className='user-name'>
                 {user.name} {user.surname}
             </span>
