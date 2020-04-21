@@ -5,6 +5,7 @@
 }
 
 .user-image {
+    height: 40px;
     margin-right: 5px;
 
     border-radius: 50%;
