@@ -4,6 +4,7 @@ import FlipCard from "../../FlipCard/FlipCard";
 import './GamePage.css'
 import CardCarousel from "../../CardCarousel/CardsCorusel";
 
+//TODO: clean up this mess
 function CardSide({label}) {
     return (
         <div className='card-side main-color shadow'>
@@ -12,9 +13,11 @@ function CardSide({label}) {
     );
 }
 
+//TODO: clean up this mess
 function Card({card, flipped}) {
     return (
         <FlipCard flipped={flipped}>
+            {/*TODO: sides of different colors from color theme*/}
             <CardSide label={card.front}/>
             <CardSide label={card.back}/>
         </FlipCard>

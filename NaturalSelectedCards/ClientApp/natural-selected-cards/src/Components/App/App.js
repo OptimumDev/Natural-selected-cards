@@ -21,6 +21,8 @@ export default class App extends React.Component {
     }
 
     render() {
+        //TODO: change color theme
+        //TODO: maybe add dark theme (.light or .dark class on app and specify selectors)
         return (
             <div className="app">
                 <header className='shadow main-color'>
@@ -57,15 +59,19 @@ export default class App extends React.Component {
                     onStandardDecks={() => this.setPageName(PageNames.STANDARD_DECKS)}
                 />;
             case PageNames.MY_DECKS:
+                //TODO: Make main page
                 return <DecksPage isMine={true} onPlay={this.play} onEdit={this.edit} onCreate={this.create} />;
             case PageNames.STANDARD_DECKS:
+                //TODO: Replace with catalog
                 return <DecksPage isMine={false} onPlay={this.play} onEdit={this.edit} />;
             case PageNames.GAME:
                 return <GamePage deckId={this.state.deckId} onEnd={() => this.setPageName(PageNames.MAIN)}/>;
             case PageNames.CREATE:
+                //TODO: Edit-like page, but only 1 card at the start (chosen)
                 return <CreatePage />;
             case PageNames.EDIT:
-                return <EditPage deckId={this.state.deckId} />
+                //TODO: all cards miniatures at the top with scrolling and possibility to choose, chosen as in game
+                return <EditPage deckId={this.state.deckId} />;
             default:
                 console.log(`Can't load page with name "${this.state.pageName}"`)
         }

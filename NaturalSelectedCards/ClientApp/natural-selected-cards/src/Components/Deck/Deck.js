@@ -2,6 +2,7 @@ import React from "react";
 import './Deck.css'
 
 export default function Deck({deck, onPlay, onEdit, onDelete}) {
+    //TODO: change to FlipCard: add option and class from this option (.card.flip-by-hover:hover, .card.flipped {})
     return (
         <div className='deck-container'>
             <div className='deck shadow'>
@@ -16,8 +17,10 @@ export default function Deck({deck, onPlay, onEdit, onDelete}) {
                     </div>
                     <div className='deck-statistics'>
                         Кол-во игр: 8<br/>
+                        Кол-во карт: 37<br/>
                         Процент правильных ответов: 42%<br/>
                     </div>
+                    {/*TODO: make optional*/}
                     <div className='settings-buttons'>
                         <button className='edit-button yellow shadow' onClick={() => onEdit(deck.id)}>Изменить</button>
                         <button className='delete-button red shadow' onClick={onDelete}>Удалить</button>
