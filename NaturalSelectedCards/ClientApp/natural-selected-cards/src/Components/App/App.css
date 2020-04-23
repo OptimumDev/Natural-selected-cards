@@ -48,9 +48,9 @@ button:active {
 }
 
 .red {
-    background-color: tomato;
+    background-color: #e53935;
 }
 
 .yellow {
-    background-color: gold;
+    background-color: #fdd835;
 }
