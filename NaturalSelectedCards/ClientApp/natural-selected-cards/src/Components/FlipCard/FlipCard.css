@@ -1,5 +1,6 @@
 .flip-container {
     perspective: 1000px;
+    background-color: transparent;
 }
 
 .flip-card {
@@ -9,9 +10,11 @@
     text-align: center;
     transition: transform 0.8s;
     transform-style: preserve-3d;
+    background-color: transparent;
 }
 
-.flip-container.flipped .flip-card {
+.flip-container.flipped .flip-card,
+.flip-container.flip-on-hover:hover .flip-card {
     transform: rotateY(-180deg);
 }
 

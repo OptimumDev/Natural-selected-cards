@@ -32,10 +32,10 @@
 .flip-container {
     flex-shrink: 0;
     height: 100%;
+    margin-left: 100vw;
 }
 
 .flip-container {
-    margin-left: 100vw;
 }
 
 .buttons button {

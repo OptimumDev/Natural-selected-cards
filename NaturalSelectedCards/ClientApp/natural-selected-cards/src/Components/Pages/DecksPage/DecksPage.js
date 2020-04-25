@@ -21,7 +21,7 @@ export default class Decks extends React.Component {
                 </div>
                 <div className='decks'>
                     {this.state.decks.map(this.createDeck)}
-                    {isMine && <div className='create-button deck-container' onClick={onCreate}>+</div>}
+                    {isMine && <div className='create-button' onClick={onCreate}>+</div>}
                 </div>
             </div>
         );

@@ -38,8 +38,8 @@ export default class GamePage extends React.Component {
 
     getCard = (card, index) => (
         <FlipCard flipped={this.state.flipped[index]} key={card.id}>
-            <div className='card-side main-color shadow'> {card.front} </div>
-            <div className='card-side main-color-light shadow'> {card.back} </div>
+            <div className='card-side'>{card.front}</div>
+            <div className='card-side'>{card.back}</div>
         </FlipCard>
     );
 

@@ -2,11 +2,11 @@
     display: flex;
 }
 
-.deck-container {
+.create-button,
+.decks .flip-container {
     height: 50vh;
     width: 35vh;
     margin-left: 5vw;
-    perspective: 1000px;
 }
 
 .create-button {
