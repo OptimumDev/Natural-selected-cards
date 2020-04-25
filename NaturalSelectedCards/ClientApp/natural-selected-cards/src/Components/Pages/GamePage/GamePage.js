@@ -4,26 +4,6 @@ import FlipCard from "../../FlipCard/FlipCard";
 import './GamePage.css'
 import CardCarousel from "../../CardCarousel/CardsCorusel";
 
-//TODO: clean up this mess
-function CardSide({label}) {
-    return (
-        <div className='card-side main-color shadow'>
-            {label}
-        </div>
-    );
-}
-
-//TODO: clean up this mess
-function Card({card, flipped}) {
-    return (
-        <FlipCard flipped={flipped}>
-            {/*TODO: sides of different colors from color theme*/}
-            <CardSide label={card.front}/>
-            <CardSide label={card.back}/>
-        </FlipCard>
-    );
-}
-
 export default class GamePage extends React.Component {
     constructor(props) {
         super(props);
@@ -50,13 +30,19 @@ export default class GamePage extends React.Component {
                     backButton={this.createButton('Вернуться', this.props.onEnd, 'back-button')}
                     buttons={this.getButtons()}
                 >
-                    {this.deck.cards.map((card, i) => (
-                        <Card flipped={this.state.flipped[i]} card={card} key={i}/>
-                    ))}
+                    {this.deck.cards.map(this.getCard)}
                 </CardCarousel>
             </div>
         );
     }
+
+    getCard = (card, index) => (
+        <FlipCard flipped={this.state.flipped[index]} key={card.id}>
+            {/*TODO: sides of different colors from color theme*/}
+            <div className='card-side main-color shadow'> {card.front} </div>
+            <div className='card-side main-color shadow'> {card.back} </div>
+        </FlipCard>
+    );
 
     getButtons = () => {
         if (this.isCurrentCardFlipped()) {
@@ -67,7 +53,7 @@ export default class GamePage extends React.Component {
                 ]
             } else {
                 return [
-                    this.createButton('Теперь запомню', this.moveToNextCard,'', 3)
+                    this.createButton('Теперь запомню', this.moveToNextCard, '', 3)
                 ]
             }
         } else {
