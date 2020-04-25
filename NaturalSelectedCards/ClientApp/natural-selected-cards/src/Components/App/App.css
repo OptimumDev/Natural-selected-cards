@@ -4,7 +4,6 @@
     display: grid;
     grid-template-rows: 1fr 10fr;
     font-family: Roboto, sans-serif;
-    background-color: #eeeeee;
     cursor: default;
 }
 
@@ -43,14 +42,30 @@ button:active {
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
 }
 
-.main-color {
-    background-color: #7cb342;
+.light {
+    background-color: #eeeeee;
 }
 
-.red {
-    background-color: #e53935;
+.light .main-color {
+    background-color: #66E2FF;
 }
 
-.yellow {
-    background-color: #fdd835;
+.light .main-color-light {
+    background-color: #9FFFFF;
+}
+
+.light .main-color-dark {
+    background-color: #006778;
+}
+
+.light .red {
+    background-color: #FF6966;
+}
+
+.light .yellow {
+    background-color: #FFDF4D;
+}
+
+.light .green {
+    background-color: #5DE388;
 }

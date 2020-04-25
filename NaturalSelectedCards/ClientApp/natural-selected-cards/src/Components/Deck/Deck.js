@@ -11,7 +11,7 @@ export default function Deck({deck, onPlay, onEdit, onDelete}) {
                         {deck.name}
                     </div>
                 </div>
-                <div className='deck-info'>
+                <div className='deck-info main-color-light'>
                     <div className='deck-name'>
                         {deck.name}
                     </div>
@@ -25,7 +25,7 @@ export default function Deck({deck, onPlay, onEdit, onDelete}) {
                         <button className='edit-button yellow shadow' onClick={() => onEdit(deck.id)}>Изменить</button>
                         <button className='delete-button red shadow' onClick={onDelete}>Удалить</button>
                     </div>
-                    <button className='play-button main-color shadow' onClick={() => onPlay(deck.id)}>Играть</button>
+                    <button className='play-button green shadow' onClick={() => onPlay(deck.id)}>Играть</button>
                 </div>
             </div>
         </div>

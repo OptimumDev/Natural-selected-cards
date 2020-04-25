@@ -38,9 +38,8 @@ export default class GamePage extends React.Component {
 
     getCard = (card, index) => (
         <FlipCard flipped={this.state.flipped[index]} key={card.id}>
-            {/*TODO: sides of different colors from color theme*/}
             <div className='card-side main-color shadow'> {card.front} </div>
-            <div className='card-side main-color shadow'> {card.back} </div>
+            <div className='card-side main-color-light shadow'> {card.back} </div>
         </FlipCard>
     );
 
@@ -48,18 +47,18 @@ export default class GamePage extends React.Component {
         if (this.isCurrentCardFlipped()) {
             if (this.state.knewCurrentCard) {
                 return [
-                    this.createButton('Действительно помню', this.actuallyKnowButtonHandle, '', 1),
+                    this.createButton('Действительно помню', this.actuallyKnowHandle, 'green', 1),
                     this.createButton('Все-таки не помню', this.actuallyDontKnowHandle, 'red', 2)
                 ]
             } else {
                 return [
-                    this.createButton('Теперь запомню', this.moveToNextCard, '', 3)
+                    this.createButton('Теперь запомню', this.moveToNextCard, 'green', 3)
                 ]
             }
         } else {
             return [
-                this.createButton('Помню', this.knowButtonHandle, '', 4),
-                this.createButton('Не помню', this.dontKnowButtonHandle, 'red', 5)
+                this.createButton('Помню', this.knowHandle, 'green', 4),
+                this.createButton('Не помню', this.dontKnowHandle, 'red', 5)
             ]
         }
     };
@@ -70,21 +69,21 @@ export default class GamePage extends React.Component {
         </button>
     );
 
-    knowButtonHandle = () => {
+    knowHandle = () => {
         this.setState({
             flipped: this.updateFlipped(),
             knewCurrentCard: true
         });
     };
 
-    dontKnowButtonHandle = () => {
+    dontKnowHandle = () => {
         this.setState({
             flipped: this.updateFlipped(),
             knewCurrentCard: false
         });
     };
 
-    actuallyKnowButtonHandle = () => {
+    actuallyKnowHandle = () => {
         this.moveToNextCard();
     };
 

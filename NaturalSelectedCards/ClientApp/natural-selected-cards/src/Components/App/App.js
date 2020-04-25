@@ -21,10 +21,9 @@ export default class App extends React.Component {
     }
 
     render() {
-        //TODO: change color theme
-        //TODO: maybe add dark theme (.light or .dark class on app and specify selectors)
+        //TODO: maybe add dark theme
         return (
-            <div className="app">
+            <div className="app light">
                 <header className='shadow main-color'>
                     <AppName onClick={() => this.setPageName(PageNames.MAIN)}/>
                     <User user={user}/>
