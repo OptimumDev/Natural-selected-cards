@@ -1,0 +1,35 @@
+.deck-subview {
+    display: flex;
+    overflow-x: auto;
+    padding: 20px 10px;
+}
+
+.card {
+    padding-right: 20px;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    flex-direction: column;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card-front {
+    margin-bottom: 5px;
+}
+
+.card-front,
+.card-back {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    width: 10vw;
+    height: 4vw;
+
+    font-size: 1vw;
+}
+
