@@ -50,6 +50,10 @@ export default class App extends React.Component {
         this.setPageName(PageNames.EDIT);
     };
 
+    add = deckId => {
+        this.setPageName(PageNames.MY_DECKS);
+    };
+
     getPage = () => {
         switch (this.state.pageName) {
             case PageNames.MAIN:
@@ -60,21 +64,22 @@ export default class App extends React.Component {
             case PageNames.MY_DECKS:
                 //TODO: Make main page
                 return <DecksPage
-                    isMine={true}
+                    isUsers={true}
                     onPlay={this.play}
                     onEdit={this.edit}
                     onCreate={this.create}
-                    onChooseStandard={() => this.setPageName(PageNames.STANDARD_DECKS)} />;
+                    onChooseStandard={() => this.setPageName(PageNames.STANDARD_DECKS)}
+                    key={PageNames.MY_DECKS}/>;
             case PageNames.STANDARD_DECKS:
-                return <DecksPage isMine={false} onPlay={this.play} onEdit={this.edit} />;
+                return <DecksPage isUsers={false} onAdd={this.add} key={PageNames.STANDARD_DECKS}/>;
             case PageNames.GAME:
                 return <GamePage deckId={this.state.deckId} onEnd={() => this.setPageName(PageNames.MAIN)}/>;
             case PageNames.CREATE:
                 //TODO: Edit-like page, but only 1 card at the start (chosen)
-                return <CreatePage />;
+                return <CreatePage/>;
             case PageNames.EDIT:
                 //TODO: all cards miniatures at the top with scrolling and possibility to choose, chosen as in game
-                return <EditPage deckId={this.state.deckId} />;
+                return <EditPage deckId={this.state.deckId}/>;
             default:
                 console.log(`Can't load page with name "${this.state.pageName}"`)
         }

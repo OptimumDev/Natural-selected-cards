@@ -2,7 +2,7 @@ import React from "react";
 import './Deck.css'
 import FlipCard from "../FlipCard/FlipCard";
 
-export default function Deck({deck, onPlay, onEdit, onDelete}) {
+export default function Deck({deck, isUsers, onAdd, onPlay, onEdit, onDelete}) {
     return (
         <FlipCard flipOnHover={true}>
             <div className='deck-name'>
@@ -17,12 +17,17 @@ export default function Deck({deck, onPlay, onEdit, onDelete}) {
                     Кол-во карт: 37<br/>
                     Процент правильных ответов: 42%<br/>
                 </div>
-                {/*TODO: make optional*/}
                 <div className='settings-buttons'>
-                    <button className='edit-button yellow shadow' onClick={() => onEdit(deck.id)}>Изменить</button>
-                    <button className='delete-button red shadow' onClick={onDelete}>Удалить</button>
+                    {isUsers &&
+                    <>
+                        <button className='edit-button yellow shadow' onClick={() => onEdit(deck.id)}>Изменить</button>
+                        <button className='delete-button red shadow' onClick={onDelete}>Удалить</button>
+                    </>
+                    }
                 </div>
-                <button className='play-button green shadow' onClick={() => onPlay(deck.id)}>Играть</button>
+                <button className='play-button green shadow' onClick={() => isUsers ? onPlay(deck.id) : onAdd(deck.id)}>
+                    {isUsers ? 'Играть' : 'Добавить'}
+                </button>
             </div>
         </FlipCard>
     )
