@@ -18,13 +18,15 @@
 .deck-name {
     width: 100%;
     text-align: center;
-    font-size: 8vh;
+    font-size: 5vw;
     font-weight: 200;
 }
 
 .deck-statistics {
     display: flex;
     align-items: center;
+    justify-content: center;
+    font-size: 1.5vw;
 }
 
 .settings-buttons {
@@ -36,11 +38,12 @@
 .edit-button, .delete-button {
     height: 60%;
     width: 42.5%;
-    font-size: 2.5vh;
+    font-size: 1.25vw;
 }
 
 .play-button {
     width: 90%;
     margin: 2% 5% 8%;
-    font-size: 5vh;
+    font-size: 2.5vw;
+    font-weight: 300;
 }

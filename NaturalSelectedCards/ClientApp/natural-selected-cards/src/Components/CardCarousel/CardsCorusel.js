@@ -3,7 +3,7 @@ import './CardCarousel.css'
 
 export default function CardCarousel({children, cardIndex, buttons, lastButton}) {
     const curIndex = Math.min(cardIndex, children.length);
-    const shift = -(1 + curIndex) * 150;
+    const shift = -curIndex * 135;
     const isLast = cardIndex === children.length;
 
     return (

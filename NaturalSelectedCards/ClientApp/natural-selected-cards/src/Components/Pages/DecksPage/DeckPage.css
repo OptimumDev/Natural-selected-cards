@@ -1,6 +1,6 @@
 :root {
-    --deck-height: 50vh;
-    --deck-width: 35vh;
+    --deck-height: 25vw;
+    --deck-width: 17.5vw;
     --deck-margin: 5vw;
 }
 
@@ -17,13 +17,13 @@
 
 
 .create-button {
-    border: #bbbbbb 5px dashed;
+    border: #bbbbbb 0.5vw dashed;
     box-sizing: border-box;
     color: #bbbbbb;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 30vh;
+    font-size: 20vw;
     font-weight: 900;
     user-select: none;
 }
@@ -37,7 +37,7 @@
     display: flex;
     align-items: center;
     text-align: center;
-    font-size: 5vh;
+    font-size: 2.5vw;
     font-weight: 300;
     user-select: none;
 }

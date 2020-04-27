@@ -9,12 +9,12 @@
 .cards {
     height: 100%;
     display: flex;
+    align-items: center;
     transition: transform 500ms;
-    margin-left: 50vw;
 }
 
 .buttons {
-    height: 20%;
+    height: 10vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,26 +22,24 @@
 }
 
 .cards-container, .flip-container, .buttons {
-    width: 50vw;
+    width: 35vw;
 }
 
 .cards-container, .flip-container {
-    height: 20vw;
+    height: 15vw;
 }
 
-.flip-container {
+.cards-carousel .flip-container {
     flex-shrink: 0;
     height: 100%;
-    margin-left: 100vw;
-}
-
-.flip-container {
+    margin-right: 100vw;
 }
 
 .buttons button {
-    height: 50%;
-    width: 45%;
-    font-size: 100%;
+    height: 5vw;
+    width: 47.5%;
+    font-size: 2vw;
+    font-weight: 300;
 }
 
 .buttons button:only-child {
@@ -52,7 +50,6 @@
     flex-shrink: 0;
     height: 10vw;
     width: 30vw;
-    margin-left: 110vw;
-    margin-top: 5vw;
+    margin-left: 2.5vw;
     font-size: 200%;
 }

@@ -5,7 +5,7 @@
 }
 
 .user-image {
-    height: 40px;
+    height: 4vw;
     margin-right: 5px;
 
     border-radius: 50%;
@@ -21,6 +21,6 @@
 }
 
 .user-name {
-    font-size: 18px;
+    font-size: 2vw;
     font-weight: 200;
 }
