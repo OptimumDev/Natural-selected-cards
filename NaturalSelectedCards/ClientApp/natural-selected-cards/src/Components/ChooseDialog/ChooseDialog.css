@@ -1,0 +1,61 @@
+:root {
+    --duration: 0.7s;
+}
+
+.blackout {
+    position: absolute;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.25);
+}
+
+.blackout.shown {
+    transition: opacity var(--duration);
+
+    bottom: 0;
+    opacity: 1;
+}
+
+.blackout.hidden {
+    transition-property: opacity, bottom;
+    transition-duration: var(--duration), 0s;
+    transition-delay: 0s, var(--duration);
+
+    bottom: -100vh;
+    opacity: 0;
+}
+
+.choose-dialog {
+    height: 100vh;
+    width: 100vw;
+    position: absolute;
+    left: 0;
+    bottom: -100vh;
+    transition: bottom var(--duration);
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.blackout.shown ~ .choose-dialog{
+    bottom: 0;
+}
+
+.choices {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 3vh;
+}
+
+.cancel-button {
+    width: 10vw;
+    height: 5vh;
+}
+
+.choices *:hover {
+    transform: scale(1.05);
+}

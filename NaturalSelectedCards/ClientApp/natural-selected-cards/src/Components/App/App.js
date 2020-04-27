@@ -59,9 +59,13 @@ export default class App extends React.Component {
                 />;
             case PageNames.MY_DECKS:
                 //TODO: Make main page
-                return <DecksPage isMine={true} onPlay={this.play} onEdit={this.edit} onCreate={this.create} />;
+                return <DecksPage
+                    isMine={true}
+                    onPlay={this.play}
+                    onEdit={this.edit}
+                    onCreate={this.create}
+                    onChooseStandard={() => this.setPageName(PageNames.STANDARD_DECKS)} />;
             case PageNames.STANDARD_DECKS:
-                //TODO: Replace with catalog
                 return <DecksPage isMine={false} onPlay={this.play} onEdit={this.edit} />;
             case PageNames.GAME:
                 return <GamePage deckId={this.state.deckId} onEnd={() => this.setPageName(PageNames.MAIN)}/>;
