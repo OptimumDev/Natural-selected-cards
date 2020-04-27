@@ -27,7 +27,7 @@ export default class GamePage extends React.Component {
                 </div>
                 <CardCarousel
                     cardIndex={this.state.cardIndex}
-                    backButton={this.createButton('Вернуться', this.props.onEnd, 'back-button')}
+                    lastButton={this.createButton('Вернуться', this.props.onEnd, 'back-button')}
                     buttons={this.getButtons()}
                 >
                     {this.deck.cards.map(this.getCard)}
