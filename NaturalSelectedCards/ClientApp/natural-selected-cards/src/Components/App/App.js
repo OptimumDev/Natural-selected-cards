@@ -15,10 +15,9 @@ const user = {id: 123, name: 'Артемий', surname: 'Изаков'};
 export default class App extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
-            pageName: PageNames.MAIN
-        }
+            pageName: this.getMainPage()
+        };
     }
 
     render() {
@@ -26,8 +25,8 @@ export default class App extends React.Component {
         return (
             <div className="app light">
                 <header className='shadow main-color'>
-                    <AppName onClick={() => this.setPageName(PageNames.MAIN)}/>
-                    <User user={user}/>
+                    <AppName onClick={this.goToMain}/>
+                    <User user={this.state.user}/>
                 </header>
                 {this.getPage()}
             </div>
@@ -61,13 +60,19 @@ export default class App extends React.Component {
         this.setPageName(PageNames.MY_DECKS);
     };
 
+    goToMain = () => this.setPageName(this.getMainPage());
+
+    getMainPage = () => this.state && this.state.user ? PageNames.MY_DECKS : PageNames.MAIN;
+
+    logIn = () => this.setState({
+        pageName: PageNames.MY_DECKS,
+        user: user
+    });
+
     getPage = () => {
         switch (this.state.pageName) {
             case PageNames.MAIN:
-                return <MainPage
-                    onMyDecks={() => this.setPageName(PageNames.MY_DECKS)}
-                    onStandardDecks={() => this.setPageName(PageNames.STANDARD_DECKS)}
-                />;
+                return <MainPage onLogin={this.logIn} />;
             case PageNames.MY_DECKS:
                 //TODO: Make main page
                 return <DecksPage

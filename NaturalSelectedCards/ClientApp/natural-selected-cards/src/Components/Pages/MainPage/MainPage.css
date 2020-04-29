@@ -5,14 +5,16 @@
     flex-direction: column;
 }
 
-.main-page button {
-    width: 40vw;
-    height: 10vw;
-    margin-bottom: 40px;
-    font-size: 4vw;
-    font-weight: 200;
+.main-page p {
+    text-align: center;
+    font-size: 1.5vw;
+    margin: 1vw;
 }
 
-.main-page button:last-child {
-    margin-bottom: 0;
+.enter-button {
+    font-size: 2vw;
+    width: 12vw;
+    height: 3vw;
+    margin: 0.5vw 0 1vw;
+    font-weight: 200;
 }
