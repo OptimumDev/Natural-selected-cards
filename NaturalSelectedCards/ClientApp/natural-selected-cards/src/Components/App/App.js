@@ -90,7 +90,7 @@ export default class App extends React.Component {
                     key={PageNames.STANDARD_DECKS}
                 />;
             case PageNames.GAME:
-                return <GamePage deckId={this.state.deckId} onEnd={() => this.setPageName(PageNames.MAIN)}/>;
+                return <GamePage deckId={this.state.deckId} onEnd={this.goToMain}/>;
             case PageNames.CREATE:
                 //TODO: Edit-like page, but only 1 card at the start (chosen)
                 return <CreatePage/>;
