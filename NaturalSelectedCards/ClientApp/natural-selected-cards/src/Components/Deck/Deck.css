@@ -29,18 +29,31 @@
     font-size: 1.5vw;
 }
 
- .delete-button {
-    /*height: 60%;*/
-    /*width: 42.5%;*/
-    /*font-size: 1.25vw;*/
+.delete-button {
+    position: absolute;
+    top: -1vw;
+    right: -1vw;
+    border-radius: 50%;
+    padding: 0;
+    width: 2.5vw;
+    height: 2.5vw;
 }
 
- .controls {
-     display: flex;
-     justify-content: space-evenly;
-     align-items: center;
-     flex-direction: column;
- }
+.delete-button:hover {
+    transform: scale(1.1);
+}
+
+.delete-button:active {
+    transform: none;
+    box-shadow: none;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
 
 .play-button,
 .edit-button {

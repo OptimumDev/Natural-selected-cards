@@ -8,6 +8,7 @@ import DecksPage from "../Pages/DecksPage/DecksPage";
 import GamePage from "../Pages/GamePage/GamePage";
 import CreatePage from "../Pages/CreatePage/CreatePage";
 import ViewDeckPage from "../Pages/ViewDeckPage/ViewDeckPage";
+import {myDecks, standardDecks} from "../../deckExamples";
 
 const user = {id: 123, name: 'Артемий', surname: 'Изаков'};
 
@@ -56,6 +57,7 @@ export default class App extends React.Component {
     };
 
     add = deckId => {
+        myDecks.push(standardDecks.find(deck => deck.id === deckId));
         this.setPageName(PageNames.MY_DECKS);
     };
 

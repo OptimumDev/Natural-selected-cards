@@ -24,6 +24,7 @@
     position: absolute;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    transform-style: preserve-3d;
 }
 
 .front-side {

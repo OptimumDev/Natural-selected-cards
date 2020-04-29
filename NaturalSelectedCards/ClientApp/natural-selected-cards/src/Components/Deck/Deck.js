@@ -1,6 +1,7 @@
 import React from "react";
 import './Deck.css'
 import FlipCard from "../FlipCard/FlipCard";
+import crossIcon from '../../images/Flat_cross_icon.svg'
 
 export default function Deck({deck, isUsers, onAdd, onPlay, onView, onDelete}) {
     return (
@@ -22,6 +23,9 @@ export default function Deck({deck, isUsers, onAdd, onPlay, onView, onDelete}) {
                     <button className='edit-button yellow shadow' onClick={onView}>Просмотр</button>
                     <button className='play-button green shadow' onClick={isUsers ? onPlay : onAdd}>
                         {isUsers ? 'Играть' : 'Добавить'}
+                    </button>
+                    <button className='delete-button' onClick={onDelete}>
+                        <img src={crossIcon}  alt='X' draggable={false}/>
                     </button>
                 </div>
             </div>
