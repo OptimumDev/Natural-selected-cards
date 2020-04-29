@@ -7,7 +7,7 @@ import MainPage from "../Pages/MainPage/MainPage";
 import DecksPage from "../Pages/DecksPage/DecksPage";
 import GamePage from "../Pages/GamePage/GamePage";
 import CreatePage from "../Pages/CreatePage/CreatePage";
-import EditPage from "../Pages/EditPage/EditPage";
+import ViewDeckPage from "../Pages/ViewDeckPage/ViewDeckPage";
 
 const user = {id: 123, name: 'Артемий', surname: 'Изаков'};
 
@@ -50,6 +50,11 @@ export default class App extends React.Component {
         this.setPageName(PageNames.EDIT);
     };
 
+    view = deckId => {
+        this.setDeckId(deckId);
+        this.setPageName(PageNames.VIEW);
+    };
+
     add = deckId => {
         this.setPageName(PageNames.MY_DECKS);
     };
@@ -66,20 +71,26 @@ export default class App extends React.Component {
                 return <DecksPage
                     isUsers={true}
                     onPlay={this.play}
-                    onEdit={this.edit}
+                    onView={this.edit}
                     onCreate={this.create}
                     onChooseStandard={() => this.setPageName(PageNames.STANDARD_DECKS)}
                     key={PageNames.MY_DECKS}/>;
             case PageNames.STANDARD_DECKS:
-                return <DecksPage isUsers={false} onAdd={this.add} key={PageNames.STANDARD_DECKS}/>;
+                return <DecksPage
+                    isUsers={false}
+                    onView={this.view}
+                    onAdd={this.add}
+                    key={PageNames.STANDARD_DECKS}
+                />;
             case PageNames.GAME:
                 return <GamePage deckId={this.state.deckId} onEnd={() => this.setPageName(PageNames.MAIN)}/>;
             case PageNames.CREATE:
                 //TODO: Edit-like page, but only 1 card at the start (chosen)
                 return <CreatePage/>;
             case PageNames.EDIT:
-                //TODO: all cards miniatures at the top with scrolling and possibility to choose, chosen as in game
-                return <EditPage deckId={this.state.deckId}/>;
+                return <ViewDeckPage deckId={this.state.deckId} isEditable={true}/>;
+            case PageNames.VIEW:
+                return <ViewDeckPage deckId={this.state.deckId} isEditable={false}/>;
             default:
                 console.log(`Can't load page with name "${this.state.pageName}"`)
         }

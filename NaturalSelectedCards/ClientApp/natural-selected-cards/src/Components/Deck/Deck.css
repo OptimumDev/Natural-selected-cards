@@ -12,7 +12,7 @@
 .deck-info {
     height: 100%;
     display: grid;
-    grid-template-rows: 1.5fr 3fr 1fr 1.5fr;
+    grid-template-rows: 1.5fr 3fr 2.5fr;
 }
 
 .deck-name {
@@ -29,21 +29,23 @@
     font-size: 1.5vw;
 }
 
-.settings-buttons {
-    display: flex;
-    justify-content: space-evenly;
-    align-items: center;
+ .delete-button {
+    /*height: 60%;*/
+    /*width: 42.5%;*/
+    /*font-size: 1.25vw;*/
 }
 
-.edit-button, .delete-button {
-    height: 60%;
-    width: 42.5%;
-    font-size: 1.25vw;
-}
+ .controls {
+     display: flex;
+     justify-content: space-evenly;
+     align-items: center;
+     flex-direction: column;
+ }
 
-.play-button {
+.play-button,
+.edit-button {
     width: 90%;
-    margin: 2% 5% 8%;
     font-size: 2.5vw;
     font-weight: 300;
+    flex-shrink: 0;
 }

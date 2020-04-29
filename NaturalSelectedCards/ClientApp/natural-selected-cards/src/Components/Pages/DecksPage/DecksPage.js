@@ -47,13 +47,14 @@ export default class Decks extends React.Component {
                 deck={deck}
                 isUsers={true}
                 onPlay={() => this.props.onPlay(deck.id)}
-                onEdit={() => this.props.onEdit(deck.id)}
+                onView={() => this.props.onView(deck.id)}
                 onDelete={() => this.delete(deck.id)}
                 key={deck.id}
             />
             : <Deck
                 deck={deck}
                 isUsers={false}
+                onView={() => this.props.onView(deck.id)}
                 onAdd={() => this.props.onAdd(deck.id)}
                 key={deck.id}
             />
