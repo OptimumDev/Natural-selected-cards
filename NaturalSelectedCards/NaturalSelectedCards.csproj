@@ -10,6 +10,12 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore" Version="3.5.2" />
+        <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.linux-x64" Version="3.5.2" />
+        <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.osx-x64" Version="3.5.2" />
+        <PackageReference Include="JavaScriptEngineSwitcher.ChakraCore.Native.win-x64" Version="3.5.2" />
+        <PackageReference Include="JavaScriptEngineSwitcher.Core" Version="3.3.0" />
+        <PackageReference Include="JavaScriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.3.0" />
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.2" />
         <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.1.2" />
         <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.2" />
@@ -18,6 +24,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
+        <PackageReference Include="React.AspNet" Version="5.2.4" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,6 +35,14 @@
         <Content Remove="$(SpaRoot)**" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    </ItemGroup>
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="wwwroot\public\favicon.ico" />
+      <_ContentIncludedByDefault Remove="wwwroot\public\index.html" />
+      <_ContentIncludedByDefault Remove="wwwroot\public\logo192.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\public\logo512.png" />
+      <_ContentIncludedByDefault Remove="wwwroot\public\manifest.json" />
+      <_ContentIncludedByDefault Remove="wwwroot\public\robots.txt" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
