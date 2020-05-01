@@ -1,7 +1,7 @@
 .decks .flip-container {
     height: var(--deck-height);
     width: var(--deck-width);
-    margin-left: var(--deck-margin);
+    margin: var(--deck-margin);
 }
 
 .front-side {

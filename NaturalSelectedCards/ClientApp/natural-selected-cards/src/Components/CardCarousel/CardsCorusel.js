@@ -3,13 +3,13 @@ import './CardCarousel.css'
 
 export default function CardCarousel({children, cardIndex, buttons, lastButton}) {
     const curIndex = Math.min(cardIndex, children.length);
-    const shift = -curIndex * 135;
+    const shift = `calc(-${curIndex} * (var(--card-width) + 100vw))`;
     const isLast = cardIndex === children.length;
 
     return (
         <div className='cards-carousel'>
             <div className='cards-container'>
-                <div className='cards' style={{transform: `translate(${shift}vw)`}}>
+                <div className='cards' style={{transform: `translate(${shift})`}}>
                     {children}
                     {lastButton}
                 </div>

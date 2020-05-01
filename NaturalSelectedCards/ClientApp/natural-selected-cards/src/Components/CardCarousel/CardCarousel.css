@@ -1,3 +1,8 @@
+:root {
+    --card-width: 35vw;
+    --card-height: 15vw;
+}
+
 .cards-carousel {
     width: 100vw;
     display: flex;
@@ -22,11 +27,11 @@
 }
 
 .cards-container, .flip-container, .buttons {
-    width: 35vw;
+    width: var(--card-width);
 }
 
 .cards-container, .flip-container {
-    height: 15vw;
+    height: var(--card-height);
 }
 
 .cards-carousel .flip-container {

@@ -1,18 +1,20 @@
 :root {
     --deck-height: 25vw;
     --deck-width: 17.5vw;
-    --deck-margin: 5vw;
+    --deck-margin: 0 0 6vw 6vw;
 }
 
 .decks {
     display: flex;
+    width: 100%;
+    flex-wrap: wrap;
 }
 
 .create-button,
 .deck-like {
     height: var(--deck-height);
     width: var(--deck-width);
-    margin-left: var(--deck-margin);
+    margin: var(--deck-margin);
 }
 
 
@@ -42,6 +44,10 @@
     user-select: none;
 }
 
-.deck-like:first-child {
-    margin: 0;
+.choose-dialog .deck-like {
+    margin-bottom: 0;
+}
+
+.choose-dialog .deck-like:first-child {
+    margin-left: 0;
 }

@@ -1,7 +1,29 @@
+.middle {
+    position: relative;
+}
+
 .card-side input {
     width: 95%;
     text-align: center;
     font-size: 4vw;
     font-weight: 200;
     border: #006778 solid 1px;
+}
+
+.deck-heading {
+    width: 30vw;
+    font-size: inherit;
+    font-weight: inherit;
+    border: #006778 solid 1px;
+    text-align: center;
+}
+
+.return-button {
+    position: absolute;
+    bottom: 2vw;
+    left: 2vw;
+    width: 15vw;
+    height: 3vw;
+    font-size: 2vw;
+    font-weight: 200;
 }

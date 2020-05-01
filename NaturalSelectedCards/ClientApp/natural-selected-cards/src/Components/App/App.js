@@ -12,7 +12,7 @@ import {myDecks, standardDecks} from "../../deckExamples";
 
 const user = {id: 123, name: 'Артемий', surname: 'Изаков'};
 
-export default class App extends React.Component {
+export default class App extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -74,7 +74,6 @@ export default class App extends React.Component {
             case PageNames.MAIN:
                 return <MainPage onLogin={this.logIn} />;
             case PageNames.MY_DECKS:
-                //TODO: Make main page
                 return <DecksPage
                     isUsers={true}
                     onPlay={this.play}
@@ -92,12 +91,19 @@ export default class App extends React.Component {
             case PageNames.GAME:
                 return <GamePage deckId={this.state.deckId} onEnd={this.goToMain}/>;
             case PageNames.CREATE:
-                //TODO: Edit-like page, but only 1 card at the start (chosen)
-                return <CreatePage/>;
+                return <CreatePage onBack={this.goToMain}/>;
             case PageNames.EDIT:
-                return <ViewDeckPage deckId={this.state.deckId} isEditable={true}/>;
+                return <ViewDeckPage
+                    deckId={this.state.deckId}
+                    isEditable={true}
+                    onBack={this.goToMain}
+                />;
             case PageNames.VIEW:
-                return <ViewDeckPage deckId={this.state.deckId} isEditable={false}/>;
+                return <ViewDeckPage
+                    deckId={this.state.deckId}
+                    isEditable={false}
+                    onBack={() => this.setPageName(PageNames.STANDARD_DECKS)}
+                />;
             default:
                 console.log(`Can't load page with name "${this.state.pageName}"`)
         }

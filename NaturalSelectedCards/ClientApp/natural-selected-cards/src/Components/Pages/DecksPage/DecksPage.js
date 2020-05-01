@@ -60,7 +60,7 @@ export default class Decks extends React.Component {
             />
     );
 
-    delete = deckId => this.setState({decks: this.state.decks.filter(d => d.id !== deckId)})
+    delete = deckId => this.setState({decks: this.state.decks.filter(d => d.id !== deckId)});
 
     create = () => {
         this.toggleChooseDialog();
