@@ -27,7 +27,7 @@ export default class GamePage extends React.Component {
                 </div>
                 <CardCarousel
                     cardIndex={this.state.cardIndex}
-                    lastButton={this.createButton('Вернуться', this.props.onEnd, 'back-button')}
+                    lastButton={this.createButton('Вернуться', this.props.onEnd, 'main-color back-button')}
                     buttons={this.getButtons()}
                 >
                     {this.deck.cards.map(this.getCard)}
@@ -64,7 +64,7 @@ export default class GamePage extends React.Component {
     };
 
     createButton = (label, handle, className = '', key) => (
-        <button className={`main-color shadow ${className}`} onClick={handle} key={key}>
+        <button className={`shadow ${className}`} onClick={handle} key={key}>
             {label}
         </button>
     );

@@ -16,14 +16,14 @@ export default class App extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
-            pageName: this.getMainPage()
+            pageName: this.getMainPage(),
+            isDarkTheme: false
         };
     }
 
     render() {
-        //TODO: maybe add dark theme
         return (
-            <div className="app light">
+            <div className={`app ${this.state.isDarkTheme ? 'dark' : 'light'}`}>
                 <header className='shadow main-color'>
                     <AppName onClick={this.goToMain}/>
                     <User user={this.state.user}/>

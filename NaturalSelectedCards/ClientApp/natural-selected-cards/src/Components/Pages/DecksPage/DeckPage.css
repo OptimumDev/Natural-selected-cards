@@ -19,9 +19,9 @@
 
 
 .create-button {
-    border: #bbbbbb 0.5vw dashed;
+    border-style: dashed;
+    border-width: 0.5vw;
     box-sizing: border-box;
-    color: #bbbbbb;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -30,9 +30,16 @@
     user-select: none;
 }
 
+.dark .create-button,
 .create-button:hover {
     border-color: #999999;
     color: #999999;
+}
+
+.create-button,
+.dark .create-button:hover {
+    border-color: #bbbbbb;
+    color: #bbbbbb;
 }
 
 .deck-like {
