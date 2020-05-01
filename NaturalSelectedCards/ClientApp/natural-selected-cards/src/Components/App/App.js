@@ -9,6 +9,8 @@ import GamePage from "../Pages/GamePage/GamePage";
 import CreatePage from "../Pages/CreatePage/CreatePage";
 import ViewDeckPage from "../Pages/ViewDeckPage/ViewDeckPage";
 import {myDecks, standardDecks} from "../../deckExamples";
+import darkThemeIcon from "../../images/brightness_4-black-48dp.svg"
+import brightThemeIcon from "../../images/brightness_4-white-48dp.svg"
 
 const user = {id: 123, name: 'Артемий', surname: 'Изаков'};
 
@@ -22,11 +24,15 @@ export default class App extends React.PureComponent {
     }
 
     render() {
+        const {isDarkTheme, user} = this.state;
         return (
-            <div className={`app ${this.state.isDarkTheme ? 'dark' : 'light'}`}>
+            <div className={`app ${isDarkTheme ? 'dark' : 'light'}`}>
                 <header className='shadow main-color'>
                     <AppName onClick={this.goToMain}/>
-                    <User user={this.state.user}/>
+                    <button onClick={this.toggleDarkMode} className='theme-button'>
+                        <img src={isDarkTheme ? brightThemeIcon : darkThemeIcon} alt='🌗'/>
+                    </button>
+                    <User user={user}/>
                 </header>
                 {this.getPage()}
             </div>
@@ -35,6 +41,7 @@ export default class App extends React.PureComponent {
 
     setPageName = name => this.setState({pageName: name});
     setDeckId = id => this.setState({deckId: id});
+    toggleDarkMode = () => this.setState({isDarkTheme: !this.state.isDarkTheme});
 
     play = deckId => {
         this.setDeckId(deckId);
