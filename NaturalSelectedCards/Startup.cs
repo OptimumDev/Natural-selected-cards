@@ -21,7 +21,9 @@ namespace NaturalSelectedCards
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseMvc();
+            app
+                .UseStaticFiles()
+                .UseMvc();
 
 //            app.UseAuthentication();
 //            app.UseAuthorization();
