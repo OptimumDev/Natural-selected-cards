@@ -8,7 +8,7 @@ using NaturalSelectedCards.Models.Requests;
 
 namespace NaturalSelectedCards.Controllers
 {
-    [Authorize]
+    //[Authorize]
     [ApiController]
     [Route("api/v1/decks")]
     public class DecksController : Controller

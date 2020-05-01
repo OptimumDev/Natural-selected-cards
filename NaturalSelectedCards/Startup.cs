@@ -16,7 +16,7 @@ namespace NaturalSelectedCards
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc(o => o.EnableEndpointRouting = false); // поч?
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
