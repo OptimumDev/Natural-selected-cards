@@ -20,7 +20,7 @@ export default class Decks extends React.Component {
             <>
                 <div className='page'>
                     <div className='page-name'>
-                        {isUsers ? 'My Decks' : 'Standard Decks'}
+                        {isUsers ? 'Мои колоды' : 'Стандартные колоды'}
                     </div>
                     <div className='decks'>
                         {this.state.decks.map(this.createDeck)}

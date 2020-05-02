@@ -12,7 +12,7 @@ import {myDecks, standardDecks} from "../../deckExamples";
 import darkThemeIcon from "../../images/brightness_4-black-48dp.svg"
 import brightThemeIcon from "../../images/brightness_4-white-48dp.svg"
 
-const user = {id: 123, name: 'Артемий', surname: 'Изаков'};
+const user = {id: 123, name: 'Неопознаный', surname: 'Пользователь'};
 
 export default class App extends React.PureComponent {
     constructor(props) {

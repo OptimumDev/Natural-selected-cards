@@ -10,6 +10,13 @@
     border: #006778 solid 1px;
 }
 
+.dark .card-side input,
+.dark .deck-heading {
+    background-color: black;
+    color: white;
+    border-color: #66E2FF;
+}
+
 .deck-heading {
     width: 30vw;
     font-size: inherit;
