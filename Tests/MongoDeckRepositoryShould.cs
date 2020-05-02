@@ -17,11 +17,11 @@ namespace Tests
 
         private static readonly DeckEntity[] Decks =
         {
-            new DeckEntity {Title = "deck", UserId = Guid.NewGuid()},
-            new DeckEntity {Title = "deck 1", UserId = CommonUserId},
-            new DeckEntity {Title = "deck 2", UserId = CommonUserId},
-            new DeckEntity {Title = "standard 1", UserId = Guid.Empty},
-            new DeckEntity {Title = "standard 2", UserId = Guid.Empty}
+            new DeckEntity(Guid.NewGuid(), "deck"), 
+            new DeckEntity(CommonUserId, "deck 1"), 
+            new DeckEntity(CommonUserId, "deck 2"), 
+            new DeckEntity(Guid.Empty, "standard 1"), 
+            new DeckEntity(Guid.Empty, "standard 2")
         };
 
         private IMongoCollection<DeckEntity> _collection;
@@ -90,7 +90,7 @@ namespace Tests
         [Test]
         public async Task InsertAsync_SetsNewId()
         {
-            var deck = new DeckEntity();
+            var deck = new DeckEntity(Guid.Empty, "d");
 
             await _repository.InsertAsync(deck);
 
@@ -100,7 +100,7 @@ namespace Tests
         [Test]
         public async Task InsertAsync_ReturnsTheSameObject()
         {
-            var expected = new DeckEntity();
+            var expected = new DeckEntity(Guid.Empty, "d");
 
             var actual = await _repository.InsertAsync(expected);
 
@@ -110,7 +110,7 @@ namespace Tests
         [Test]
         public async Task InsertAsync_SavesDeck()
         {
-            var expected = new DeckEntity {Title = "new deck", UserId = Guid.NewGuid()};
+            var expected = new DeckEntity(Guid.NewGuid(), "new deck");
 
             await _repository.InsertAsync(expected);
 
@@ -121,8 +121,8 @@ namespace Tests
         [Test]
         public async Task UpdateAsync_ChangesDeck()
         {
-            var expected = Decks[0];
-            expected.Title = "updated deck";
+            var old = Decks[0];
+            var expected = new DeckEntity(old.Id, old.UserId, "updated deck");
 
             await _repository.UpdateAsync(expected);
 

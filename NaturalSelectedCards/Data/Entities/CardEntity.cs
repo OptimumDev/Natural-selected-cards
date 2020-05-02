@@ -1,16 +1,35 @@
 ﻿using System;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace NaturalSelectedCards.Data.Entities
 {
     public class CardEntity
     {
-        // ReSharper disable once UnusedAutoPropertyAccessor.Local
         public Guid Id { get; private set; }
-        public Guid DeckId { get; set; }
-        public string Question { get; set; }
-        public string Answer { get; set; }
-        public int Repetitions { get; set; }
-        public int CorrectAnswers { get; set; }
-        public DateTime LastRepeat { get; set; }
+        [BsonElement] public readonly Guid DeckId;
+        [BsonElement] public readonly string Question;
+        [BsonElement] public readonly string Answer;
+        [BsonElement] public readonly int Repetitions;
+        [BsonElement] public readonly int CorrectAnswers;
+        [BsonElement] public readonly DateTime LastRepeat;
+
+        public CardEntity(Guid deckId, string question, string answer,
+            int repetitions = 0, int correctAnswers = 0, DateTime lastRepeat = default)
+            : this(Guid.Empty, deckId, question, answer, repetitions, correctAnswers, lastRepeat)
+        {
+        }
+
+        [BsonConstructor]
+        public CardEntity(Guid id, Guid deckId, string question, string answer,
+            int repetitions = 0, int correctAnswers = 0, DateTime lastRepeat = default)
+        {
+            Id = id;
+            DeckId = deckId;
+            Question = question;
+            Answer = answer;
+            Repetitions = repetitions;
+            CorrectAnswers = correctAnswers;
+            LastRepeat = lastRepeat;
+        }
     }
 }
