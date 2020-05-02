@@ -9,10 +9,10 @@ namespace NaturalSelectedCards.Logic.Managers
     {
         Task<List<DeckEntity>> GetDecksFor(Guid userId);
         Task<List<DeckEntity>> GetStandartDecks();
-        Task<Boolean> AddStandartDeck(Guid userId, Guid deckId);
+        Task<DeckEntity> AddStandartDeck(Guid userId, Guid deckId);
         // придумать что возвращать bool, или колоду
-        Task<List<CardEntity>> GetAllCardsFromDeck(Guid deckId);
-        Task<DeckEntity> UpdateDeck(DeckEntity deck);
+        Task<List<CardEntity>> GetAllCardsFromDeck(Guid userId, Guid deckId);
+        Task<DeckEntity> UpdateDeck(Guid userId, DeckEntity deck);
         Task<DeckEntity> AddDeck(Guid userId, DeckEntity deck);
         Task<Boolean> DeleteDeck(Guid userId, Guid deckId);
         Task<List<CardEntity>> GetCardsForGame(Guid userId, Guid deckId);
