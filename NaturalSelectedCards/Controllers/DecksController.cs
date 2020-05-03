@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using NaturalSelectedCards.Models;
 using NaturalSelectedCards.Models.Requests;
+using NaturalSelectedCards.Models.Responses;
 
 namespace NaturalSelectedCards.Controllers
 {
@@ -19,10 +19,7 @@ namespace NaturalSelectedCards.Controllers
                 .Select(i => new CardResponse
                 {
                     Answer = $"Ответ №{i.ToString()}",
-                    CorrectAnswers = 0,
-                    DeckId = deckId,
                     Id = Guid.NewGuid(),
-                    LastRepeat = DateTime.Now,
                     Question = $"Вопрос №{i.ToString()}"
                 });
 
@@ -36,7 +33,7 @@ namespace NaturalSelectedCards.Controllers
         }
         
         [HttpPost]
-        public ActionResult<DeckResponse> CreateDeck([FromBody] DeckRequest deck)
+        public IActionResult CreateDeck([FromBody] DeckRequest deck)
         {
             return Ok();
         }
@@ -55,8 +52,8 @@ namespace NaturalSelectedCards.Controllers
 
             return Ok(new[]
             {
-                new DeckResponse {Id = Guid.NewGuid(), Title = "зачем жить?", UserId = userId},
-                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета грязи", UserId = userId},
+                new DeckResponse {Id = Guid.NewGuid(), Title = "зачем жить?"},
+                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета грязи"},
             });
         }
         
@@ -67,8 +64,8 @@ namespace NaturalSelectedCards.Controllers
 
             return Ok(new[]
             {
-                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета", UserId = userId},
-                new DeckResponse {Id = Guid.NewGuid(), Title = "животные", UserId = userId},
+                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета"},
+                new DeckResponse {Id = Guid.NewGuid(), Title = "животные"}
             });
         }
 
@@ -86,10 +83,7 @@ namespace NaturalSelectedCards.Controllers
                 .Select(i => new CardResponse
                 {
                     Answer = $"Ответ №{i.ToString()}",
-                    CorrectAnswers = 0,
-                    DeckId = deckId,
                     Id = Guid.NewGuid(),
-                    LastRepeat = DateTime.Now,
                     Question = $"Вопрос №{i.ToString()}"
                 });
 
