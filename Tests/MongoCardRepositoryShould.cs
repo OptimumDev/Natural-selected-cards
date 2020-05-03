@@ -49,7 +49,7 @@ namespace Tests
         }
 
         [Test]
-        public async Task GetCardsByDeckAsync_ReturnsNonEmptyList()
+        public async Task GetCardsByDeckAsync_ReturnsNonEmptyList_WhenHaveCards()
         {
             var expected = Cards.Where(d => d.DeckId == CommonDeckId);
 
@@ -105,6 +105,16 @@ namespace Tests
 
             var actual = await _collection.Find(d => d.Id == expected.Id).FirstOrDefaultAsync();
             actual.Should().BeEquivalentTo(expected);
+        }
+        
+        [Test]
+        public async Task UpdateAsync_ReturnsTheSameObject()
+        {
+            var expected = Cards[0];
+
+            var actual = await _repository.UpdateAsync(expected);
+
+            actual.Should().Be(expected);
         }
 
         [Test]

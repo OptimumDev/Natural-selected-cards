@@ -36,9 +36,10 @@ namespace NaturalSelectedCards.Data.Repositories
             return card;
         }
 
-        public Task UpdateAsync(CardEntity card)
+        public async Task<CardEntity> UpdateAsync(CardEntity card)
         {
-            return _cardCollection.ReplaceOneAsync(c => c.Id == card.Id, card);
+            await _cardCollection.ReplaceOneAsync(c => c.Id == card.Id, card);
+            return card;
         }
 
         public Task DeleteAsync(Guid cardId)

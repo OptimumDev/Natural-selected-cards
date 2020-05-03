@@ -50,7 +50,7 @@ namespace Tests
         }
 
         [Test]
-        public async Task GetUserDecksAsync_ReturnsNonEmptyList()
+        public async Task GetUserDecksAsync_ReturnsNonEmptyList_WhenHaveDecks()
         {
             var expected = Decks.Where(d => d.UserId == CommonUserId);
 
@@ -116,6 +116,16 @@ namespace Tests
 
             var actual = await _collection.Find(d => d.Id == expected.Id).FirstOrDefaultAsync();
             actual.Should().BeEquivalentTo(expected);
+        }
+        
+        [Test]
+        public async Task UpdateAsync_ReturnsTheSameObject()
+        {
+            var expected = Decks[0];
+
+            var actual = await _repository.UpdateAsync(expected);
+
+            actual.Should().Be(expected);
         }
 
         [Test]
