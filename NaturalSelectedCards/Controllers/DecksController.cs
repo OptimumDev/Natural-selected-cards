@@ -48,8 +48,9 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult<Guid> CreateDeck([FromBody] CreateCardRequest request)
+        public ActionResult<Guid> CreateDeck([FromBody] CreateDeckRequest request)
         {
+            // Created
             return Ok();
         }
         

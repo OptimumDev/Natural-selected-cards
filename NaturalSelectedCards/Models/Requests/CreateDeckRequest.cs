@@ -2,7 +2,7 @@ using System;
 
 namespace NaturalSelectedCards.Models.Requests
 {
-    public class CreateCardRequest
+    public class CreateDeckRequest
     {
         public Guid UserId { get; set; }
     }
