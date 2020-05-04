@@ -11,7 +11,12 @@ namespace NaturalSelectedCards.Controllers
     [Route("api/v1/decks")]
     public class DecksController : Controller
     {
-        [HttpGet("/{deckId}")]
+        /// <summary>
+        /// Получение всей колоды (карточек)
+        /// </summary>
+        /// <param name="deckId"></param>
+        /// <returns></returns>
+        [HttpGet("{deckId}")]
         public ActionResult<ICollection<CardResponse>> GetDeck([FromRoute] Guid deckId)
         {
             var response = Enumerable.Range(0, 5)
@@ -25,25 +30,45 @@ namespace NaturalSelectedCards.Controllers
             return Ok(response);
 ;        }
         
-        [HttpPut("/{deckId}")]
+        /// <summary>
+        /// Обновление колоды (названия)
+        /// </summary>
+        /// <param name="deckId"></param>
+        /// <param name="updateDeck"></param>
+        /// <returns></returns>
+        [HttpPut("{deckId}")]
         public ActionResult<DeckResponse> UpdateDeck([FromRoute] Guid deckId, [FromBody] UpdateDeckRequest updateDeck)
         {
             return Ok();
         }
         
+        /// <summary>
+        /// Создание новой колоды (пустой)
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPost]
         public ActionResult<Guid> CreateDeck([FromBody] CreateCardRequest request)
         {
             return Ok();
         }
         
-        [HttpDelete("/{deckId}")]
+        /// <summary>
+        /// Удаление колоды
+        /// </summary>
+        /// <param name="deckId"></param>
+        /// <returns></returns>
+        [HttpDelete("{deckId}")]
         public IActionResult DeleteDeck([FromRoute] Guid deckId)
         {
             return Ok();
         }
 
-        
+        /// <summary>
+        /// Получение информации о колодах пользователя
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet()]
         public ActionResult<ICollection<DeckResponse>> GetDecks([FromQuery] Guid userId)
         {
@@ -54,7 +79,11 @@ namespace NaturalSelectedCards.Controllers
             });
         }
         
-        [HttpGet("/standard")]
+        /// <summary>
+        /// Получение информации о стандартных колодах
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("standard")]
         public ActionResult<ICollection<DeckResponse>> GetStandardDecks()
         {
             return Ok(new[]
@@ -64,14 +93,24 @@ namespace NaturalSelectedCards.Controllers
             });
         }
 
-        [HttpPost("/{deckId}/copy")]
+        /// <summary>
+        /// Добавление другой колоды в коллекцию пользователя
+        /// </summary>
+        /// <param name="deckId"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("{deckId}/copy")]
         public IActionResult CopyDeck([FromRoute] Guid deckId, [FromBody] CopyDeckRequest request)
         {
             return Ok();
         }
 
-
-        [HttpDelete("/{deckId}/game")]
+        /// <summary>
+        /// Получение тренировочного набора карт
+        /// </summary>
+        /// <param name="deckId"></param>
+        /// <returns></returns>
+        [HttpDelete("{deckId}/game")]
         public ActionResult<ICollection<CardResponse>> GetGameDeck([FromRoute] Guid deckId)
         {
             var response = Enumerable.Range(0, 5)
