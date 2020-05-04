@@ -28,7 +28,7 @@ namespace NaturalSelectedCards.Controllers
         }
         
         [HttpPut("/{cardId}")]
-        public IActionResult UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest card)
+        public ActionResult<CardResponse> UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest card)
         {
             return Ok();
         }

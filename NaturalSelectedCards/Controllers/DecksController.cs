@@ -27,13 +27,13 @@ namespace NaturalSelectedCards.Controllers
 ;        }
         
         [HttpPut("/{deckId}")]
-        public ActionResult<DeckResponse> UpdateDeck([FromRoute] Guid deckId, [FromBody] DeckRequest deck)
+        public ActionResult<DeckResponse> UpdateDeck([FromRoute] Guid deckId, [FromBody] string title)
         {
             return Ok();
         }
         
         [HttpPost]
-        public IActionResult CreateDeck([FromBody] DeckRequest deck)
+        public ActionResult<Guid> CreateDeck([FromBody] Guid userId)
         {
             return Ok();
         }
@@ -46,31 +46,27 @@ namespace NaturalSelectedCards.Controllers
 
         
         [HttpGet()]
-        public ActionResult<ICollection<DeckResponse>> GetDecks()
+        public ActionResult<ICollection<DeckResponse>> GetDecks([FromQuery] Guid userId)
         {
-            var userId = Guid.NewGuid();
-
             return Ok(new[]
             {
-                new DeckResponse {Id = Guid.NewGuid(), Title = "зачем жить?"},
-                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета грязи"},
+                new DeckResponse {Id = Guid.NewGuid(), Title = "зачем жить?", Rating = 0.1, CardsCount = 3, LastRepetition = DateTime.Now},
+                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета грязи", Rating = 0.8, CardsCount = 3, LastRepetition = DateTime.Now.AddDays(-3)},
             });
         }
         
         [HttpGet("/standard")]
         public ActionResult<ICollection<DeckResponse>> GetStandardDecks()
         {
-            var userId = Guid.Empty;
-
             return Ok(new[]
             {
-                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета"},
-                new DeckResponse {Id = Guid.NewGuid(), Title = "животные"}
+                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета", Rating = 0, CardsCount = 3, PlayedCount = 0, LastRepetition = null},
+                new DeckResponse {Id = Guid.NewGuid(), Title = "животные", Rating = 0, CardsCount = 3, PlayedCount = 0, LastRepetition = null}
             });
         }
 
         [HttpPost("/{deckId}/copy")]
-        public IActionResult AddStandardDeckToUser([FromRoute] Guid deckId, [FromBody] Guid userId) // не помню сработает ли
+        public IActionResult AddStandardDeckToUser([FromRoute] Guid deckId, [FromBody] Guid userId)
         {
             return Ok();
         }
