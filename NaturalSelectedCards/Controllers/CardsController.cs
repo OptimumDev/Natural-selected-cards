@@ -34,7 +34,7 @@ namespace NaturalSelectedCards.Controllers
         }
         
         [HttpPost("/{cardId}/answer")]
-        public IActionResult AnswerCard([FromRoute] Guid cardId, [FromBody] bool isCorrect) // мб не сработает, надо тестить
+        public IActionResult AnswerCard([FromRoute] Guid cardId, [FromBody] bool isCorrect)
         {
             return Ok();
         }

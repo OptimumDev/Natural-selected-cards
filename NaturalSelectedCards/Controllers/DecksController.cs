@@ -7,7 +7,6 @@ using NaturalSelectedCards.Models.Responses;
 
 namespace NaturalSelectedCards.Controllers
 {
-    //[Authorize]
     [ApiController]
     [Route("api/v1/decks")]
     public class DecksController : Controller
@@ -27,13 +26,13 @@ namespace NaturalSelectedCards.Controllers
 ;        }
         
         [HttpPut("/{deckId}")]
-        public ActionResult<DeckResponse> UpdateDeck([FromRoute] Guid deckId, [FromBody] string title)
+        public ActionResult<DeckResponse> UpdateDeck([FromRoute] Guid deckId, [FromBody] UpdateDeckRequest updateDeck)
         {
             return Ok();
         }
         
         [HttpPost]
-        public ActionResult<Guid> CreateDeck([FromBody] Guid userId)
+        public ActionResult<Guid> CreateDeck([FromBody] CreateCardRequest request)
         {
             return Ok();
         }
@@ -66,7 +65,7 @@ namespace NaturalSelectedCards.Controllers
         }
 
         [HttpPost("/{deckId}/copy")]
-        public IActionResult AddStandardDeckToUser([FromRoute] Guid deckId, [FromBody] Guid userId)
+        public IActionResult CopyDeck([FromRoute] Guid deckId, [FromBody] CopyDeckRequest request)
         {
             return Ok();
         }
