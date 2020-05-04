@@ -17,6 +17,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.2" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.2" />
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="5.4.1" />
     </ItemGroup>
 
 </Project>
