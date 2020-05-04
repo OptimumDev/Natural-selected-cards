@@ -1,0 +1,60 @@
+:root {
+    --card-width: 35vw;
+    --card-height: 15vw;
+}
+
+.cards-carousel {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.cards {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: transform 500ms;
+}
+
+.buttons {
+    height: 10vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: transform 1000ms;
+}
+
+.cards-container, .flip-container, .buttons {
+    width: var(--card-width);
+}
+
+.cards-container, .flip-container {
+    height: var(--card-height);
+}
+
+.cards-carousel .flip-container {
+    flex-shrink: 0;
+    height: 100%;
+    margin-right: 100vw;
+}
+
+.buttons button {
+    height: 5vw;
+    width: 47.5%;
+    font-size: 2vw;
+    font-weight: 300;
+}
+
+.buttons button:only-child {
+    margin: 0 auto;
+}
+
+.back-button {
+    flex-shrink: 0;
+    height: 10vw;
+    width: 30vw;
+    margin-left: 2.5vw;
+    font-size: 200%;
+}

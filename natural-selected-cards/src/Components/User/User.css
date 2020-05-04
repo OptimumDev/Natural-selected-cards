@@ -1,0 +1,27 @@
+.user {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.user-image {
+    height: 3.5vw;
+    margin-right: 5px;
+
+    border-radius: 50%;
+    border: #888888 1px solid;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    overflow: hidden;
+    user-select: none;
+}
+
+.user-name {
+    font-size: 2vw;
+    font-weight: 200;
+}
