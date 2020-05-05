@@ -1,0 +1,60 @@
+:root {
+    --deck-height: 25vw;
+    --deck-width: 17.5vw;
+    --deck-margin: 0 0 6vw 6vw;
+}
+
+.decks {
+    display: flex;
+    width: 100%;
+    flex-wrap: wrap;
+}
+
+.create-button,
+.deck-like {
+    height: var(--deck-height);
+    width: var(--deck-width);
+    margin: var(--deck-margin);
+}
+
+
+.create-button {
+    border-style: dashed;
+    border-width: 0.5vw;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20vw;
+    font-weight: 900;
+    user-select: none;
+}
+
+.dark .create-button,
+.create-button:hover {
+    border-color: #999999;
+    color: #999999;
+}
+
+.create-button,
+.dark .create-button:hover {
+    border-color: #bbbbbb;
+    color: #bbbbbb;
+}
+
+.deck-like {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    font-size: 2.5vw;
+    font-weight: 300;
+    user-select: none;
+}
+
+.choose-dialog .deck-like {
+    margin-bottom: 0;
+}
+
+.choose-dialog .deck-like:first-child {
+    margin-left: 0;
+}
