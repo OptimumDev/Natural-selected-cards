@@ -11,13 +11,13 @@ namespace NaturalSelectedCards.Logic.Managers
         Task<List<DeckModel>> GetStandartDecksAsync();
         Task<bool> CopyDeckAsync(Guid userId, Guid deckId);
         Task<List<CardModel>> GetAllCardsFromDeckAsync(Guid deckId);
-        Task<bool> UpdateDeckAsync(DeckModel deck);
-        Task<bool> AddDeckAsync(Guid userId, DeckModel deck);
+        Task<Guid> AddDeckAsync(Guid userId);
+        Task<bool> UpdateDeckTitleAsync(Guid deckId, String title);
         Task<bool> DeleteDeckAsync(Guid deckId);
         Task<List<CardModel>> GetCardsForGameAsync(Guid deckId);
-        Task<bool> UpdateCardKnowledgeAsync(Guid userId, Guid cardId, Boolean isCorrect);
-        Task<CardModel> CreateCardAsync(Guid deckId);
-        Task<CardModel> UpdateCardTitleAsync(Guid cardId, String title);
+        Task<bool> UpdateCardKnowledgeAsync(Guid cardId, Boolean isCorrect);
+        Task<Guid> AddCardAsync(Guid deckId);
+        Task<bool> UpdateCardAsync(Guid cardId, CardModel cardModel);
         Task<bool> DeleteCardAsync(Guid cardId);
     }
 }
