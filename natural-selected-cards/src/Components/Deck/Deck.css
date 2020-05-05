@@ -1,0 +1,58 @@
+.decks .flip-container {
+    height: var(--deck-height);
+    width: var(--deck-width);
+    margin: var(--deck-margin);
+}
+
+.front-side {
+    display: flex;
+    align-items: center;
+}
+
+.deck-info {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 1.5fr 3fr 2.5fr;
+}
+
+.deck-name {
+    width: 100%;
+    text-align: center;
+    font-size: 5vw;
+    font-weight: 200;
+}
+
+.delete-button {
+    position: absolute;
+    top: -1vw;
+    right: -1vw;
+    border-radius: 50%;
+    box-sizing: border-box;
+    padding: 0;
+    width: 2.5vw;
+    height: 2.5vw;
+}
+
+.delete-button:hover {
+    transform: scale(1.1);
+}
+
+.delete-button:active {
+    transform: none;
+    box-shadow: none;
+}
+
+.controls {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-direction: column;
+}
+
+.play-button,
+.edit-button {
+    width: 90%;
+    font-size: 2.5vw;
+    font-weight: 300;
+    flex-shrink: 0;
+}

@@ -11,7 +11,7 @@ namespace NaturalSelectedCards.Data.Repositories
         Task<List<DeckEntity>> GetStandardDecksAsync();
         Task<DeckEntity> FindByIdAsync(Guid deckId);
         Task<DeckEntity> InsertAsync(DeckEntity deck);
-        Task UpdateAsync(DeckEntity deck);
+        Task<DeckEntity> UpdateAsync(DeckEntity deck);
         Task DeleteAsync(Guid deckId);
     }
 }
