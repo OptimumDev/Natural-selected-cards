@@ -28,22 +28,24 @@ export default class ViewDeckPage extends React.Component {
                 <div className='page-name'>
                     {this.getHeading()}
                 </div>
-                <div className='middle'>
-                    <CardCarousel
-                        cardIndex={this.state.cardIndex}
-                        buttons={this.getButtons()}
-                    >
-                        {this.state.deck.cards.map(this.renderCard)}
-                    </CardCarousel>
-                    <button className='main-color shadow return-button' onClick={this.props.onBack}>
-                        &lt; Вернуться
-                    </button>
+                <div className='page-content'>
+                    <div className='middle'>
+                        <CardCarousel
+                            cardIndex={this.state.cardIndex}
+                            buttons={this.getButtons()}
+                        >
+                            {this.state.deck.cards.map(this.renderCard)}
+                        </CardCarousel>
+                        <button className='main-color shadow return-button' onClick={this.props.onBack}>
+                            &lt; Вернуться
+                        </button>
+                    </div>
+                    <DeckSubview
+                        deck={this.state.deck}
+                        chosenIndex={this.state.cardIndex}
+                        onCardChoice={this.setCardIndex}
+                    />
                 </div>
-                <DeckSubview
-                    deck={this.state.deck}
-                    chosenIndex={this.state.cardIndex}
-                    onCardChoice={this.setCardIndex}
-                />
             </div>
         );
     }

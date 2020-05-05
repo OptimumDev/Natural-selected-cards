@@ -50,11 +50,3 @@
 .buttons button:only-child {
     margin: 0 auto;
 }
-
-.back-button {
-    flex-shrink: 0;
-    height: 10vw;
-    width: 30vw;
-    margin-left: 2.5vw;
-    font-size: 200%;
-}

@@ -3,7 +3,7 @@ import './MainPage.css'
 
 export default function MainPage({onLogin}) {
     return (
-        <div className='main-page'>
+        <div className='page main-page page-content'>
             <p>
                 Добро пожаловать!<br/>
                 Данный сайт предоставляет возможность<br/>
