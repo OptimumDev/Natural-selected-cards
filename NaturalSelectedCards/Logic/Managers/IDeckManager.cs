@@ -7,15 +7,17 @@ namespace NaturalSelectedCards.Logic.Managers
 {
     public interface IDeckManager
     {
-        Task<List<DeckModel>> GetDecksFor(Guid userId);
-        Task<List<DeckModel>> GetStandartDecks();
-        Task<DeckModel> AddStandartDeck(Guid userId, Guid deckId);
-        // придумать что возвращать bool, или колоду
-        Task<List<CardModel>> GetAllCardsFromDeck(Guid userId, Guid deckId);
-        Task<DeckModel> UpdateDeck(Guid userId, DeckModel deck);
-        Task<DeckModel> AddDeck(Guid userId, DeckModel deck);
-        Task<Boolean> DeleteDeck(Guid userId, Guid deckId);
-        Task<List<CardModel>> GetCardsForGame(Guid userId, Guid deckId);
-        Task<Boolean> UpdateCardKnowledge(Guid userId, Guid cardId, Boolean isCorrect);
+        Task<List<DeckModel>> GetDecksAsync(Guid userId);
+        Task<List<DeckModel>> GetStandartDecksAsync();
+        Task<bool> CopyDeckAsync(Guid userId, Guid deckId);
+        Task<List<CardModel>> GetAllCardsFromDeckAsync(Guid deckId);
+        Task<bool> UpdateDeckAsync(DeckModel deck);
+        Task<bool> AddDeckAsync(Guid userId, DeckModel deck);
+        Task<bool> DeleteDeckAsync(Guid deckId);
+        Task<List<CardModel>> GetCardsForGameAsync(Guid deckId);
+        Task<bool> UpdateCardKnowledgeAsync(Guid userId, Guid cardId, Boolean isCorrect);
+        Task<CardModel> CreateCardAsync(Guid deckId);
+        Task<CardModel> UpdateCardTitleAsync(Guid cardId, String title);
+        Task<bool> DeleteCardAsync(Guid cardId);
     }
 }
