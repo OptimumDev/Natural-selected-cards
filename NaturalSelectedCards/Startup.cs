@@ -37,8 +37,8 @@ namespace NaturalSelectedCards
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-            
-            //app.UseDefaultFiles();
+
+            app.UseDefaultFiles();
             app.UseStaticFiles();
             
             app.UseSwaggerUI(c =>
