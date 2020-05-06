@@ -30,7 +30,7 @@ export default class App extends React.PureComponent {
         return (
             <div className={`app ${isDarkTheme ? 'dark' : 'light'}`}>
                 <header className='shadow main-color'>
-                    <AppName onClick={this.goToMain}/>
+                    <AppName onClick={this.goToMain} isDarkTheme={isDarkTheme}/>
                     <button onClick={this.toggleDarkMode} className='theme-button'>
                         <img src={isDarkTheme ? brightThemeIcon : darkThemeIcon} alt='🌗'/>
                     </button>

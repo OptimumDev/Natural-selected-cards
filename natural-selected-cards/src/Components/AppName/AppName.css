@@ -1,4 +1,12 @@
 .app-name {
     font-size: 2.5vw;
     font-weight: 300;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    width: 3.5vw;
+    height: 3.5vw;
+    margin-right: 5px;
 }
