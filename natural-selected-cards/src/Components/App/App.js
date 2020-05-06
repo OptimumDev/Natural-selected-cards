@@ -12,6 +12,8 @@ import {myDecks, standardDecks} from "../../deckExamples";
 import darkThemeIcon from "../../images/brightness_4-black-48dp.svg"
 import brightThemeIcon from "../../images/brightness_4-white-48dp.svg"
 
+const IS_DARK_THEME_KEY = 'isDarkTheme';
+
 const user = {id: 123, name: 'Неопознаный', surname: 'Пользователь'};
 
 export default class App extends React.PureComponent {
@@ -19,7 +21,7 @@ export default class App extends React.PureComponent {
         super(props);
         this.state = {
             pageName: this.getMainPage(),
-            isDarkTheme: false
+            isDarkTheme: JSON.parse(localStorage.getItem(IS_DARK_THEME_KEY)) || false
         };
     }
 
@@ -41,7 +43,13 @@ export default class App extends React.PureComponent {
 
     setPageName = name => this.setState({pageName: name});
     setDeckId = id => this.setState({deckId: id});
-    toggleDarkMode = () => this.setState({isDarkTheme: !this.state.isDarkTheme});
+
+    toggleDarkMode = () => {
+        const isDarkTheme = !this.state.isDarkTheme;
+
+        this.setState({isDarkTheme});
+        localStorage.setItem(IS_DARK_THEME_KEY, isDarkTheme);
+    };
 
     play = deckId => {
         this.setDeckId(deckId);
