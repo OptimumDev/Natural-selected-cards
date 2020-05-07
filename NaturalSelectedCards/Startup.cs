@@ -25,30 +25,36 @@ namespace NaturalSelectedCards
             services.AddMvc(o => o.EnableEndpointRouting = false);
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "NSCards Api", Version = "v1" });
-                
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "NSCards Api", Version = "v1"});
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 c.IncludeXmlComments(xmlPath);
             });
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Google";
+            })
+                .AddScheme<GoogleAuthenticationSchemeOptions, GoogleAuthenticationHandler>("Google", o => {});
         }
- 
+
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
-
-            app.UseDefaultFiles();
-            app.UseStaticFiles();
-            
             app.UseSwaggerUI(c =>
             {
                 // Заходить по {ip}:{port}/swagger
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "NSCards Api");
             });
 
+            app.UseDefaultFiles();
+            app.UseStaticFiles();
             app.UseRouting();
             app.UseMvc();
+
+            app.UseAuthentication();
         }
     }
 }
