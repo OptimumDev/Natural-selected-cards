@@ -14,16 +14,6 @@ input {
     font-family: Roboto, sans-serif;
 }
 
-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px;
-    position: relative;
-    z-index: 100;
-    flex: none;
-}
-
 button {
     border: none;
     border-radius: 5px;
@@ -35,11 +25,6 @@ button {
 button:active {
     transform: translateY(5%);
     box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 2px 2px rgba(0,0,0,0.23);
-}
-
-.theme-button {
-    left: 48.25vw;
-    position: absolute;
 }
 
 .light a {

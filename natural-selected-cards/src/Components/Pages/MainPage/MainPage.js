@@ -1,7 +1,9 @@
 import React from "react";
 import './MainPage.css'
 
-export default function MainPage({onLogin}) {
+const user = {id: 123, name: 'Неопознаный', surname: 'Пользователь'};
+
+export default function MainPage({onLogin, isDarkTheme}) {
     return (
         <div className='page main-page page-content'>
             <p>
@@ -12,13 +14,12 @@ export default function MainPage({onLogin}) {
             </p>
             <p>
                 Для того, чтобы начать,<br/>
-                <button onClick={onLogin} className='main-color shadow enter-button'>Войдите</button><br/>
+                <button onClick={() => onLogin(user)} className='main-color shadow enter-button'>Войдите</button><br/>
                 и добавьте в коллекцию первую колоду.<br/>
             </p>
             <p>
                 Удачи!
             </p>
-
         </div>
     )
 }
