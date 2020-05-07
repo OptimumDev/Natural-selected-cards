@@ -24,7 +24,7 @@ namespace NaturalSelectedCards.Controllers
                 ClientSecret = "",
 
                 Code = authCode,
-                RedirectUri = "https://localhost:5001/api/v1/auth/login",
+                RedirectUri = "postmessage",
             });
 
             if (response.IsError)
