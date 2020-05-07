@@ -14,7 +14,6 @@ namespace NaturalSelectedCards
         : AuthenticationHandler<GoogleAuthenticationSchemeOptions>
     {
         private const string AuthCookieName = "Authorization-Token";
-        private const string Address = "https://oauth2.googleapis.com/token";
         
         public GoogleAuthenticationHandler(
             IOptionsMonitor<GoogleAuthenticationSchemeOptions> options,
@@ -31,7 +30,7 @@ namespace NaturalSelectedCards
                 return AuthenticateResult.Fail("No auth code");
             
             using var client = new HttpClient();
-
+            
             var userInfo = await client.GetUserInfoAsync(new UserInfoRequest
             {
                 Address = "https://openidconnect.googleapis.com/v1/userinfo",
