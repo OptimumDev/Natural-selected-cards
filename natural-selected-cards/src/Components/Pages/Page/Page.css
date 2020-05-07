@@ -1,0 +1,24 @@
+.page {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.page-name {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4vw;
+    padding: 2vw;
+}
+
+.dark .page-name {
+    color: #66E2FF;
+}
+
+.page-content {
+    flex: 1 0 auto;
+}
