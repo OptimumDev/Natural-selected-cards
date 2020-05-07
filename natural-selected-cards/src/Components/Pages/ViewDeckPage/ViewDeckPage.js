@@ -5,6 +5,7 @@ import CardCarousel from "../../CardCarousel/CardsCorusel";
 import FlipCard from "../../FlipCard/FlipCard";
 import './ViewDeckPage.css'
 import crossIcon from "../../../images/Flat_cross_icon.svg";
+import IconButton from "../../IconButton/IconButton";
 
 export default class ViewDeckPage extends React.Component {
 
@@ -99,9 +100,13 @@ export default class ViewDeckPage extends React.Component {
                             />
                             {
                                 this.state.deck.cards.length > 1 &&
-                                <button className='delete-button' onClick={this.delete}>
-                                    <img src={crossIcon} alt='X' draggable={false}/>
-                                </button>
+                                <IconButton
+                                    className='delete-button'
+                                    onClick={this.delete}
+                                    icon={crossIcon}
+                                    alt='X'
+                                    size='2.5vw'
+                                />
                             }
                         </>
                         : label

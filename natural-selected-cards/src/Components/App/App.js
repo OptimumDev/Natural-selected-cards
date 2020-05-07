@@ -11,6 +11,7 @@ import ViewDeckPage from "../Pages/ViewDeckPage/ViewDeckPage";
 import {myDecks, standardDecks} from "../../deckExamples";
 import darkThemeIcon from "../../images/brightness_4-black-48dp.svg"
 import brightThemeIcon from "../../images/brightness_4-white-48dp.svg"
+import IconButton from "../IconButton/IconButton";
 
 const IS_DARK_THEME_KEY = 'isDarkTheme';
 
@@ -31,10 +32,14 @@ export default class App extends React.PureComponent {
             <div className={`app ${isDarkTheme ? 'dark' : 'light'}`}>
                 <header className='shadow main-color'>
                     <AppName onClick={this.goToMain} isDarkTheme={isDarkTheme}/>
-                    <button onClick={this.toggleDarkMode} className='theme-button'>
-                        <img src={isDarkTheme ? brightThemeIcon : darkThemeIcon} alt='🌗'/>
-                    </button>
-                    <User user={user}/>
+                    <IconButton
+                        className='theme-button'
+                        onClick={this.toggleDarkMode}
+                        icon={isDarkTheme ? brightThemeIcon : darkThemeIcon}
+                        alt='🌗'
+                        size='3.5vw'
+                    />
+                    <User user={user} isDarkTheme={isDarkTheme} onLogout={this.logOut}/>
                 </header>
                 {this.getPage()}
             </div>
@@ -48,7 +53,7 @@ export default class App extends React.PureComponent {
         const isDarkTheme = !this.state.isDarkTheme;
 
         this.setState({isDarkTheme});
-        localStorage.setItem(IS_DARK_THEME_KEY, isDarkTheme);
+        localStorage.setItem(IS_DARK_THEME_KEY, JSON.stringify(isDarkTheme));
     };
 
     play = deckId => {
@@ -82,6 +87,11 @@ export default class App extends React.PureComponent {
     logIn = () => this.setState({
         pageName: PageNames.MY_DECKS,
         user: user
+    });
+
+    logOut = () => this.setState({
+        pageName: PageNames.MAIN,
+        user: null
     });
 
     getPage = () => {

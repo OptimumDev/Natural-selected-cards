@@ -29,6 +29,7 @@
     font-size: 20vw;
     font-weight: 900;
     user-select: none;
+    cursor: pointer;
 }
 
 .dark .create-button,

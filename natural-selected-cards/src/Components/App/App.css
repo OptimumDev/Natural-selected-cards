@@ -54,6 +54,7 @@ button {
     border-radius: 5px;
     font-family: Roboto, sans-serif;
     outline: none;
+    cursor: pointer;
 }
 
 button:active {
@@ -62,19 +63,8 @@ button:active {
 }
 
 .theme-button {
-    background-color: transparent;
     left: 48.25vw;
     position: absolute;
-    padding: 0;
-}
-
-.theme-button img {
-    height: 3.5vw;
-}
-
-.theme-button:active {
-    box-shadow: none;
-    transform: none;
 }
 
 .light a {
