@@ -10,7 +10,7 @@ export default function User({user, isDarkTheme, onLogout}) {
         <div className='user'>
             {user &&
             <>
-                <img src={userIcon} alt='👤' className='user-image main-color-dark' draggable={false}/>
+                <img src={user.img || userIcon} alt='👤' className='user-image main-color-dark' draggable={false}/>
                 <span className='user-name'>{user.name} {user.surname}</span>
                 <IconButton
                     className='exit-button'
