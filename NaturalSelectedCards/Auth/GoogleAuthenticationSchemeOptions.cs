@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Authentication;
 
-namespace NaturalSelectedCards
+namespace NaturalSelectedCards.Auth
 {
-    public class GoogleAuthenticationSchemeOptions
-        : AuthenticationSchemeOptions
-    { }
+    public class GoogleAuthenticationSchemeOptions : AuthenticationSchemeOptions
+    {
+    }
 }

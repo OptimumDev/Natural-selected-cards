@@ -1,15 +1,18 @@
-using System.Linq;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NaturalSelectedCards.Utils;
+using NaturalSelectedCards.Utils.Constants;
+using NaturalSelectedCards.Utils.Constants.ClaimTypes;
+using NaturalSelectedCards.Utils.Extensions;
 using UserInfo = NaturalSelectedCards.Models.Responses.UserInfoResponse;
 
 namespace NaturalSelectedCards.Controllers
 {
-    [Authorize(AuthenticationSchemes = "Google")]
+    [Authorize(AuthenticationSchemes = AuthenticationSchemes.Google)]
     [Route("api/v1/users")]
     public class UserController : Controller
     {
@@ -51,15 +54,10 @@ namespace NaturalSelectedCards.Controllers
         {
             return Ok(new UserInfo
             {
-                FirstName = GetClaimValue(ClaimTypes.Name),
-                LastName = GetClaimValue(ClaimTypes.Surname),
-                PhotoUrl = GetClaimValue(CustomClaimType.Photo)
+                FirstName = User.Claims.GetValueByType(ClaimTypes.Name),
+                LastName = User.Claims.GetValueByType(ClaimTypes.Surname),
+                PhotoUrl = User.Claims.GetValueByType(CustomClaimTypes.Photo)
             });
-        }
-
-        private string GetClaimValue(string claim)
-        {
-            return User.Claims.FirstOrDefault(c => c.Type == claim)?.Value;
         }
     }
 }

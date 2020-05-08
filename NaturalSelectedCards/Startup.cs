@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using NaturalSelectedCards.Auth;
+using NaturalSelectedCards.Utils.Constants;
 
 namespace NaturalSelectedCards
 {
@@ -34,9 +36,10 @@ namespace NaturalSelectedCards
 
             services.AddAuthentication(options =>
             {
-                options.DefaultScheme = "Google";
+                options.DefaultScheme = AuthenticationSchemes.Google;
             })
-                .AddScheme<GoogleAuthenticationSchemeOptions, GoogleAuthenticationHandler>("Google", o => {});
+                .AddScheme<GoogleAuthenticationSchemeOptions, GoogleAuthenticationHandler>(
+                    AuthenticationSchemes.Google, o => {});
         }
 
         public void Configure(IApplicationBuilder app)

@@ -1,10 +1,16 @@
 using System;
 
-namespace NaturalSelectedCards
+namespace NaturalSelectedCards.Utils
 {
     public static class EnvironmentVariables
     {
-        public static string ClientId { get; } = Environment.GetEnvironmentVariable("NSCARDS_CLIENTID");
-        public static string ClientSecret { get; } = Environment.GetEnvironmentVariable("NSCARDS_SECRET");
+        private static class Keys
+        {
+            public const string ClientId = "NSCARDS_CLIENTID";
+            public const string ClientSecret = "NSCARDS_SECRET";
+        }
+
+        public static string ClientId => Environment.GetEnvironmentVariable(Keys.ClientId);
+        public static string ClientSecret => Environment.GetEnvironmentVariable(Keys.ClientSecret);
     }
 }
