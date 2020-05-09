@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NaturalSelectedCards.Models.Requests;
 using NaturalSelectedCards.Models.Responses;
+using NaturalSelectedCards.Utils.Constants;
 
 namespace NaturalSelectedCards.Controllers
 {
+    [Authorize(AuthenticationSchemes = AuthenticationSchemes.Google)]
     [ApiController]
     [Route("api/v1/decks")]
     public class DecksController : Controller
