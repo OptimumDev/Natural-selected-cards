@@ -15,7 +15,7 @@ namespace NaturalSelectedCards.Utils
 
         public static string ClientId => Environment.GetEnvironmentVariable(Keys.ClientId);
         public static string ClientSecret => Environment.GetEnvironmentVariable(Keys.ClientSecret);
-        public static string MongoUsername => Environment.GetEnvironmentVariable(Keys.ClientSecret);
-        public static string MongoPassword => Environment.GetEnvironmentVariable(Keys.ClientSecret);
+        public static string MongoUsername => Environment.GetEnvironmentVariable(Keys.MongoUsername);
+        public static string MongoPassword => Environment.GetEnvironmentVariable(Keys.MongoPassword);
     }
 }
