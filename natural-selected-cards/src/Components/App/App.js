@@ -4,9 +4,9 @@ import './App.css';
 import AppHeader from "../AppHeader/AppHeader";
 import Page from "../Pages/Page/Page";
 
-import * as localStorageHelper from "../../Utils/localStorageHelper"
+import * as localStorageHelper from "../../Utils/localStorageHelper";
 import * as PageNames from "../../Constants/PageNames";
-import * as LocalStorageKeys from "../../Constants/LocalStorageKeys"
+import * as LocalStorageKeys from "../../Constants/LocalStorageKeys";
 
 export default class App extends React.PureComponent {
     constructor(props) {
