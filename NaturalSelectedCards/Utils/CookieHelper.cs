@@ -9,7 +9,7 @@ namespace NaturalSelectedCards.Utils
         {
             HttpOnly = true,
             Secure = true,
-            Expires = DateTimeOffset.UtcNow.AddHours(5).AddSeconds(expiresInSeconds)
+            Expires = DateTimeOffset.Now.AddSeconds(expiresInSeconds)
         };
 
         public static CookieOptions GetSecureCookieOptions() => new CookieOptions
