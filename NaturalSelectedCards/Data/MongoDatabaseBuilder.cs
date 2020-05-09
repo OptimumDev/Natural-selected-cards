@@ -12,9 +12,6 @@ namespace NaturalSelectedCards.Data
 
         private readonly DatabaseSettings _settings;
 
-        public string Username { get; set; }
-        public string Password { get; set; }
-
         public MongoDatabaseBuilder(DatabaseSettings settings)
         {
             _settings = settings;
@@ -22,8 +19,8 @@ namespace NaturalSelectedCards.Data
 
         public IMongoDatabase Build()
         {
-            var username = Username ?? Environment.GetEnvironmentVariable(MongoUsername);
-            var password = Password ?? Environment.GetEnvironmentVariable(MongoPassword);
+            var username = _settings.Username ?? Environment.GetEnvironmentVariable(MongoUsername);
+            var password = _settings.Password ?? Environment.GetEnvironmentVariable(MongoPassword);
             var connectionString = username is null || password is null
                 ? DefaultConnectionString
                 : $"mongodb+srv://{username}:{password}@naturalselectedcluster-4awy4.azure.mongodb.net/" +
