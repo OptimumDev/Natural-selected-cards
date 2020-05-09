@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
+using NaturalSelectedCards.Data;
+using NaturalSelectedCards.Data.Repositories;
+using NaturalSelectedCards.Models.Settings;
 
 namespace NaturalSelectedCards
 {
@@ -21,6 +24,17 @@ namespace NaturalSelectedCards
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMemoryCache();
+
+            services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.AddSingleton(sp =>
+            {
+                var settings = sp.GetRequiredService<DatabaseSettings>();
+                var builder = new MongoDatabaseBuilder(settings);
+                return builder.Build();
+            });
+            services.AddSingleton<IDeckRepository, MongoDeckRepository>();
+            services.AddSingleton<ICardRepository, MongoCardRepository>();
+
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(o => o.EnableEndpointRouting = false);
             services.AddSwaggerGen(c =>
