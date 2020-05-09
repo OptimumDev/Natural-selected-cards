@@ -1,14 +1,13 @@
 ﻿using System;
 using MongoDB.Driver;
 using NaturalSelectedCards.Models.Settings;
+using NaturalSelectedCards.Utils;
 
 namespace NaturalSelectedCards.Data
 {
     public class MongoDatabaseBuilder
     {
         private const string DefaultConnectionString = "mongodb://localhost:27017";
-        private const string MongoUsername = "MONGO_USERNAME";
-        private const string MongoPassword = "MONGO_PASSWORD";
 
         private readonly DatabaseSettings _settings;
 
@@ -19,8 +18,8 @@ namespace NaturalSelectedCards.Data
 
         public IMongoDatabase Build()
         {
-            var username = _settings.Username ?? Environment.GetEnvironmentVariable(MongoUsername);
-            var password = _settings.Password ?? Environment.GetEnvironmentVariable(MongoPassword);
+            var username = _settings.Username ?? EnvironmentVariables.MongoUsername;
+            var password = _settings.Password ?? EnvironmentVariables.MongoPassword;
             var connectionString = username is null || password is null
                 ? DefaultConnectionString
                 : $"mongodb+srv://{username}:{password}@naturalselectedcluster-4awy4.azure.mongodb.net/" +
