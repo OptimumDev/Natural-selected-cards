@@ -3,8 +3,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using MongoDB.Driver;
+using NaturalSelectedCards.Data;
 using NaturalSelectedCards.Data.Entities;
 using NaturalSelectedCards.Data.Repositories;
+using NaturalSelectedCards.Models.Settings;
 using NUnit.Framework;
 
 namespace Tests
@@ -29,8 +31,8 @@ namespace Tests
         [OneTimeSetUp]
         public void SetUpOnce()
         {
-            var client = new MongoClient();
-            var database = client.GetDatabase(DatabaseName);
+            var builder = new MongoDatabaseBuilder(new DatabaseSettings {DatabaseName = DatabaseName});
+            var database = builder.Build();
             _collection = database.GetCollection<CardEntity>(MongoCardRepository.CollectionName);
             _repository = new MongoCardRepository(database);
         }
