@@ -16,7 +16,7 @@ namespace NaturalSelectedCards.Logic.Managers
         Task<bool> DeleteDeckAsync(Guid deckId);
         Task<List<CardModel>> GetCardsForGameAsync(Guid deckId);
         Task<bool> UpdateCardKnowledgeAsync(Guid cardId, Boolean isCorrect);
-        Task<Guid> AddCardAsync(Guid deckId);
+        Task<Guid?> AddCardAsync(Guid deckId);
         Task<bool> UpdateCardAsync(CardModel cardModel);
         Task<bool> DeleteCardAsync(Guid cardId);
     }
