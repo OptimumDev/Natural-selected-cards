@@ -4,6 +4,7 @@ import './App.css';
 import AppHeader from "../AppHeader/AppHeader";
 import Page from "../Pages/Page/Page";
 
+import * as LocalStorageHelper from "../../Utils/LocalStorageHelper"
 import * as PageNames from "../../Constants/PageNames";
 import * as LocalStorageKeys from "../../Constants/LocalStorageKeys"
 
@@ -12,7 +13,7 @@ export default class App extends React.PureComponent {
         super(props);
         this.state = {
             pageName: PageNames.MY_DECKS,
-            isDarkTheme: JSON.parse(localStorage.getItem(LocalStorageKeys.IS_DARK_THEME_KEY)) || false
+            isDarkTheme: LocalStorageHelper.getOrDefault(LocalStorageKeys.IS_DARK_THEME_KEY, false)
         };
     }
 
@@ -45,7 +46,7 @@ export default class App extends React.PureComponent {
         const isDarkTheme = !this.state.isDarkTheme;
 
         this.setState({isDarkTheme});
-        localStorage.setItem(LocalStorageKeys.IS_DARK_THEME_KEY, JSON.stringify(isDarkTheme));
+        LocalStorageHelper.setValue(LocalStorageKeys.IS_DARK_THEME_KEY, JSON.stringify(isDarkTheme));
     };
 
     logOut = () => this.setUser(null);
