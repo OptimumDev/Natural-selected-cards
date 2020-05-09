@@ -7,7 +7,7 @@ import brightThemeIcon from "../../images/brightness_4-white-48dp.svg";
 import darkThemeIcon from "../../images/brightness_4-black-48dp.svg";
 import User from "../User/User";
 
-export default function AppHeader({isDarkTheme, user, onLogout, setPageName, toggleDarkTheme}) {
+export default function AppHeader({isDarkTheme, isAuthorized, onLogout, setPageName, toggleDarkTheme}) {
     return (
         <header className='app-header shadow main-color'>
             <AppName onClick={() => setPageName(PageNames.MY_DECKS)} isDarkTheme={isDarkTheme}/>
@@ -18,7 +18,7 @@ export default function AppHeader({isDarkTheme, user, onLogout, setPageName, tog
                 alt='🌗'
                 size='3.5vw'
             />
-            <User user={user} isDarkTheme={isDarkTheme} onLogout={onLogout}/>
+            {isAuthorized && <User isDarkTheme={isDarkTheme} onLogout={onLogout}/>}
         </header>
     );
 }

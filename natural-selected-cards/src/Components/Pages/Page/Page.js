@@ -31,9 +31,9 @@ export default class Page extends React.Component {
     }
 
     getMainPage = () => {
-        const {setUser, isDarkTheme} = this.props;
+        const {authorize, isDarkTheme} = this.props;
         return (
-            <MainPage onLogin={setUser} isDarkTheme={isDarkTheme}/>
+            <MainPage onLogin={authorize} isDarkTheme={isDarkTheme}/>
         );
     };
 

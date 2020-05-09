@@ -4,7 +4,7 @@ import './App.css';
 import AppHeader from "../AppHeader/AppHeader";
 import Page from "../Pages/Page/Page";
 
-import * as LocalStorageHelper from "../../Utils/LocalStorageHelper"
+import * as localStorageHelper from "../../Utils/localStorageHelper"
 import * as PageNames from "../../Constants/PageNames";
 import * as LocalStorageKeys from "../../Constants/LocalStorageKeys"
 
@@ -13,25 +13,26 @@ export default class App extends React.PureComponent {
         super(props);
         this.state = {
             pageName: PageNames.MY_DECKS,
-            isDarkTheme: LocalStorageHelper.getOrDefault(LocalStorageKeys.IS_DARK_THEME_KEY, false)
+            isAuthorized: true,
+            isDarkTheme: localStorageHelper.getOrDefault(LocalStorageKeys.IS_DARK_THEME_KEY, false)
         };
     }
 
     render() {
-        const {pageName, isDarkTheme, user} = this.state;
+        const {pageName, isDarkTheme, isAuthorized} = this.state;
         return (
             <div className={`app ${isDarkTheme ? 'dark' : 'light'}`}>
                 <AppHeader
                     isDarkTheme={isDarkTheme}
-                    user={user}
+                    isAuthorized={isAuthorized}
                     onLogout={this.logOut}
                     setPageName={this.setPageName}
                     toggleDarkTheme={this.toggleDarkTheme}
                 />
                 <Page
-                    pageName={user ? pageName : PageNames.MAIN}
+                    pageName={isAuthorized ? pageName : PageNames.MAIN}
                     setPageName={this.setPageName}
-                    setUser={this.setUser}
+                    authorize={this.authorize}
                     isDarkTheme={isDarkTheme}
                 />
             </div>
@@ -40,14 +41,14 @@ export default class App extends React.PureComponent {
 
     setPageName = pageName => this.setState({pageName});
 
-    setUser = user => this.setState({user});
-
     toggleDarkTheme = () => {
         const isDarkTheme = !this.state.isDarkTheme;
 
         this.setState({isDarkTheme});
-        LocalStorageHelper.setValue(LocalStorageKeys.IS_DARK_THEME_KEY, JSON.stringify(isDarkTheme));
+        localStorageHelper.setValue(LocalStorageKeys.IS_DARK_THEME_KEY, JSON.stringify(isDarkTheme));
     };
 
-    logOut = () => this.setUser(null);
+    logOut = () => this.setState({isAuthorized: false});
+
+    authorize = () => this.setState({isAuthorized: true});
 }
