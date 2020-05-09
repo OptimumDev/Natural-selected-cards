@@ -8,11 +8,12 @@ namespace NaturalSelectedCards.Logic.Mappers
     {
         public CardModel Map(CardEntity entity)
         {
-            var model = new CardModel();
-            model.Id = entity.Id;
-            model.Question = entity.Question;
-            model.Answer = entity.Answer;
-            return model;
+            return new CardModel
+            {
+                Id = entity.Id,
+                Question = entity.Question,
+                Answer = entity.Answer
+            };
         }
     }
 }
