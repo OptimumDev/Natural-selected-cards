@@ -1,4 +1,8 @@
-const server =  process.env.NODE_ENV === 'development' ? "https://localhost:5001" : "https://nscards.herokuapp.com";
+let currentHref = window.location.href;
+if (currentHref.slice(-1) === '/')
+    currentHref = currentHref.slice(0, -1);
+
+const server =  process.env.NODE_ENV === 'development' ? "https://localhost:5001" : currentHref;
 const api = `${server}/api/v1`;
 
 const users = `${api}/users`;
