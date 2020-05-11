@@ -2,11 +2,14 @@
     display: flex;
     overflow-x: auto;
     padding: 20px 10px;
-    min-height: 6vw;
 }
 
 .card-container {
     padding-right: 20px;
+}
+
+.card-container:last-child {
+    padding-right: 10px;
 }
 
 .card {
@@ -15,6 +18,7 @@
     flex-shrink: 0;
     flex-direction: column;
     box-sizing: content-box;
+    cursor: pointer;
 }
 
 .card.chosen,

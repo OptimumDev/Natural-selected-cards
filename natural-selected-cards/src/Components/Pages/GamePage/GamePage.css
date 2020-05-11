@@ -9,3 +9,18 @@
     font-size: 4vw;
     font-weight: 200;
 }
+
+.back-button {
+    flex-shrink: 0;
+    height: 10vw;
+    width: 30vw;
+    margin-left: 2.5vw;
+    font-size: 4vw;
+    font-weight: 200;
+}
+
+.game-page .page-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

@@ -3,6 +3,7 @@ import './Deck.css'
 import FlipCard from "../FlipCard/FlipCard";
 import crossIcon from '../../images/Flat_cross_icon.svg'
 import DeckStatistics from "../DeckStatistics/DeckStatistics";
+import IconButton from "../IconButton/IconButton";
 
 export default function Deck({deck, isUsers, onAdd, onPlay, onView, onDelete}) {
     return (
@@ -33,9 +34,13 @@ export default function Deck({deck, isUsers, onAdd, onPlay, onView, onDelete}) {
                     </button>
                     {
                         isUsers &&
-                        <button className='delete-button' onClick={onDelete}>
-                            <img src={crossIcon} alt='X' draggable={false}/>
-                        </button>
+                        <IconButton
+                            className='delete-button'
+                            onClick={onDelete}
+                            icon={crossIcon}
+                            alt='X'
+                            size='2.5vw'
+                        />
                     }
                 </div>
             </div>

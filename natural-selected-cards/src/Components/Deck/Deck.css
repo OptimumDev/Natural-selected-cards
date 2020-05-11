@@ -28,18 +28,6 @@
     right: -1vw;
     border-radius: 50%;
     box-sizing: border-box;
-    padding: 0;
-    width: 2.5vw;
-    height: 2.5vw;
-}
-
-.delete-button:hover {
-    transform: scale(1.1);
-}
-
-.delete-button:active {
-    transform: none;
-    box-shadow: none;
 }
 
 .controls {

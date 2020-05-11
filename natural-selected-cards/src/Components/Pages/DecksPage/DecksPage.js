@@ -22,7 +22,7 @@ export default class Decks extends React.Component {
                     <div className='page-name'>
                         {isUsers ? 'Мои колоды' : 'Стандартные колоды'}
                     </div>
-                    <div className='decks'>
+                    <div className='page-content decks'>
                         {this.state.decks.map(this.createDeck)}
                         {isUsers && <div className='create-button' onClick={this.toggleChooseDialog}>+</div>}
                     </div>

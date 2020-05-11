@@ -25,6 +25,17 @@ namespace NaturalSelectedCards
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(Policies.CorsPolicy, builder =>
+                    builder
+                        .WithOrigins(Urls.ReactDevServer)
+                        .AllowAnyMethod()
+                        .AllowAnyHeader()
+                        .AllowCredentials()
+                );
+            });
+
             services.AddMemoryCache();
 
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
@@ -48,16 +59,16 @@ namespace NaturalSelectedCards
                 c.IncludeXmlComments(xmlPath);
             });
 
-            services.AddAuthentication(options =>
-            {
-                options.DefaultScheme = AuthenticationSchemes.Google;
-            })
+            services
+                .AddAuthentication(options => options.DefaultScheme = AuthenticationSchemes.Google)
                 .AddScheme<GoogleAuthenticationSchemeOptions, GoogleAuthenticationHandler>(
-                    AuthenticationSchemes.Google, o => {});
+                    AuthenticationSchemes.Google, o => { });
         }
 
         public void Configure(IApplicationBuilder app)
         {
+            app.UseCors(Policies.CorsPolicy);
+
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI(c =>

@@ -1,0 +1,14 @@
+.app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    position: relative;
+    z-index: 100;
+    flex: none;
+}
+
+.theme-button {
+    left: 48.25vw;
+    position: absolute;
+}
