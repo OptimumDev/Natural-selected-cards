@@ -25,13 +25,15 @@ export default class GamePage extends React.Component {
                 <div className='page-name'>
                     {this.deck.name}
                 </div>
-                <CardCarousel
-                    cardIndex={this.state.cardIndex}
-                    lastButton={this.createButton('Вернуться', this.props.onEnd, 'main-color back-button')}
-                    buttons={this.getButtons()}
-                >
-                    {this.deck.cards.map(this.getCard)}
-                </CardCarousel>
+                <div className='page-content'>
+                    <CardCarousel
+                        cardIndex={this.state.cardIndex}
+                        lastButton={this.createButton('Вернуться', this.props.onEnd, 'main-color back-button')}
+                        buttons={this.getButtons()}
+                    >
+                        {this.deck.cards.map(this.getCard)}
+                    </CardCarousel>
+                </div>
             </div>
         );
     }

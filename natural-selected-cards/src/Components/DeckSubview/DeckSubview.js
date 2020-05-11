@@ -11,9 +11,10 @@ export default class DeckSubview extends React.Component {
     }
 
     renderCard = (card, i) => (
-        <div key={card.id}
-             className='card-container'
-             onClick={() => this.props.onCardChoice(i)}
+        <div
+            key={card.id}
+            className='card-container'
+            onClick={() => this.props.onCardChoice(i)}
         >
             <div className={`card ${this.props.chosenIndex === i ? 'chosen' : ''}`}>
                 <div className='card-front main-color shadow'>

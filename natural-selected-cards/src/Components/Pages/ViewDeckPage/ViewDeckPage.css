@@ -1,5 +1,14 @@
+.view-page .page-content {
+    display: flex;
+    flex-direction: column;
+}
+
 .middle {
     position: relative;
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .card-side input {
