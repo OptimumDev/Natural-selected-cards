@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 using NaturalSelectedCards.Logic.Models;
 using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Data.Entities;
@@ -23,8 +24,16 @@ namespace NaturalSelectedCards.Logic.Managers
         }
 
         public async Task<List<DeckModel>> GetDecksAsync(Guid userId) {
-            var decks = await deckRepository.GetUserDecksAsync(userId);
-            return decks.ConvertAll(deck => deckMapper.Map(deck));
+            var deckEntities = await deckRepository.GetUserDecksAsync(userId);
+            var decks = deckEntities.ConvertAll(deck => deckMapper.Map(deck));
+            foreach (var deck in decks) {
+                var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
+                deck.CardsCount = cards.Count;
+                deck.PlayedCount = cards.Max(card => card.Repetitions);
+                deck.Rating = 228; // make function later
+                deck.LastRepetition = cards.Max(card => card.LastRepeat);
+            }
+            return decks;
         }
 
         public async Task<List<DeckModel>> GetStandartDecksAsync() {
@@ -36,9 +45,16 @@ namespace NaturalSelectedCards.Logic.Managers
             var deck = await deckRepository.FindByIdAsync(deckId);
             if (deck != null)
             {
+                var newDeck = new DeckEntity(userId, deck.Title);
                 var result = await deckRepository.InsertAsync(deck);
-                if (result != null)
-                    return true;
+                var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
+                if (result == null)
+                    return false;
+                foreach (var card in cards) {
+                    var copiedCard = new CardEntity(result.Id, card.Question, card.Answer);
+                    cardRepository.InsertAsync(copiedCard);
+                }
+                return true;
             }
             return false;
         }
@@ -115,9 +131,9 @@ namespace NaturalSelectedCards.Logic.Managers
                 entity.DeckId,
                 cardModel.Question,
                 cardModel.Answer,
-                entity.Repetitions,
-                entity.CorrectAnswers,
-                entity.LastRepeat
+                0,
+                0,
+                default
             );
             var result = await cardRepository.UpdateAsync(updatedEntity);
             if (result == null)
