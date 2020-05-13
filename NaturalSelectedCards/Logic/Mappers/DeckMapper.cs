@@ -6,7 +6,8 @@ namespace NaturalSelectedCards.Logic.Mappers
 {
     public class DeckMapper
     {
-        public DeckModel Map(DeckEntity entity) {
+        public DeckModel Map(DeckEntity entity)
+        {
             // TODO: add mapping for other fields
             return new DeckModel
             {
