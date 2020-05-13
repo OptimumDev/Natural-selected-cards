@@ -40,8 +40,13 @@ namespace NaturalSelectedCards.Logic.Managers
 
         public async Task<List<DeckModel>> GetStandardDecksAsync()
         {
-            var decks = await deckRepository.GetStandardDecksAsync();
-            return decks.ConvertAll(deck => deckMapper.Map(deck));
+            var deckEntities = await deckRepository.GetStandardDecksAsync();
+            var decks = deckEntities.ConvertAll(deck => deckMapper.Map(deck));
+            foreach (var deck in decks) {
+                var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
+                deck.CardsCount = cards.Count;
+            }
+            return decks;
         }
 
         public async Task<bool> CopyDeckAsync(Guid userId, Guid deckId)
