@@ -110,7 +110,7 @@ namespace NaturalSelectedCards.Logic.Managers
                 card.Question,
                 card.Answer,
                 card.Repetitions + 1,
-                card.CorrectAnswers,
+                card.CorrectAnswers + (isCorrect ? 1 : 0),
                 DateTime.Now
             );
             var updatedEntity = await cardRepository.UpdateAsync(updatedCard);
