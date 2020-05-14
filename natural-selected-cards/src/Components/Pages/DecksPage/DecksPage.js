@@ -1,16 +1,37 @@
 import React from "react";
-import Deck from "../../Deck/Deck";
 import './DeckPage.css'
-import {myDecks, standardDecks} from "../../../deckExamples";
+
+import Deck from "../../Deck/Deck";
 import ChooseDialog from "../../ChooseDialog/ChooseDialog";
+
+import * as server from "../../../Utils/server";
+
 
 export default class Decks extends React.Component {
 
     constructor(props, context) {
         super(props, context);
         this.state = {
-            decks: props.isUsers ? myDecks : standardDecks,
+            decks: [],
             showBlackout: false
+        }
+    }
+
+    async componentDidMount() {
+        const getFunc = this.props.isUsers ? server.getUserDecks : server.getStandardDecks;
+        const response = await getFunc();
+
+        if (response.ok) {
+            const decks = (await response.json())
+                .map(deck => ({
+                    id: deck.id,
+                    name: deck.title,
+                    cardsCount: deck.cardsCount,
+                    gamesCount: deck.playedCount,
+                    userRating: deck.rating,
+                    lastRepeatTime: new Date(deck.lastRepetition)
+                }));
+            this.setState({decks});
         }
     }
 
