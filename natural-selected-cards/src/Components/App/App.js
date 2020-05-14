@@ -50,7 +50,7 @@ export default class App extends React.PureComponent {
         const isDarkTheme = !this.state.isDarkTheme;
 
         this.setState({isDarkTheme});
-        localStorageHelper.setValue(LocalStorageKeys.IS_DARK_THEME_KEY, JSON.stringify(isDarkTheme));
+        localStorageHelper.setValue(LocalStorageKeys.IS_DARK_THEME_KEY, isDarkTheme);
     };
 
     logOut = () => this.setState({isAuthorized: false});
