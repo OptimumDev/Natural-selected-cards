@@ -191,7 +191,7 @@ namespace NaturalSelectedCards.Controllers
         /// </summary>
         /// <param name="deckId"></param>
         /// <returns></returns>
-        [HttpDelete("{deckId}/game")]
+        [HttpGet("{deckId}/game")]
         public async Task<ActionResult<ICollection<CardResponse>>> GetGameDeck([FromRoute] Guid deckId)
         {
             try
