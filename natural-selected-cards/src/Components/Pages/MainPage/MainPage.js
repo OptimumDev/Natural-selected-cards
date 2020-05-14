@@ -43,7 +43,5 @@ export default class MainPage extends React.Component {
         const response = await server.authorizeUser(code);
         if (response.ok)
             this.props.onLogin();
-        else
-            console.log(`${response.status} ${response.statusText}`);
     }
 }
