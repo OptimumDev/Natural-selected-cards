@@ -1,6 +1,9 @@
 using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NaturalSelectedCards.Logic.Managers;
+using NaturalSelectedCards.Logic.Models;
 using NaturalSelectedCards.Models.Requests;
 using NaturalSelectedCards.Models.Responses;
 using NaturalSelectedCards.Utils.Constants;
@@ -12,25 +15,26 @@ namespace NaturalSelectedCards.Controllers
     [Route("api/v1/cards")]
     public class CardsController : Controller
     {
-        /// <summary>
-        /// Получить карточку
-        /// </summary>
-        /// <param name="cardId"></param>
-        /// <returns></returns>
-        [HttpGet("{cardId}")]
-        public ActionResult<CardResponse> GetCard([FromRoute] Guid cardId)
+        private readonly IDeckManager manager;
+
+        public CardsController(IDeckManager manager)
         {
-            return Ok(new CardResponse());
+            this.manager = manager;
         }
 
         /// <summary>
         /// Создание новой карты (пустой)
         /// </summary>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult<Guid> CreateCard()
+        public async Task<ActionResult<Guid>> CreateCard([FromBody] CreateCardRequest request)
         {
-            return Guid.NewGuid();
+            var result = await manager.AddCardAsync(request.DeckId).ConfigureAwait(false);
+
+            if (result == null)
+                return StatusCode(500);
+            return Ok();
         }
 
         /// <summary>
@@ -39,21 +43,36 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="cardId"></param>
         /// <returns></returns>
         [HttpDelete("{cardId}")]
-        public IActionResult DeleteCard([FromRoute] Guid cardId)
+        public async Task<IActionResult> DeleteCard([FromRoute] Guid cardId)
         {
-            return Ok();
+            var result = await manager.DeleteCardAsync(cardId).ConfigureAwait(false);
+            
+            if (result)
+                return Ok();
+            return StatusCode(500);
         }
         
         /// <summary>
         /// Обновление самой карты (вопроса и ответа)
         /// </summary>
         /// <param name="cardId"></param>
-        /// <param name="card"></param>
+        /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{cardId}")]
-        public ActionResult<CardResponse> UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest card)
+        public async Task<ActionResult<CardResponse>> UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest request)
         {
-            return Ok();
+            var model = new CardModel
+            {
+                Id = cardId,
+                Answer = request.Answer,
+                Question = request.Question
+            };
+
+            var result = await manager.UpdateCardAsync(model).ConfigureAwait(false);
+
+            if (result)
+                return Ok();
+            return StatusCode(500);
         }
         
         /// <summary>
@@ -63,9 +82,13 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="isCorrect"></param>
         /// <returns></returns>
         [HttpPost("{cardId}/answer")]
-        public IActionResult AnswerCard([FromRoute] Guid cardId, [FromBody] bool isCorrect)
+        public async Task<IActionResult> AnswerCard([FromRoute] Guid cardId, [FromBody] bool isCorrect)
         {
-            return Ok();
+            var result = await manager.UpdateCardKnowledgeAsync(cardId, isCorrect).ConfigureAwait(false);
+
+            if (result)
+                return Ok();
+            return StatusCode(500);
         }
     }
 }

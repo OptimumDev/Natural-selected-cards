@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NaturalSelectedCards.Logic.Managers;
 using NaturalSelectedCards.Models.Requests;
 using NaturalSelectedCards.Models.Responses;
 using NaturalSelectedCards.Utils.Constants;
@@ -14,23 +16,36 @@ namespace NaturalSelectedCards.Controllers
     [Route("api/v1/decks")]
     public class DecksController : Controller
     {
+        private readonly IDeckManager manager;
+
+        public DecksController(IDeckManager manager)
+        {
+            this.manager = manager;
+        }
+
         /// <summary>
         /// Получение всей колоды (карточек)
         /// </summary>
         /// <param name="deckId"></param>
+        /// <response code="200">Все карты колоды</response>
+        /// <response code="404">Нет такой колоды</response>
+        /// <response code="500">Ошибка при получении колоды</response>
         /// <returns></returns>
         [HttpGet("{deckId}")]
-        public ActionResult<ICollection<CardResponse>> GetDeck([FromRoute] Guid deckId)
+        public async Task<ActionResult<ICollection<CardResponse>>> GetDeck([FromRoute] Guid deckId)
         {
-            var response = Enumerable.Range(0, 5)
-                .Select(i => new CardResponse
-                {
-                    Answer = $"Ответ №{i.ToString()}",
-                    Id = Guid.NewGuid(),
-                    Question = $"Вопрос №{i.ToString()}"
-                });
+            try
+            {
+                var deck = await manager.GetAllCardsFromDeckAsync(deckId).ConfigureAwait(false);
+                if (deck == null)
+                    return NotFound();
 
-            return Ok(response);
+                return Ok(deck);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
 ;        }
         
         /// <summary>
@@ -38,23 +53,51 @@ namespace NaturalSelectedCards.Controllers
         /// </summary>
         /// <param name="deckId"></param>
         /// <param name="updateDeck"></param>
+        /// <response code="200">Колода обновлена</response>
+        /// <response code="404">Нет такой колоды</response>
+        /// <response code="500">Ошибка при обновлении колоды</response>
         /// <returns></returns>
         [HttpPut("{deckId}")]
-        public ActionResult<DeckResponse> UpdateDeck([FromRoute] Guid deckId, [FromBody] UpdateDeckRequest updateDeck)
+        public async Task<ActionResult<DeckResponse>> UpdateDeck([FromRoute] Guid deckId, [FromBody] UpdateDeckRequest updateDeck)
         {
-            return Ok();
+            
+            try
+            {
+                var result = await manager.UpdateDeckTitleAsync(deckId, updateDeck.Title).ConfigureAwait(false);
+
+                if (result)
+                    return Ok();
+                return NotFound();
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
         
         /// <summary>
         /// Создание новой колоды (пустой)
         /// </summary>
         /// <param name="request"></param>
+        /// <response code="200">Все карты колоды</response>
+        /// <response code="400">Неверный или отсутсвующий deckId</response>
+        /// <response code="500">Ошибка при создании колоды</response>
         /// <returns></returns>
         [HttpPost]
-        public ActionResult<Guid> CreateDeck([FromBody] CreateDeckRequest request)
+        public async Task<ActionResult<Guid>> CreateDeck([FromBody] CreateDeckRequest request)
         {
-            // Created
-            return Ok();
+            try
+            {
+                var deckId = await manager.AddDeckAsync(request.UserId).ConfigureAwait(false);
+
+                if (deckId == null)
+                    return StatusCode(500);
+                return Created($"api/v1/decks/{deckId.ToString()}", deckId);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
         
         /// <summary>
@@ -63,9 +106,18 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="deckId"></param>
         /// <returns></returns>
         [HttpDelete("{deckId}")]
-        public IActionResult DeleteDeck([FromRoute] Guid deckId)
+        public async Task<IActionResult> DeleteDeck([FromRoute] Guid deckId)
         {
-            return Ok();
+            try
+            {
+                var result = await manager.DeleteDeckAsync(deckId).ConfigureAwait(false);
+            
+                return result ? Ok() : StatusCode(500);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         /// <summary>
@@ -74,13 +126,20 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet()]
-        public ActionResult<ICollection<DeckResponse>> GetDecks([FromQuery] Guid userId)
+        public async Task<ActionResult<ICollection<DeckResponse>>> GetDecks([FromQuery] Guid userId)
         {
-            return Ok(new[]
+            try
             {
-                new DeckResponse {Id = Guid.NewGuid(), Title = "зачем жить?", Rating = 0.1, CardsCount = 3, LastRepetition = DateTime.Now},
-                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета грязи", Rating = 0.8, CardsCount = 3, LastRepetition = DateTime.Now.AddDays(-3)},
-            });
+                var decks = await manager.GetDecksAsync(userId).ConfigureAwait(false);
+            
+                if (decks == null)
+                    return NotFound();
+                return Ok(decks);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
         
         /// <summary>
@@ -88,13 +147,20 @@ namespace NaturalSelectedCards.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet("standard")]
-        public ActionResult<ICollection<DeckResponse>> GetStandardDecks()
+        public async Task<ActionResult<ICollection<DeckResponse>>> GetStandardDecks()
         {
-            return Ok(new[]
+            try
             {
-                new DeckResponse {Id = Guid.NewGuid(), Title = "цвета", Rating = 0, CardsCount = 3, PlayedCount = 0, LastRepetition = null},
-                new DeckResponse {Id = Guid.NewGuid(), Title = "животные", Rating = 0, CardsCount = 3, PlayedCount = 0, LastRepetition = null}
-            });
+                var standardDecks = await manager.GetStandardDecksAsync().ConfigureAwait(false);
+
+                if (standardDecks == null)
+                    return StatusCode(500);
+                return Ok(standardDecks);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         /// <summary>
@@ -104,9 +170,20 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("{deckId}/copy")]
-        public IActionResult CopyDeck([FromRoute] Guid deckId, [FromBody] CopyDeckRequest request)
+        public async Task<IActionResult> CopyDeck([FromRoute] Guid deckId, [FromBody] CopyDeckRequest request)
         {
-            return Ok();
+            try
+            {
+                var result = await manager.CopyDeckAsync(request.UserId, deckId).ConfigureAwait(false);
+
+                if (result)
+                    return Ok();
+                return StatusCode(500);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
 
         /// <summary>
@@ -115,17 +192,20 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="deckId"></param>
         /// <returns></returns>
         [HttpDelete("{deckId}/game")]
-        public ActionResult<ICollection<CardResponse>> GetGameDeck([FromRoute] Guid deckId)
+        public async Task<ActionResult<ICollection<CardResponse>>> GetGameDeck([FromRoute] Guid deckId)
         {
-            var response = Enumerable.Range(0, 5)
-                .Select(i => new CardResponse
-                {
-                    Answer = $"Ответ №{i.ToString()}",
-                    Id = Guid.NewGuid(),
-                    Question = $"Вопрос №{i.ToString()}"
-                });
+            try
+            {
+                var gameDeck = await manager.GetCardsForGameAsync(deckId).ConfigureAwait(false);
 
-            return Ok(response);
+                if (gameDeck == null)
+                    return NotFound();
+                return Ok(gameDeck);
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ using NaturalSelectedCards.Data;
 using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Models.Settings;
 using NaturalSelectedCards.Auth;
+using NaturalSelectedCards.Logic.Managers;
+using NaturalSelectedCards.Logic.Mappers;
 using NaturalSelectedCards.Utils.Constants;
 
 namespace NaturalSelectedCards
@@ -47,6 +49,9 @@ namespace NaturalSelectedCards
             });
             services.AddSingleton<IDeckRepository, MongoDeckRepository>();
             services.AddSingleton<ICardRepository, MongoCardRepository>();
+            services.AddSingleton<CardMapper>();
+            services.AddSingleton<DeckMapper>();
+            services.AddSingleton<IDeckManager, DeckManager>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(o => o.EnableEndpointRouting = false);

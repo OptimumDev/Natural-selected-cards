@@ -1,9 +1,10 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace NaturalSelectedCards.Models.Requests
 {
     public class CreateDeckRequest
     {
-        public Guid UserId { get; set; }
+        [Required] public Guid UserId { get; set; }
     }
 }

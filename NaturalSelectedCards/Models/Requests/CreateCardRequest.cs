@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace NaturalSelectedCards.Models.Requests
 {
-    public class CopyDeckRequest
+    public class CreateCardRequest
     {
-        [Required] public Guid UserId { get; set; }
+        [Required] public Guid DeckId { get; set; } 
     }
 }
