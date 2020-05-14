@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NaturalSelectedCards.Data.Entities;
+using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Utils;
 using NaturalSelectedCards.Utils.Constants;
 using NaturalSelectedCards.Utils.Constants.ClaimTypes;
@@ -16,6 +18,13 @@ namespace NaturalSelectedCards.Controllers
     [Route("api/v1/users")]
     public class UserController : Controller
     {
+        private readonly IUserRepository users;
+
+        public UserController(IUserRepository users)
+        {
+            this.users = users;
+        }
+
         [AllowAnonymous]
         [HttpPost("auth")]
         public async Task<IActionResult> Authenticate([FromBody] string authCode)
@@ -36,6 +45,9 @@ namespace NaturalSelectedCards.Controllers
             if (response.IsError)
                 return BadRequest(response.Error);
 
+            var userEntity = new UserEntity(response.AccessToken); // хз может нужен апдейт
+            await users.InsertAsync(userEntity).ConfigureAwait(false);
+            
             Response.SetTokenCookies(response);
 
             return Ok();

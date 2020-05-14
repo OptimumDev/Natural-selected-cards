@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +8,7 @@ using NaturalSelectedCards.Logic.Managers;
 using NaturalSelectedCards.Models.Requests;
 using NaturalSelectedCards.Models.Responses;
 using NaturalSelectedCards.Utils.Constants;
+using NaturalSelectedCards.Utils.Extensions;
 
 namespace NaturalSelectedCards.Controllers
 {
@@ -84,11 +85,12 @@ namespace NaturalSelectedCards.Controllers
         /// <response code="500">Ошибка при создании колоды</response>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Guid>> CreateDeck([FromBody] CreateDeckRequest request)
+        public async Task<ActionResult<Guid>> CreateDeck()
         {
             try
             {
-                var deckId = await manager.AddDeckAsync(request.UserId).ConfigureAwait(false);
+                var userId = Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
+                var deckId = await manager.AddDeckAsync(userId).ConfigureAwait(false);
 
                 if (deckId == null)
                     return StatusCode(500);
@@ -126,10 +128,11 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="userId"></param>
         /// <returns></returns>
         [HttpGet()]
-        public async Task<ActionResult<ICollection<DeckResponse>>> GetDecks([FromQuery] Guid userId)
+        public async Task<ActionResult<ICollection<DeckResponse>>> GetDecks()
         {
             try
             {
+                var userId = Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
                 var decks = await manager.GetDecksAsync(userId).ConfigureAwait(false);
             
                 if (decks == null)
@@ -170,11 +173,12 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPost("{deckId}/copy")]
-        public async Task<IActionResult> CopyDeck([FromRoute] Guid deckId, [FromBody] CopyDeckRequest request)
+        public async Task<IActionResult> CopyDeck([FromRoute] Guid deckId)
         {
             try
             {
-                var result = await manager.CopyDeckAsync(request.UserId, deckId).ConfigureAwait(false);
+                var userId = Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
+                var result = await manager.CopyDeckAsync(userId, deckId).ConfigureAwait(false);
 
                 if (result)
                     return Ok();

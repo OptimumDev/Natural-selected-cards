@@ -6,6 +6,7 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Utils;
 using NaturalSelectedCards.Utils.Constants;
 using NaturalSelectedCards.Utils.Constants.ClaimTypes;
@@ -16,13 +17,16 @@ namespace NaturalSelectedCards.Auth
     public class GoogleAuthenticationHandler
         : AuthenticationHandler<GoogleAuthenticationSchemeOptions>
     {
+        private readonly IUserRepository users;
         public GoogleAuthenticationHandler(
             IOptionsMonitor<GoogleAuthenticationSchemeOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
-            ISystemClock clock)
+            ISystemClock clock,
+            IUserRepository users)
             : base(options, logger, encoder, clock)
         {
+            this.users = users;
         }
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -65,24 +69,26 @@ namespace NaturalSelectedCards.Auth
                 Token = token
             }).ConfigureAwait(false);
 
-            return userInfo.IsError
-                ? AuthenticateResult.Fail($"Google auth fail: {userInfo.Error}")
-                : AuthenticateWithUserInfo(userInfo);
+            if (userInfo.IsError)
+                return AuthenticateResult.Fail($"Google auth fail: {userInfo.Error}");
+            return await AuthenticateWithUserInfo(userInfo).ConfigureAwait(false);
         }
 
-        private AuthenticateResult AuthenticateWithUserInfo(UserInfoResponse userInfo)
+        private async Task<AuthenticateResult> AuthenticateWithUserInfo(UserInfoResponse userInfo)
         {
             var userId = userInfo.Claims.GetValueByType(GoogleClaimTypes.Sub);
             if (userId == null)
                 return AuthenticateResult.Fail("No sub claim");
 
+            var userEntity = await users.FindByGoogleIdAsync(userId)
+                .ConfigureAwait(false);
             var name = userInfo.Claims.GetValueByType(GoogleClaimTypes.FirstName) ?? "";
             var surname = userInfo.Claims.GetValueByType(GoogleClaimTypes.LastName) ?? "";
             var photo = userInfo.Claims.GetValueByType(GoogleClaimTypes.Picture) ?? "";
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userId), // to GUID from repository
+                new Claim(ClaimTypes.NameIdentifier, userEntity.Id.ToString()),
                 new Claim(ClaimTypes.Name, name),
                 new Claim(ClaimTypes.Surname, surname),
                 new Claim(CustomClaimTypes.Photo, photo)
