@@ -60,7 +60,7 @@ namespace NaturalSelectedCards.Controllers
         /// <param name="request"></param>
         /// <returns></returns>
         [HttpPut("{cardId}")]
-        public async Task<ActionResult<CardResponse>> UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest request)
+        public async Task<IActionResult> UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest request)
         {
             var model = new CardModel
             {

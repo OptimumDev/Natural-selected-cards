@@ -59,9 +59,8 @@ namespace NaturalSelectedCards.Controllers
         /// <response code="500">Ошибка при обновлении колоды</response>
         /// <returns></returns>
         [HttpPut("{deckId}")]
-        public async Task<ActionResult<DeckResponse>> UpdateDeck([FromRoute] Guid deckId, [FromBody] UpdateDeckRequest updateDeck)
+        public async Task<IActionResult> UpdateDeck([FromRoute] Guid deckId, [FromBody] UpdateDeckRequest updateDeck)
         {
-            
             try
             {
                 var result = await manager.UpdateDeckTitleAsync(deckId, updateDeck.Title).ConfigureAwait(false);
@@ -81,7 +80,6 @@ namespace NaturalSelectedCards.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <response code="201">Все карты колоды</response>
-        /// <response code="400">Неверный или отсутсвующий deckId</response>
         /// <response code="500">Ошибка при создании колоды</response>
         /// <returns></returns>
         [HttpPost]
