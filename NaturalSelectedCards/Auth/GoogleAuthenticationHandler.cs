@@ -1,3 +1,4 @@
+using System;
 using System.Net.Http;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
@@ -6,6 +7,7 @@ using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using NaturalSelectedCards.Data.Entities;
 using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Utils;
 using NaturalSelectedCards.Utils.Constants;
@@ -76,19 +78,19 @@ namespace NaturalSelectedCards.Auth
 
         private async Task<AuthenticateResult> AuthenticateWithUserInfo(UserInfoResponse userInfo)
         {
-            var userId = userInfo.Claims.GetValueByType(GoogleClaimTypes.Sub);
-            if (userId == null)
+            var googleUserId = userInfo.Claims.GetValueByType(GoogleClaimTypes.Sub);
+            if (googleUserId == null)
                 return AuthenticateResult.Fail("No sub claim");
 
-            var userEntity = await users.FindByGoogleIdAsync(userId)
-                .ConfigureAwait(false);
+            var user = await GetOrCreateUserAsync(googleUserId).ConfigureAwait(false);
+
             var name = userInfo.Claims.GetValueByType(GoogleClaimTypes.FirstName) ?? "";
             var surname = userInfo.Claims.GetValueByType(GoogleClaimTypes.LastName) ?? "";
             var photo = userInfo.Claims.GetValueByType(GoogleClaimTypes.Picture) ?? "";
 
             var claims = new[]
             {
-                new Claim(ClaimTypes.NameIdentifier, userEntity.Id.ToString()),
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, name),
                 new Claim(ClaimTypes.Surname, surname),
                 new Claim(CustomClaimTypes.Photo, photo)
@@ -99,6 +101,15 @@ namespace NaturalSelectedCards.Auth
             var ticket = new AuthenticationTicket(new ClaimsPrincipal(claimsIdentity), Scheme.Name);
 
             return AuthenticateResult.Success(ticket);
+        }
+
+        private async Task<UserEntity> GetOrCreateUserAsync(string googleUserId)
+        {
+            var user = await users.FindByGoogleIdAsync(googleUserId).ConfigureAwait(false);
+            if (user != null)
+                return user;
+            
+            return await users.InsertAsync(new UserEntity(googleUserId)).ConfigureAwait(false);
         }
     }
 }
