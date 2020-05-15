@@ -80,7 +80,7 @@ namespace NaturalSelectedCards.Controllers
         /// Создание новой колоды (пустой)
         /// </summary>
         /// <param name="request"></param>
-        /// <response code="200">Все карты колоды</response>
+        /// <response code="201">Все карты колоды</response>
         /// <response code="400">Неверный или отсутсвующий deckId</response>
         /// <response code="500">Ошибка при создании колоды</response>
         /// <returns></returns>

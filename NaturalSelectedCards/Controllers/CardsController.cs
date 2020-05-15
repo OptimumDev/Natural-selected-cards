@@ -34,7 +34,8 @@ namespace NaturalSelectedCards.Controllers
 
             if (result == null)
                 return StatusCode(500);
-            return Ok();
+            // Не совсем корректно отдавать Id, вместо карточки, но норм
+            return Created($"api/v1/cards/{result.Value}", result.Value); 
         }
 
         /// <summary>
