@@ -6,7 +6,7 @@ import DecksPage from "../DecksPage/DecksPage";
 import GamePage from "../GamePage/GamePage";
 import CreatePage from "../CreatePage/CreatePage";
 import ViewDeckPage from "../ViewDeckPage/ViewDeckPage";
-import {myDecks, standardDecks} from "../../../deckExamples";
+import * as server from "../../../Utils/server"
 
 export default class Page extends React.Component {
 
@@ -121,9 +121,9 @@ export default class Page extends React.Component {
         this.props.setPageName(PageNames.VIEW);
     };
 
-    add = deckId => {
-        myDecks.push(standardDecks.find(deck => deck.id === deckId)); // TEMP
+    add = async deckId => {
         this.props.setPageName(PageNames.MY_DECKS);
+        await server.copyDeck(deckId);
     };
 
     showMyDecks = () => {

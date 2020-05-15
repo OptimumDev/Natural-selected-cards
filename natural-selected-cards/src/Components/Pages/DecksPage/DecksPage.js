@@ -81,7 +81,10 @@ export default class Decks extends React.Component {
             />
     );
 
-    delete = deckId => this.setState({decks: this.state.decks.filter(d => d.id !== deckId)});
+    delete = async deckId => {
+        this.setState({decks: this.state.decks.filter(d => d.id !== deckId)});
+        await server.deleteDeck(deckId);
+    };
 
     create = () => {
         this.toggleChooseDialog();

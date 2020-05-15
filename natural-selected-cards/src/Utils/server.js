@@ -10,7 +10,7 @@ export const getStandardDecks = () => httpGet(ApiUrls.standardDecks);
 export const getDeck = id => httpGet(ApiUrls.deck(id));
 export const updateDeckTitle = (id, title) => httpPut(ApiUrls.deck(id), {title});
 export const deleteDeck = id => httpDelete(ApiUrls.deck(id));
-export const createDeck = id => httpPost(ApiUrls.deck(id));
+export const createDeck = () => httpPost(ApiUrls.decks);
 export const copyDeck = id => httpPost(ApiUrls.copy(id));
 export const getGameCards = id => httpGet(ApiUrls.game(id));
 

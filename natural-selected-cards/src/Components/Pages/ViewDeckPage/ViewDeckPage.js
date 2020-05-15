@@ -42,10 +42,7 @@ export default class ViewDeckPage extends React.Component {
                 </div>
                 <div className='page-content'>
                     <div className='middle'>
-                        <CardCarousel
-                            cardIndex={cardIndex}
-                            buttons={this.getButtons()}
-                        >
+                        <CardCarousel cardIndex={cardIndex} buttons={this.getButtons()}>
                             {cards.map(this.renderCard)}
                         </CardCarousel>
                         <button className='main-color shadow return-button' onClick={this.props.onBack}>
@@ -141,34 +138,42 @@ export default class ViewDeckPage extends React.Component {
         });
     };
 
-    create = () => {
+    create = async () => {
         const {cards, flipped} = this.state;
+
+        const response = await server.createCard(this.props.deckId);
+        if (!response.ok)
+            return;
+        const id = await response.json();
+
         this.setState({
-            cards: cards.concat({id: cards.length, question: '', answer: ''}), // TODO server
+            cards: cards.concat({id, question: '', answer: ''}),
             cardIndex: cards.length,
             flipped: flipped.concat(false)
         });
     };
 
-    delete = () => {
+    delete = async () => {
         const {cards, cardIndex} = this.state;
         this.setState({
             cards: cards.filter((c, i) => i !== cardIndex),
             cardIndex: cardIndex === cards.length - 1 ? cardIndex - 1 : cardIndex
         });
+        await server.deleteCard(cards[cardIndex].id);
     };
 
-    editDeckHeading = e => {
-        this.setState({
-            deckName: e.target.value
-        });
+    editDeckHeading = async e => {
+        const deckName = e.target.value;
+        this.setState({deckName});
+        await server.updateDeckTitle(this.props.deckId, deckName)
     };
 
-    editCard = card => {
+    editCard = async card => {
         const {cards, cardIndex} = this.state;
         this.setState({
             cards: cards.map((c, i) => i === cardIndex ? card : c)
         });
+        await server.updateCard(card.id, card.question, card.answer)
     };
 
     enterHandler = ref => e => {

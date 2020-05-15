@@ -63,7 +63,7 @@ export default class GamePage extends React.Component {
                 ]
             } else {
                 return [
-                    this.createButton('Теперь запомню', this.moveToNextCard, 'green', 3)
+                    this.createButton('Теперь запомню', this.actuallyDontKnowHandle, 'green', 3)
                 ]
             }
         } else {
@@ -94,12 +94,14 @@ export default class GamePage extends React.Component {
         });
     };
 
-    actuallyKnowHandle = () => {
+    actuallyKnowHandle = async () => {
         this.moveToNextCard();
+        await server.answerCard(this.getCurrentCard().id, true);
     };
 
-    actuallyDontKnowHandle = () => {
+    actuallyDontKnowHandle = async () => {
         this.moveToNextCard();
+        await server.answerCard(this.getCurrentCard().id, false);
     };
 
     isCurrentCardFlipped = () => this.state.flipped[this.state.cardIndex];
@@ -109,4 +111,6 @@ export default class GamePage extends React.Component {
     createFlipped = cards => cards.map(_ => false);
 
     moveToNextCard = () => this.setState({cardIndex: this.state.cardIndex + 1});
+
+    getCurrentCard = () => this.state.cards[this.state.cardIndex];
 }
