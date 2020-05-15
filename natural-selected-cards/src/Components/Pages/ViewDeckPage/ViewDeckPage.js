@@ -1,29 +1,40 @@
 import React from "react";
 import DeckSubview from "../../DeckSubview/DeckSubview";
-import {myDecks, standardDecks} from "../../../deckExamples";
 import CardCarousel from "../../CardCarousel/CardsCorusel";
 import FlipCard from "../../FlipCard/FlipCard";
 import './ViewDeckPage.css'
 import crossIcon from "../../../images/Flat_cross_icon.svg";
 import IconButton from "../../IconButton/IconButton";
 
+import * as server from "../../../Utils/server"
+
 export default class ViewDeckPage extends React.Component {
 
     constructor(props, context) {
         super(props, context);
 
-        const deck =
-            standardDecks.find(deck => deck.id === this.props.deckId) ||
-            myDecks.find(deck => deck.id === this.props.deckId);
-
         this.state = {
             cardIndex: 0,
-            flipped: deck.cards.map(_ => false),
-            deck
+            flipped: [],
+            cards: [],
+            deckName: this.props.deckName
         };
     }
 
+    async componentDidMount() {
+        const response = await server.getDeck(this.props.deckId);
+
+        if (response.ok) {
+            const cards = await response.json();
+            this.setState({
+                cards,
+                flipped: this.createFlipped(cards)
+            });
+        }
+    }
+
     render() {
+        const {cardIndex, cards} = this.state;
         return (
             <div className='page view-page'>
                 <div className='page-name'>
@@ -32,17 +43,17 @@ export default class ViewDeckPage extends React.Component {
                 <div className='page-content'>
                     <div className='middle'>
                         <CardCarousel
-                            cardIndex={this.state.cardIndex}
+                            cardIndex={cardIndex}
                             buttons={this.getButtons()}
                         >
-                            {this.state.deck.cards.map(this.renderCard)}
+                            {cards.map(this.renderCard)}
                         </CardCarousel>
                         <button className='main-color shadow return-button' onClick={this.props.onBack}>
                             &lt; Вернуться
                         </button>
                     </div>
                     <DeckSubview
-                        deck={this.state.deck}
+                        cards={this.state.cards}
                         chosenIndex={this.state.cardIndex}
                         onCardChoice={this.setCardIndex}
                     />
@@ -53,17 +64,20 @@ export default class ViewDeckPage extends React.Component {
 
     getHeading = () => {
         const ref = React.createRef();
-        const heading = this.state.deck.name;
-        return this.props.isEditable
+
+        const {isEditable} = this.props;
+        const {deckName} = this.state;
+
+        return isEditable
             ? <input
                 type='text'
                 className='deck-heading'
-                defaultValue={heading}
+                defaultValue={deckName}
                 onBlur={this.editDeckHeading}
                 ref={ref}
                 onKeyPress={this.enterHandler(ref)}
             />
-            : heading
+            : deckName
     };
 
     getButtons = () => {
@@ -79,8 +93,8 @@ export default class ViewDeckPage extends React.Component {
 
     renderCard = (card, i) => (
         <FlipCard key={card.id} flipped={this.state.flipped[i]}>
-            {this.getCardSide(card.front, e => this.editCard({...card, front: e.target.value}))}
-            {this.getCardSide(card.back, e => this.editCard({...card, back: e.target.value}))}
+            {this.getCardSide(card.question, e => this.editCard({...card, question: e.target.value}))}
+            {this.getCardSide(card.answer, e => this.editCard({...card, answer: e.target.value}))}
         </FlipCard>
     );
 
@@ -99,7 +113,7 @@ export default class ViewDeckPage extends React.Component {
                                 onKeyPress={this.enterHandler(ref)}
                             />
                             {
-                                this.state.deck.cards.length > 1 &&
+                                this.state.cards.length > 1 &&
                                 <IconButton
                                     className='delete-button'
                                     onClick={this.delete}
@@ -117,7 +131,7 @@ export default class ViewDeckPage extends React.Component {
 
     setCardIndex = i => this.setState({
         cardIndex: i,
-        flipped: this.state.deck.cards.map(_ => false)
+        flipped: this.createFlipped(this.state.cards)
     });
 
     flip = () => {
@@ -128,51 +142,39 @@ export default class ViewDeckPage extends React.Component {
     };
 
     create = () => {
-        const {deck, flipped} = this.state;
+        const {cards, flipped} = this.state;
         this.setState({
-            deck: {
-                ...deck,
-                cards: deck.cards.concat({id: deck.cards.length, front: '', back: ''})
-            },
-            cardIndex: deck.cards.length,
+            cards: cards.concat({id: cards.length, question: '', answer: ''}), // TODO server
+            cardIndex: cards.length,
             flipped: flipped.concat(false)
         });
     };
 
     delete = () => {
-        const {deck, cardIndex} = this.state;
+        const {cards, cardIndex} = this.state;
         this.setState({
-            deck: {
-                ...deck,
-                cards: deck.cards.filter((c, i) => i !== cardIndex)
-            },
-            cardIndex: cardIndex === deck.cards.length - 1 ? cardIndex - 1 : cardIndex
+            cards: cards.filter((c, i) => i !== cardIndex),
+            cardIndex: cardIndex === cards.length - 1 ? cardIndex - 1 : cardIndex
         });
     };
 
     editDeckHeading = e => {
-        const {deck} = this.state;
         this.setState({
-            deck: {
-                ...deck,
-                name: e.target.value
-            }
+            deckName: e.target.value
         });
     };
 
     editCard = card => {
-        const {deck, cardIndex} = this.state;
+        const {cards, cardIndex} = this.state;
         this.setState({
-            deck: {
-                ...deck,
-                cards: deck.cards.map((c, i) => i === cardIndex ? card : c)
-            }
+            cards: cards.map((c, i) => i === cardIndex ? card : c)
         });
     };
 
     enterHandler = ref => e => {
         if (e.key === "Enter")
             ref.current.blur();
-    }
+    };
 
+    createFlipped = cards => cards.map(_ => false);
 }

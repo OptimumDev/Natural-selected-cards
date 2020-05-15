@@ -1,37 +1,46 @@
 import React from "react";
-import {standardDecks, myDecks} from "../../../deckExamples";
 import FlipCard from "../../FlipCard/FlipCard";
 import './GamePage.css'
 import CardCarousel from "../../CardCarousel/CardsCorusel";
+
+import * as server from "../../../Utils/server";
 
 export default class GamePage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.deck =
-            standardDecks.find(deck => deck.id === this.props.deckId) ||
-            myDecks.find(deck => deck.id === this.props.deckId);
-
         this.state = {
             cardIndex: 0,
-            flipped: this.deck.cards.map(_ => false),
+            cards: [],
+            flipped: [],
             knewCurrentCard: false
         };
     }
+    
+    async componentDidMount() {
+        const response = await server.getGameCards(this.props.deckId);
+
+        if (response.ok) {
+            const cards = await response.json();
+            this.setState({cards, flipped: this.createFlipped(cards)})
+        }
+    }
 
     render() {
+        const {cards, cardIndex} = this.state;
+        const {deckName} = this.props;
         return (
             <div className='page game-page'>
                 <div className='page-name'>
-                    {this.deck.name}
+                    {deckName}
                 </div>
                 <div className='page-content'>
                     <CardCarousel
-                        cardIndex={this.state.cardIndex}
+                        cardIndex={cardIndex}
                         lastButton={this.createButton('Вернуться', this.props.onEnd, 'main-color back-button')}
                         buttons={this.getButtons()}
                     >
-                        {this.deck.cards.map(this.getCard)}
+                        {cards.map(this.getCard)}
                     </CardCarousel>
                 </div>
             </div>
@@ -40,8 +49,8 @@ export default class GamePage extends React.Component {
 
     getCard = (card, index) => (
         <FlipCard flipped={this.state.flipped[index]} key={card.id}>
-            <div className='card-side'>{card.front}</div>
-            <div className='card-side'>{card.back}</div>
+            <div className='card-side'>{card.question}</div>
+            <div className='card-side'>{card.answer}</div>
         </FlipCard>
     );
 
@@ -73,14 +82,14 @@ export default class GamePage extends React.Component {
 
     knowHandle = () => {
         this.setState({
-            flipped: this.updateFlipped(),
+            flipped: this.getUpdatedFlipped(),
             knewCurrentCard: true
         });
     };
 
     dontKnowHandle = () => {
         this.setState({
-            flipped: this.updateFlipped(),
+            flipped: this.getUpdatedFlipped(),
             knewCurrentCard: false
         });
     };
@@ -95,7 +104,9 @@ export default class GamePage extends React.Component {
 
     isCurrentCardFlipped = () => this.state.flipped[this.state.cardIndex];
 
-    updateFlipped = () => this.state.flipped.map((f, i) => i === this.state.cardIndex ? true : f);
+    getUpdatedFlipped = () => this.state.flipped.map((f, i) => i === this.state.cardIndex ? true : f);
+
+    createFlipped = cards => cards.map(_ => false);
 
     moveToNextCard = () => this.setState({cardIndex: this.state.cardIndex + 1});
 }

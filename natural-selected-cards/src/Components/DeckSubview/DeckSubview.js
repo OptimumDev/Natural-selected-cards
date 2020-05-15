@@ -5,7 +5,7 @@ export default class DeckSubview extends React.Component {
     render() {
         return (
             <div className='deck-subview'>
-                {this.props.deck.cards.map(this.renderCard)}
+                {this.props.cards.map(this.renderCard)}
             </div>
         );
     }
@@ -18,10 +18,10 @@ export default class DeckSubview extends React.Component {
         >
             <div className={`card ${this.props.chosenIndex === i ? 'chosen' : ''}`}>
                 <div className='card-front main-color shadow'>
-                    {card.front}
+                    {card.question}
                 </div>
                 <div className='card-back main-color-light shadow'>
-                    {card.back}
+                    {card.answer}
                 </div>
             </div>
         </div>

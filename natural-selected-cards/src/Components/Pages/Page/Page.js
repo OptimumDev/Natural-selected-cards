@@ -63,7 +63,7 @@ export default class Page extends React.Component {
 
     getGamePage = () => {
         return (
-            <GamePage deckId={this.deckId} onEnd={this.showMyDecks}/>
+            <GamePage deckId={this.deckId} onEnd={this.showMyDecks} deckName={this.deckName}/>
         );
     };
 
@@ -79,6 +79,7 @@ export default class Page extends React.Component {
                 deckId={this.deckId}
                 isEditable={true}
                 onBack={this.showMyDecks}
+                deckName={this.deckName}
             />
         );
     };
@@ -89,17 +90,20 @@ export default class Page extends React.Component {
                 deckId={this.deckId}
                 isEditable={false}
                 onBack={this.showStandardDecks}
+                deckName={this.deckName}
             />
         );
     };
 
-    play = deckId => {
+    play = (deckId, deckName) => {
         this.deckId = deckId;
+        this.deckName = deckName;
         this.props.setPageName(PageNames.GAME);
     };
 
-    edit = deckId => {
+    edit = (deckId, deckName) => {
         this.deckId = deckId;
+        this.deckName = deckName;
         this.props.setPageName(PageNames.EDIT);
     };
 
@@ -111,8 +115,9 @@ export default class Page extends React.Component {
         this.props.setPageName(PageNames.STANDARD_DECKS);
     };
 
-    view = deckId => {
+    view = (deckId, deckName) => {
         this.deckId = deckId;
+        this.deckName = deckName;
         this.props.setPageName(PageNames.VIEW);
     };
 
