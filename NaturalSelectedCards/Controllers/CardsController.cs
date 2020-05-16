@@ -4,6 +4,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Logic.Managers;
 using NaturalSelectedCards.Logic.Models;
 using NaturalSelectedCards.Models.Requests;
@@ -19,10 +20,14 @@ namespace NaturalSelectedCards.Controllers
     public class CardsController : Controller
     {
         private readonly IDeckManager manager;
+        private readonly IDeckRepository deckRepository;
+        private readonly ICardRepository cardRepository;
 
-        public CardsController(IDeckManager manager)
+        public CardsController(IDeckManager manager, IDeckRepository deckRepository, ICardRepository cardRepository)
         {
             this.manager = manager;
+            this.deckRepository = deckRepository;
+            this.cardRepository = cardRepository;
         }
 
         /// <summary>
@@ -33,6 +38,9 @@ namespace NaturalSelectedCards.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreateCard([FromBody] CreateCardRequest request)
         {
+            if (!IsUsersDeck(request.DeckId, out _))
+                return Forbid();
+            
             var result = await manager.AddCardAsync(request.DeckId).ConfigureAwait(false);
 
             if (result == null)
@@ -49,6 +57,9 @@ namespace NaturalSelectedCards.Controllers
         [HttpDelete("{cardId}")]
         public async Task<IActionResult> DeleteCard([FromRoute] Guid cardId)
         {
+            if (!IsUsersCard(cardId))
+                Forbid();
+            
             var result = await manager.DeleteCardAsync(cardId).ConfigureAwait(false);
             
             if (result)
@@ -65,6 +76,9 @@ namespace NaturalSelectedCards.Controllers
         [HttpPut("{cardId}")]
         public async Task<IActionResult> UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest request)
         {
+            if (!IsUsersCard(cardId))
+                Forbid();
+            
             var model = new CardModel
             {
                 Id = cardId,
@@ -88,11 +102,33 @@ namespace NaturalSelectedCards.Controllers
         [HttpPost("{cardId}/answer")]
         public async Task<IActionResult> AnswerCard([FromRoute] Guid cardId, [FromBody] bool isCorrect)
         {
+            if (!IsUsersCard(cardId))
+                Forbid();
+            
             var result = await manager.UpdateCardKnowledgeAsync(cardId, isCorrect).ConfigureAwait(false);
 
             if (result)
                 return Ok();
             return StatusCode(500);
         }
+
+        private bool IsUsersCard(Guid cardId)
+        {
+            var card = cardRepository.FindByIdAsync(cardId).GetAwaiter().GetResult();
+
+            return card != null && IsUsersDeck(card.DeckId, out _);
+        }
+        
+        // не страшная и неизбежная копипаста
+        private bool IsUsersDeck(Guid deckId, out Guid userId)
+        {
+            userId = GetUserId();
+            var deck = deckRepository.FindByIdAsync(deckId)
+                .GetAwaiter().GetResult(); // Лучше так, чем .Result
+
+            return deck != null && deck.UserId == userId;
+        }
+        
+        private Guid GetUserId() => Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
     }
 }
