@@ -1,26 +1,28 @@
 {
   "files": {
-    "main.css": "/static/css/main.232b63dd.chunk.css",
-    "main.js": "/static/js/main.a4c2f7fd.chunk.js",
-    "main.js.map": "/static/js/main.a4c2f7fd.chunk.js.map",
+    "main.css": "/static/css/main.bfefbfe4.chunk.css",
+    "main.js": "/static/js/main.ebe28572.chunk.js",
+    "main.js.map": "/static/js/main.ebe28572.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.c558bbda.js",
     "runtime-main.js.map": "/static/js/runtime-main.c558bbda.js.map",
-    "static/js/2.cf71f0c3.chunk.js": "/static/js/2.cf71f0c3.chunk.js",
-    "static/js/2.cf71f0c3.chunk.js.map": "/static/js/2.cf71f0c3.chunk.js.map",
+    "static/js/2.7861e424.chunk.js": "/static/js/2.7861e424.chunk.js",
+    "static/js/2.7861e424.chunk.js.map": "/static/js/2.7861e424.chunk.js.map",
     "index.html": "/index.html",
-    "precache-manifest.1af3788cdde3d137a465d5d48996e51e.js": "/precache-manifest.1af3788cdde3d137a465d5d48996e51e.js",
+    "precache-manifest.eb34e5ecef93681c65e2e4fd749fc7f4.js": "/precache-manifest.eb34e5ecef93681c65e2e4fd749fc7f4.js",
     "service-worker.js": "/service-worker.js",
-    "static/css/main.232b63dd.chunk.css.map": "/static/css/main.232b63dd.chunk.css.map",
-    "static/js/2.cf71f0c3.chunk.js.LICENSE.txt": "/static/js/2.cf71f0c3.chunk.js.LICENSE.txt",
+    "static/css/main.bfefbfe4.chunk.css.map": "/static/css/main.bfefbfe4.chunk.css.map",
+    "static/js/2.7861e424.chunk.js.LICENSE.txt": "/static/js/2.7861e424.chunk.js.LICENSE.txt",
     "static/media/Flat_cross_icon.svg": "/static/media/Flat_cross_icon.01d4eced.svg",
     "static/media/account_circle-white-48dp.svg": "/static/media/account_circle-white-48dp.f0b80d9b.svg",
     "static/media/brightness_4-black-48dp.svg": "/static/media/brightness_4-black-48dp.bf8278b3.svg",
-    "static/media/brightness_4-white-48dp.svg": "/static/media/brightness_4-white-48dp.9e80471f.svg"
+    "static/media/brightness_4-white-48dp.svg": "/static/media/brightness_4-white-48dp.9e80471f.svg",
+    "static/media/exit_to_app-black-48dp.svg": "/static/media/exit_to_app-black-48dp.103ef129.svg",
+    "static/media/exit_to_app-white-48dp.svg": "/static/media/exit_to_app-white-48dp.94131d05.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.c558bbda.js",
-    "static/js/2.cf71f0c3.chunk.js",
-    "static/css/main.232b63dd.chunk.css",
-    "static/js/main.a4c2f7fd.chunk.js"
+    "static/js/2.7861e424.chunk.js",
+    "static/css/main.bfefbfe4.chunk.css",
+    "static/js/main.ebe28572.chunk.js"
   ]
 }

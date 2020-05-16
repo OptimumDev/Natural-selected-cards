@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NaturalSelectedCards.Data.Entities;
+using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Utils;
 using NaturalSelectedCards.Utils.Constants;
 using NaturalSelectedCards.Utils.Constants.ClaimTypes;
