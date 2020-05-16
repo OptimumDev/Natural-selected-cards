@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
+
 namespace NaturalSelectedCards.Models.Requests
 {
     public class UpdateDeckRequest
     {
-        public string Title { get; set; }
+        [Required(AllowEmptyStrings = false)] public string Title { get; set; }
     }
 }
