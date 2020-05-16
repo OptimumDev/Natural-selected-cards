@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NaturalSelectedCards.Data;
 using NaturalSelectedCards.Data.Repositories;
@@ -41,6 +42,7 @@ namespace NaturalSelectedCards
             services.AddMemoryCache();
 
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
             services.AddSingleton(sp =>
             {
                 var settings = sp.GetRequiredService<DatabaseSettings>();
