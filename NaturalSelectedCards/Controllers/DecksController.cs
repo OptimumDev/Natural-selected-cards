@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Logic.Managers;
 using NaturalSelectedCards.Models.Requests;
 using NaturalSelectedCards.Models.Responses;
@@ -19,10 +20,12 @@ namespace NaturalSelectedCards.Controllers
     public class DecksController : Controller
     {
         private readonly IDeckManager manager;
+        private readonly IDeckRepository deckRepository;
 
-        public DecksController(IDeckManager manager)
+        public DecksController(IDeckManager manager, IDeckRepository deckRepository)
         {
             this.manager = manager;
+            this.deckRepository = deckRepository;
         }
 
         /// <summary>
@@ -229,10 +232,10 @@ namespace NaturalSelectedCards.Controllers
         private bool IsUsersDeck(Guid deckId, out Guid userId)
         {
             userId = GetUserId();
-            var decks = manager.GetDecksAsync(userId)
+            var deck = deckRepository.FindByIdAsync(deckId)
                 .GetAwaiter().GetResult(); // Лучше так, чем .Result
 
-            return decks?.Single(d => d.Id == deckId) != null;
+            return deck != null && deck.UserId == userId;
         }
         
         private Guid GetUserId() => Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
