@@ -38,7 +38,8 @@ namespace NaturalSelectedCards.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreateCard([FromBody] CreateCardRequest request)
         {
-            if (!await IsUsersDeckAsync(request.DeckId).ConfigureAwait(false))
+            var userId = this.GetUserId();
+            if (!await deckRepository.IsUsersDeckAsync(request.DeckId, userId).ConfigureAwait(false))
                 return Forbid();
             
             var result = await manager.AddCardAsync(request.DeckId).ConfigureAwait(false);
@@ -115,19 +116,9 @@ namespace NaturalSelectedCards.Controllers
         private async Task<bool> IsUsersCardAsync(Guid cardId)
         {
             var card = cardRepository.FindByIdAsync(cardId).GetAwaiter().GetResult();
+            var userId = this.GetUserId();
 
-            return card != null && await IsUsersDeckAsync(card.DeckId).ConfigureAwait(false);
+            return card != null && await deckRepository.IsUsersDeckAsync(card.DeckId, userId).ConfigureAwait(false);
         }
-        
-        // не страшная и неизбежная копипаста
-        private async Task<bool> IsUsersDeckAsync(Guid deckId)
-        {
-            var userId = GetUserId();
-            var deck = await deckRepository.FindByIdAsync(deckId).ConfigureAwait(false);
-
-            return deck != null && deck.UserId == userId;
-        }
-        
-        private Guid GetUserId() => Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
     }
 }
