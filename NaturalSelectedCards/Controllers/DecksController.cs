@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -37,6 +38,9 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
+                if (!IsUsersDeck(deckId, out _))
+                    return Forbid();
+                
                 var deck = await manager.GetAllCardsFromDeckAsync(deckId).ConfigureAwait(false);
                 if (deck == null)
                     return NotFound();
@@ -63,6 +67,9 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
+                if (!IsUsersDeck(deckId, out _))
+                    return Forbid();
+                
                 var result = await manager.UpdateDeckTitleAsync(deckId, updateDeck.Title).ConfigureAwait(false);
 
                 if (result)
@@ -87,7 +94,7 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                var userId = Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
+                var userId = GetUserId();
                 var deckId = await manager.AddDeckAsync(userId).ConfigureAwait(false);
 
                 if (deckId == null)
@@ -110,6 +117,9 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
+                if (!IsUsersDeck(deckId, out _))
+                    return Forbid();
+                
                 var result = await manager.DeleteDeckAsync(deckId).ConfigureAwait(false);
             
                 return result ? Ok() : StatusCode(500);
@@ -130,7 +140,7 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                var userId = Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
+                var userId = GetUserId();
                 var decks = await manager.GetDecksAsync(userId).ConfigureAwait(false);
             
                 if (decks == null)
@@ -175,7 +185,9 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                var userId = Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
+                if (!IsUsersDeck(deckId, out var userId))
+                    return Forbid();
+                
                 var result = await manager.CopyDeckAsync(userId, deckId).ConfigureAwait(false);
 
                 if (result)
@@ -198,6 +210,9 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
+                if (!IsUsersDeck(deckId, out _))
+                    return Forbid();
+                
                 var gameDeck = await manager.GetCardsForGameAsync(deckId).ConfigureAwait(false);
 
                 if (gameDeck == null)
@@ -209,5 +224,17 @@ namespace NaturalSelectedCards.Controllers
                 return StatusCode(500, e.Message);
             }
         }
+
+        // async с out нельзя, да и пофиг, все равно await в if криво выглядит
+        private bool IsUsersDeck(Guid deckId, out Guid userId)
+        {
+            userId = GetUserId();
+            var decks = manager.GetDecksAsync(userId)
+                .GetAwaiter().GetResult(); // Лучше так, чем .Result
+
+            return decks?.Single(d => d.Id == deckId) != null;
+        }
+        
+        private Guid GetUserId() => Guid.Parse(User.Claims.GetValueByType(ClaimTypes.NameIdentifier));
     }
 }

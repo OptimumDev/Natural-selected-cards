@@ -1,4 +1,6 @@
 using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +9,7 @@ using NaturalSelectedCards.Logic.Models;
 using NaturalSelectedCards.Models.Requests;
 using NaturalSelectedCards.Models.Responses;
 using NaturalSelectedCards.Utils.Constants;
+using NaturalSelectedCards.Utils.Extensions;
 
 namespace NaturalSelectedCards.Controllers
 {
