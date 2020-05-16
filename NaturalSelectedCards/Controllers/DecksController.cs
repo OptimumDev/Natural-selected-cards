@@ -41,7 +41,7 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                if (!IsUsersDeck(deckId, out _))
+                if (!await IsUsersDeckAsync(deckId).ConfigureAwait(false))
                     return Forbid();
                 
                 var deck = await manager.GetAllCardsFromDeckAsync(deckId).ConfigureAwait(false);
@@ -70,7 +70,7 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                if (!IsUsersDeck(deckId, out _))
+                if (!await IsUsersDeckAsync(deckId).ConfigureAwait(false))
                     return Forbid();
                 
                 var result = await manager.UpdateDeckTitleAsync(deckId, updateDeck.Title).ConfigureAwait(false);
@@ -120,7 +120,7 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                if (!IsUsersDeck(deckId, out _))
+                if (!await IsUsersDeckAsync(deckId).ConfigureAwait(false))
                     return Forbid();
                 
                 var result = await manager.DeleteDeckAsync(deckId).ConfigureAwait(false);
@@ -188,9 +188,10 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                if (!IsUsersDeck(deckId, out var userId))
+                if (!await IsUsersDeckAsync(deckId).ConfigureAwait(false))
                     return Forbid();
-                
+
+                var userId = GetUserId();
                 var result = await manager.CopyDeckAsync(userId, deckId).ConfigureAwait(false);
 
                 if (result)
@@ -213,7 +214,7 @@ namespace NaturalSelectedCards.Controllers
         {
             try
             {
-                if (!IsUsersDeck(deckId, out _))
+                if (!await IsUsersDeckAsync(deckId).ConfigureAwait(false))
                     return Forbid();
                 
                 var gameDeck = await manager.GetCardsForGameAsync(deckId).ConfigureAwait(false);
@@ -229,11 +230,10 @@ namespace NaturalSelectedCards.Controllers
         }
 
         // async с out нельзя, да и пофиг, все равно await в if криво выглядит
-        private bool IsUsersDeck(Guid deckId, out Guid userId)
+        private async Task<bool> IsUsersDeckAsync(Guid deckId)
         {
-            userId = GetUserId();
-            var deck = deckRepository.FindByIdAsync(deckId)
-                .GetAwaiter().GetResult(); // Лучше так, чем .Result
+            var userId = GetUserId();
+            var deck = await deckRepository.FindByIdAsync(deckId).ConfigureAwait(false);
 
             return deck != null && deck.UserId == userId;
         }

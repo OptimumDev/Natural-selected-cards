@@ -38,7 +38,7 @@ namespace NaturalSelectedCards.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> CreateCard([FromBody] CreateCardRequest request)
         {
-            if (!IsUsersDeck(request.DeckId, out _))
+            if (!await IsUsersDeckAsync(request.DeckId).ConfigureAwait(false))
                 return Forbid();
             
             var result = await manager.AddCardAsync(request.DeckId).ConfigureAwait(false);
@@ -57,7 +57,7 @@ namespace NaturalSelectedCards.Controllers
         [HttpDelete("{cardId}")]
         public async Task<IActionResult> DeleteCard([FromRoute] Guid cardId)
         {
-            if (!IsUsersCard(cardId))
+            if (!await IsUsersCardAsync(cardId).ConfigureAwait(false))
                 Forbid();
             
             var result = await manager.DeleteCardAsync(cardId).ConfigureAwait(false);
@@ -76,7 +76,7 @@ namespace NaturalSelectedCards.Controllers
         [HttpPut("{cardId}")]
         public async Task<IActionResult> UpdateCard([FromRoute] Guid cardId, [FromBody] CardRequest request)
         {
-            if (!IsUsersCard(cardId))
+            if (!await IsUsersCardAsync(cardId).ConfigureAwait(false))
                 Forbid();
             
             var model = new CardModel
@@ -102,7 +102,7 @@ namespace NaturalSelectedCards.Controllers
         [HttpPost("{cardId}/answer")]
         public async Task<IActionResult> AnswerCard([FromRoute] Guid cardId, [FromBody] bool isCorrect)
         {
-            if (!IsUsersCard(cardId))
+            if (!await IsUsersCardAsync(cardId).ConfigureAwait(false))
                 Forbid();
             
             var result = await manager.UpdateCardKnowledgeAsync(cardId, isCorrect).ConfigureAwait(false);
@@ -112,19 +112,18 @@ namespace NaturalSelectedCards.Controllers
             return StatusCode(500);
         }
 
-        private bool IsUsersCard(Guid cardId)
+        private async Task<bool> IsUsersCardAsync(Guid cardId)
         {
             var card = cardRepository.FindByIdAsync(cardId).GetAwaiter().GetResult();
 
-            return card != null && IsUsersDeck(card.DeckId, out _);
+            return card != null && await IsUsersDeckAsync(card.DeckId).ConfigureAwait(false);
         }
         
         // не страшная и неизбежная копипаста
-        private bool IsUsersDeck(Guid deckId, out Guid userId)
+        private async Task<bool> IsUsersDeckAsync(Guid deckId)
         {
-            userId = GetUserId();
-            var deck = deckRepository.FindByIdAsync(deckId)
-                .GetAwaiter().GetResult(); // Лучше так, чем .Result
+            var userId = GetUserId();
+            var deck = await deckRepository.FindByIdAsync(deckId).ConfigureAwait(false);
 
             return deck != null && deck.UserId == userId;
         }
