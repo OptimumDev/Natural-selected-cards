@@ -33,10 +33,7 @@ namespace NaturalSelectedCards.Logic.Managers
             {
                 //TODO statistics in one run
                 var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
-                deck.CardsCount = cards.Count;
-                deck.PlayedCount = cards.Max(card => card.Repetitions);
-                deck.Rating = CountRatingForCards(cards);
-                deck.LastRepetition = cards.Max(card => card.LastRepeat);
+                GatherStatistics(deck, cards);
             }
 
             return decks;
@@ -86,6 +83,8 @@ namespace NaturalSelectedCards.Logic.Managers
         {
             var emptyDeck = new DeckEntity(userId, "");
             var entity = await deckRepository.InsertAsync(emptyDeck);
+            if (entity.Id != null) 
+                await AddCardAsync(entity.Id);
             return entity?.Id;
         }
 
@@ -157,11 +156,6 @@ namespace NaturalSelectedCards.Logic.Managers
             return true;
         }
 
-        private double CountRatingForCards(List<CardEntity> cards) {
-            double overalRating = cards.Sum(card => card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions));
-            return overalRating / cards.Count;
-        }
-
         private List<CardModel> GatherCardsForGame(List<CardEntity> cards) {
             var rng = new Random();
             var cardsForGame = new List<CardModel>();
@@ -180,6 +174,28 @@ namespace NaturalSelectedCards.Logic.Managers
             cardsForGame.AddRange(timeCards);
 
             return cardsForGame.OrderBy(x => rng.Next()).ToList();
+        }
+
+        private void GatherStatistics(DeckModel deck, List<CardEntity> cards) {
+            var overalRaiting = 0.0;
+            var playedCount = 0;
+            var lastRepetition = DateTime.MinValue;
+
+            foreach (var card in cards) 
+            {
+                if (card.Repetitions > playedCount)
+                    playedCount = card.Repetitions;
+
+                if (card.LastRepeat > lastRepetition)
+                    lastRepetition = card.LastRepeat;
+
+                overalRaiting += 1.0 * card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions);
+            }
+
+            deck.CardsCount = cards.Count;
+            deck.PlayedCount = playedCount;
+            deck.Rating = overalRaiting / cards.Count;
+            deck.LastRepetition = lastRepetition;
         }
     }
 }
