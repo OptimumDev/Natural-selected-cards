@@ -32,7 +32,7 @@ namespace NaturalSelectedCards.Logic.Managers
                 var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
                 deck.CardsCount = cards.Count;
                 deck.PlayedCount = cards.Max(card => card.Repetitions);
-                deck.Rating = 228; // make function later
+                deck.Rating = CountRatingForCards(cards);
                 deck.LastRepetition = cards.Max(card => card.LastRepeat);
             }
             return decks;
@@ -99,9 +99,8 @@ namespace NaturalSelectedCards.Logic.Managers
 
         public async Task<List<CardModel>> GetCardsForGameAsync(Guid deckId)
         {
-            // TODO: шафлить и фильтровать карточки
             var cards = await cardRepository.GetCardsByDeckAsync(deckId);
-            return cards.ConvertAll(card => cardMapper.Map(card));
+            return GatherCardsForGame(cards);
         }
 
         public async Task<bool> UpdateCardKnowledgeAsync(Guid cardId, bool isCorrect)
@@ -151,6 +150,31 @@ namespace NaturalSelectedCards.Logic.Managers
         {
             await cardRepository.DeleteAsync(cardId);
             return true;
+        }
+
+        private double CountRatingForCards(List<CardEntity> cards) {
+            double overalRating = cards.Sum(card => card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions));
+            return overalRating / cards.Count;
+        }
+
+        private List<CardModel> GatherCardsForGame(List<CardEntity> cards) {
+            var rng = new Random();
+            var cardsForGame = new List<CardModel>();
+
+            var ratingCards = cards
+            .OrderBy(card => card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions))
+            .Take(5)
+            .Select(card => cardMapper.Map(card));
+
+            var timeCards = cards
+            .OrderBy(card => card.LastRepeat)
+            .Take(5)
+            .Select(card => cardMapper.Map(card));
+
+            cardsForGame.AddRange(ratingCards);
+            cardsForGame.AddRange(timeCards);
+
+            return cardsForGame.OrderBy(x => rng.Next()).ToList();
         }
     }
 }
