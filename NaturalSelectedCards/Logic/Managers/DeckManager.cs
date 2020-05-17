@@ -25,16 +25,20 @@ namespace NaturalSelectedCards.Logic.Managers
             this.cardMapper = cardMapper;
         }
 
-        public async Task<List<DeckModel>> GetDecksAsync(Guid userId) {
+        public async Task<List<DeckModel>> GetDecksAsync(Guid userId)
+        {
             var deckEntities = await deckRepository.GetUserDecksAsync(userId);
             var decks = deckEntities.ConvertAll(deck => deckMapper.Map(deck));
-            foreach (var deck in decks) {
+            foreach (var deck in decks)
+            {
+                //TODO statistics in one run
                 var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
                 deck.CardsCount = cards.Count;
                 deck.PlayedCount = cards.Max(card => card.Repetitions);
                 deck.Rating = CountRatingForCards(cards);
                 deck.LastRepetition = cards.Max(card => card.LastRepeat);
             }
+
             return decks;
         }
 
@@ -42,30 +46,34 @@ namespace NaturalSelectedCards.Logic.Managers
         {
             var deckEntities = await deckRepository.GetStandardDecksAsync();
             var decks = deckEntities.ConvertAll(deck => deckMapper.Map(deck));
-            foreach (var deck in decks) {
+            foreach (var deck in decks)
+            {
                 var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
                 deck.CardsCount = cards.Count;
             }
+
             return decks;
         }
 
         public async Task<bool> CopyDeckAsync(Guid userId, Guid deckId)
         {
             var deck = await deckRepository.FindByIdAsync(deckId);
-            if (deck != null)
+            if (deck == null)
+                return false;
+
+            var newDeck = new DeckEntity(userId, deck.Title);
+            var result = await deckRepository.InsertAsync(newDeck);
+            var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
+            if (result == null || cards == null)
+                return false;
+            //TODO parallel with awaiting and result checking
+            foreach (var card in cards)
             {
-                var newDeck = new DeckEntity(userId, deck.Title);
-                var result = await deckRepository.InsertAsync(deck);
-                var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
-                if (result == null)
-                    return false;
-                foreach (var card in cards) {
-                    var copiedCard = new CardEntity(result.Id, card.Question, card.Answer);
-                    cardRepository.InsertAsync(copiedCard);
-                }
-                return true;
+                var copiedCard = new CardEntity(result.Id, card.Question, card.Answer);
+                cardRepository.InsertAsync(copiedCard);
             }
-            return false;
+            return true;
+
         }
 
         public async Task<List<CardModel>> GetAllCardsFromDeckAsync(Guid deckId)
@@ -137,10 +145,7 @@ namespace NaturalSelectedCards.Logic.Managers
             var updatedEntity = new CardEntity(
                 entity.DeckId,
                 cardModel.Question,
-                cardModel.Answer,
-                0,
-                0,
-                default
+                cardModel.Answer
             );
             var result = await cardRepository.UpdateAsync(updatedEntity);
             return result != null;
