@@ -36,7 +36,6 @@ namespace NaturalSelectedCards.Logic.Managers
             var decks = deckEntities.ConvertAll(deck => deckMapper.Map(deck));
             foreach (var deck in decks)
             {
-                //TODO statistics in one run
                 var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
                 GatherStatistics(deck, cards);
             }

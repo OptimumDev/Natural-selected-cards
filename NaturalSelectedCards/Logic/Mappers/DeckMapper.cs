@@ -8,7 +8,6 @@ namespace NaturalSelectedCards.Logic.Mappers
     {
         public DeckModel Map(DeckEntity entity)
         {
-            // TODO: add mapping for other fields
             return new DeckModel
             {
                 Id = entity.Id,
