@@ -11,18 +11,23 @@ namespace NaturalSelectedCards.Logic.Managers
 {
     public class DeckManager : IDeckManager
     {
+        private const int CardsInGameCount = 10;
+
         private readonly IDeckRepository deckRepository;
         private readonly ICardRepository cardRepository;
         private readonly DeckMapper deckMapper;
         private readonly CardMapper cardMapper;
 
+        private readonly Random rng;
+
         public DeckManager(IDeckRepository deckRepository, ICardRepository cardRepository,
-            DeckMapper deckMapper, CardMapper cardMapper)
+            DeckMapper deckMapper, CardMapper cardMapper, Random rng)
         {
             this.deckRepository = deckRepository;
             this.cardRepository = cardRepository;
             this.deckMapper = deckMapper;
             this.cardMapper = cardMapper;
+            this.rng = rng;
         }
 
         public async Task<List<DeckModel>> GetDecksAsync(Guid userId)
@@ -33,10 +38,7 @@ namespace NaturalSelectedCards.Logic.Managers
             {
                 //TODO statistics in one run
                 var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
-                deck.CardsCount = cards.Count;
-                deck.PlayedCount = cards.Max(card => card.Repetitions);
-                deck.Rating = 228; //TODO add
-                deck.LastRepetition = cards.Max(card => card.LastRepeat);
+                GatherStatistics(deck, cards);
             }
 
             return decks;
@@ -66,14 +68,13 @@ namespace NaturalSelectedCards.Logic.Managers
             var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
             if (result == null || cards == null)
                 return false;
-            //TODO parallel with awaiting and result checking
-            foreach (var card in cards)
-            {
-                var copiedCard = new CardEntity(result.Id, card.Question, card.Answer);
-                cardRepository.InsertAsync(copiedCard);
-            }
-            return true;
 
+            var tasks = cards.Select(c => Task.Run(() =>
+                cardRepository.InsertAsync(new CardEntity(result.Id, c.Question, c.Answer))
+            ));
+            var results = await Task.WhenAll(tasks);
+
+            return results.All(c => c != null);
         }
 
         public async Task<List<CardModel>> GetAllCardsFromDeckAsync(Guid deckId)
@@ -85,8 +86,13 @@ namespace NaturalSelectedCards.Logic.Managers
         public async Task<Guid?> AddDeckAsync(Guid userId)
         {
             var emptyDeck = new DeckEntity(userId, "");
-            var entity = await deckRepository.InsertAsync(emptyDeck);
-            return entity?.Id;
+            var deck = await deckRepository.InsertAsync(emptyDeck);
+
+            if (deck == null)
+                return null;
+
+            var cardId = await AddCardAsync(deck.Id);
+            return cardId != null ? deck?.Id : null;
         }
 
         public async Task<bool> UpdateDeckTitleAsync(Guid deckId, string title)
@@ -107,9 +113,8 @@ namespace NaturalSelectedCards.Logic.Managers
 
         public async Task<List<CardModel>> GetCardsForGameAsync(Guid deckId)
         {
-            // TODO: шафлить и фильтровать карточки
             var cards = await cardRepository.GetCardsByDeckAsync(deckId);
-            return cards.ConvertAll(card => cardMapper.Map(card));
+            return GatherCardsForGame(cards);
         }
 
         public async Task<bool> UpdateCardKnowledgeAsync(Guid cardId, bool isCorrect)
@@ -156,6 +161,57 @@ namespace NaturalSelectedCards.Logic.Managers
         {
             await cardRepository.DeleteAsync(cardId);
             return true;
+        }
+
+        private List<CardModel> GatherCardsForGame(List<CardEntity> cards)
+        {
+            var ratingCards = cards
+                .OrderBy(GetCardRating)
+                .Take(CardsInGameCount / 2)
+                .ToList();
+
+            var ratingIds = ratingCards
+                .Select(card => card.Id)
+                .ToHashSet();
+
+            var timeCards = cards
+                .Where(card => !ratingIds.Contains(card.Id))
+                .OrderBy(card => card.LastRepeat)
+                .Take(CardsInGameCount / 2);
+
+            return ratingCards
+                .Concat(timeCards)
+                .Select(card => cardMapper.Map(card))
+                .OrderBy(x => rng.Next())
+                .ToList();
+        }
+
+        private static double GetCardRating(CardEntity card)
+        {
+            return (double) card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions);
+        }
+
+        private static void GatherStatistics(DeckModel deck, List<CardEntity> cards)
+        {
+            var overallRating = 0.0;
+            var playedCount = 0;
+            var lastRepetition = DateTime.MinValue;
+
+            foreach (var card in cards.Where(card => card.Repetitions > 0))
+            {
+                if (card.Repetitions > playedCount)
+                    playedCount = card.Repetitions;
+
+                if (card.LastRepeat > lastRepetition)
+                    lastRepetition = card.LastRepeat;
+
+                overallRating += GetCardRating(card);
+            }
+
+            deck.CardsCount = cards.Count;
+            deck.PlayedCount = playedCount;
+            deck.Rating = overallRating / cards.Count;
+            deck.LastRepetition = lastRepetition;
         }
     }
 }
