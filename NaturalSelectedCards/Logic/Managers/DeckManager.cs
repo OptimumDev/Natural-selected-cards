@@ -16,13 +16,16 @@ namespace NaturalSelectedCards.Logic.Managers
         private readonly DeckMapper deckMapper;
         private readonly CardMapper cardMapper;
 
+        private readonly Random rng;
+
         public DeckManager(IDeckRepository deckRepository, ICardRepository cardRepository,
-            DeckMapper deckMapper, CardMapper cardMapper)
+            DeckMapper deckMapper, CardMapper cardMapper, Random rng)
         {
             this.deckRepository = deckRepository;
             this.cardRepository = cardRepository;
             this.deckMapper = deckMapper;
             this.cardMapper = cardMapper;
+            this.rng = rng;
         }
 
         public async Task<List<DeckModel>> GetDecksAsync(Guid userId)
@@ -157,7 +160,6 @@ namespace NaturalSelectedCards.Logic.Managers
         }
 
         private List<CardModel> GatherCardsForGame(List<CardEntity> cards) {
-            var rng = new Random();
             var cardsForGame = new List<CardModel>();
 
             var ratingCards = cards
@@ -183,6 +185,8 @@ namespace NaturalSelectedCards.Logic.Managers
 
             foreach (var card in cards) 
             {
+                if (card.Repetitions <= 0)
+                    continue;
                 if (card.Repetitions > playedCount)
                     playedCount = card.Repetitions;
 
