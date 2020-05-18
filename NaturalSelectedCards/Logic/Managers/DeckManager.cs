@@ -11,6 +11,8 @@ namespace NaturalSelectedCards.Logic.Managers
 {
     public class DeckManager : IDeckManager
     {
+        private const int CardsInGameCount = 10;
+
         private readonly IDeckRepository deckRepository;
         private readonly ICardRepository cardRepository;
         private readonly DeckMapper deckMapper;
@@ -66,14 +68,13 @@ namespace NaturalSelectedCards.Logic.Managers
             var cards = await cardRepository.GetCardsByDeckAsync(deck.Id);
             if (result == null || cards == null)
                 return false;
-            //TODO parallel with awaiting and result checking
-            foreach (var card in cards)
-            {
-                var copiedCard = new CardEntity(result.Id, card.Question, card.Answer);
-                cardRepository.InsertAsync(copiedCard);
-            }
-            return true;
 
+            var tasks = cards.Select(c => Task.Run(() =>
+                cardRepository.InsertAsync(new CardEntity(result.Id, c.Question, c.Answer))
+            ));
+            var results = await Task.WhenAll(tasks);
+
+            return results.All(c => c != null);
         }
 
         public async Task<List<CardModel>> GetAllCardsFromDeckAsync(Guid deckId)
@@ -85,10 +86,13 @@ namespace NaturalSelectedCards.Logic.Managers
         public async Task<Guid?> AddDeckAsync(Guid userId)
         {
             var emptyDeck = new DeckEntity(userId, "");
-            var entity = await deckRepository.InsertAsync(emptyDeck);
-            if (entity.Id != null) 
-                await AddCardAsync(entity.Id);
-            return entity?.Id;
+            var deck = await deckRepository.InsertAsync(emptyDeck);
+
+            if (deck == null)
+                return null;
+
+            var cardId = await AddCardAsync(deck.Id);
+            return cardId != null ? deck?.Id : null;
         }
 
         public async Task<bool> UpdateDeckTitleAsync(Guid deckId, string title)
@@ -159,46 +163,54 @@ namespace NaturalSelectedCards.Logic.Managers
             return true;
         }
 
-        private List<CardModel> GatherCardsForGame(List<CardEntity> cards) {
-            var cardsForGame = new List<CardModel>();
-
+        private List<CardModel> GatherCardsForGame(List<CardEntity> cards)
+        {
             var ratingCards = cards
-            .OrderBy(card => card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions))
-            .Take(5)
-            .Select(card => cardMapper.Map(card));
+                .OrderBy(GetCardRating)
+                .Take(CardsInGameCount / 2)
+                .ToList();
+
+            var ratingIds = ratingCards
+                .Select(card => card.Id)
+                .ToHashSet();
 
             var timeCards = cards
-            .OrderBy(card => card.LastRepeat)
-            .Take(5)
-            .Select(card => cardMapper.Map(card));
+                .Where(card => !ratingIds.Contains(card.Id))
+                .OrderBy(card => card.LastRepeat)
+                .Take(CardsInGameCount / 2);
 
-            cardsForGame.AddRange(ratingCards);
-            cardsForGame.AddRange(timeCards);
-
-            return cardsForGame.OrderBy(x => rng.Next()).ToList();
+            return ratingCards
+                .Concat(timeCards)
+                .Select(card => cardMapper.Map(card))
+                .OrderBy(x => rng.Next())
+                .ToList();
         }
 
-        private void GatherStatistics(DeckModel deck, List<CardEntity> cards) {
-            var overalRaiting = 0.0;
+        private static double GetCardRating(CardEntity card)
+        {
+            return (double) card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions);
+        }
+
+        private static void GatherStatistics(DeckModel deck, List<CardEntity> cards)
+        {
+            var overallRating = 0.0;
             var playedCount = 0;
             var lastRepetition = DateTime.MinValue;
 
-            foreach (var card in cards) 
+            foreach (var card in cards.Where(card => card.Repetitions > 0))
             {
-                if (card.Repetitions <= 0)
-                    continue;
                 if (card.Repetitions > playedCount)
                     playedCount = card.Repetitions;
 
                 if (card.LastRepeat > lastRepetition)
                     lastRepetition = card.LastRepeat;
 
-                overalRaiting += 1.0 * card.CorrectAnswers / (card.Repetitions == 0 ? 1 : card.Repetitions);
+                overallRating += GetCardRating(card);
             }
 
             deck.CardsCount = cards.Count;
             deck.PlayedCount = playedCount;
-            deck.Rating = overalRaiting / cards.Count;
+            deck.Rating = overallRating / cards.Count;
             deck.LastRepetition = lastRepetition;
         }
     }
