@@ -33,7 +33,7 @@ namespace NaturalSelectedCards.Auth
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            using var client = new HttpClient(); // todo
+            using var client = new HttpClient();
 
             if (Request.Cookies.TryGetValue(CookieKeys.AuthorizationToken, out var token))
                 return await AuthenticateWithToken(client, token);
