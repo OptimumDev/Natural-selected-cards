@@ -52,6 +52,8 @@ namespace NaturalSelectedCards
             services.AddSingleton<IDeckRepository, MongoDeckRepository>();
             services.AddSingleton<ICardRepository, MongoCardRepository>();
             services.AddSingleton<IUserRepository, MongoUserRepository>();
+
+            services.AddSingleton<Random>();
             services.AddSingleton<CardMapper>();
             services.AddSingleton<DeckMapper>();
             services.AddSingleton<IDeckManager, DeckManager>();

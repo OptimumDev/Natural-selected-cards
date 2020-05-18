@@ -107,6 +107,7 @@ namespace NaturalSelectedCards.Logic.Managers
         public async Task<bool> DeleteDeckAsync(Guid deckId)
         {
             await deckRepository.DeleteAsync(deckId);
+            await cardRepository.DeleteByDeckAsync(deckId);
             return true;
         }
 
@@ -123,6 +124,7 @@ namespace NaturalSelectedCards.Logic.Managers
                 return false;
 
             var updatedCard = new CardEntity(
+                cardId,
                 card.DeckId,
                 card.Question,
                 card.Answer,
@@ -148,6 +150,7 @@ namespace NaturalSelectedCards.Logic.Managers
                 return false;
 
             var updatedEntity = new CardEntity(
+                entity.Id,
                 entity.DeckId,
                 cardModel.Question,
                 cardModel.Answer

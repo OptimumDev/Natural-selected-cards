@@ -17,4 +17,4 @@ export const getGameCards = id => httpGet(ApiUrls.game(id));
 export const createCard = deckId => httpPost(ApiUrls.cards, {deckId});
 export const deleteCard = id => httpDelete(ApiUrls.card(id));
 export const updateCard = (id, question, answer) => httpPut(ApiUrls.card(id), {question, answer});
-export const answerCard = (id, isRight) => httpPost(ApiUrls.card(id), isRight);
+export const answerCard = (id, isRight) => httpPost(ApiUrls.answer(id), isRight);
