@@ -8,17 +8,18 @@ namespace NaturalSelectedCards.Data.Repositories
     public class MongoUserRepository : IUserRepository
     {
         public const string CollectionName = "users";
-        
+
         private readonly IMongoCollection<UserEntity> _userCollection;
 
         public MongoUserRepository(IMongoDatabase database)
         {
             _userCollection = database.GetCollection<UserEntity>(CollectionName);
             _userCollection.Indexes.CreateOne(new CreateIndexModel<UserEntity>(
-                Builders<UserEntity>.IndexKeys.Hashed(u => u.GoogleId)
+                Builders<UserEntity>.IndexKeys.Ascending(u => u.GoogleId),
+                new CreateIndexOptions {Unique = true}
             ));
         }
-        
+
         public Task<UserEntity> FindByIdAsync(Guid userId)
         {
             return _userCollection.Find(u => u.Id == userId).FirstOrDefaultAsync();
@@ -31,7 +32,15 @@ namespace NaturalSelectedCards.Data.Repositories
 
         public async Task<UserEntity> InsertAsync(UserEntity user)
         {
-            await _userCollection.InsertOneAsync(user);
+            if (user.Id == Guid.Empty)
+                user = new UserEntity(Guid.NewGuid(), user.GoogleId);
+
+            await _userCollection.ReplaceOneAsync(
+                u => u.GoogleId == user.GoogleId,
+                user,
+                new ReplaceOptions {IsUpsert = true}
+            );
+
             return user;
         }
 

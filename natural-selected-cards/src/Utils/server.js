@@ -1,7 +1,20 @@
-import {get, post} from "./fetchHelper";
+import {httpGet, httpDelete, httpPost, httpPut} from "./fetchHelper";
 import * as ApiUrls from '../Constants/ApiUrls'
 
-export const authorizeUser = authCode => post(ApiUrls.auth, authCode);
-export const getUserInfo = () => get(ApiUrls.me);
-export const logoutUser = () => post(ApiUrls.logout);
-export const getStandardDecks = () => get(ApiUrls.standardDecks);
+export const authorizeUser = authCode => httpPost(ApiUrls.auth, authCode);
+export const getUserInfo = () => httpGet(ApiUrls.me);
+export const logoutUser = () => httpPost(ApiUrls.logout);
+
+export const getUserDecks = () => httpGet(ApiUrls.decks);
+export const getStandardDecks = () => httpGet(ApiUrls.standardDecks);
+export const getDeck = id => httpGet(ApiUrls.deck(id));
+export const updateDeckTitle = (id, title) => httpPut(ApiUrls.deck(id), {title});
+export const deleteDeck = id => httpDelete(ApiUrls.deck(id));
+export const createDeck = () => httpPost(ApiUrls.decks);
+export const copyDeck = id => httpPost(ApiUrls.copy(id));
+export const getGameCards = id => httpGet(ApiUrls.game(id));
+
+export const createCard = deckId => httpPost(ApiUrls.cards, {deckId});
+export const deleteCard = id => httpDelete(ApiUrls.card(id));
+export const updateCard = (id, question, answer) => httpPut(ApiUrls.card(id), {question, answer});
+export const answerCard = (id, isRight) => httpPost(ApiUrls.answer(id), isRight);
