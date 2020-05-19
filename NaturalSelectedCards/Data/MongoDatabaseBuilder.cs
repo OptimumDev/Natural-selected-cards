@@ -1,5 +1,4 @@
-﻿using System;
-using MongoDB.Driver;
+﻿using MongoDB.Driver;
 using NaturalSelectedCards.Models.Settings;
 using NaturalSelectedCards.Utils;
 

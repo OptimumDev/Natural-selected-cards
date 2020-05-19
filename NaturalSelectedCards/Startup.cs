@@ -5,11 +5,14 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using NaturalSelectedCards.Data;
 using NaturalSelectedCards.Data.Repositories;
 using NaturalSelectedCards.Models.Settings;
 using NaturalSelectedCards.Auth;
+using NaturalSelectedCards.Logic.Managers;
+using NaturalSelectedCards.Logic.Mappers;
 using NaturalSelectedCards.Utils.Constants;
 
 namespace NaturalSelectedCards
@@ -39,6 +42,7 @@ namespace NaturalSelectedCards
             services.AddMemoryCache();
 
             services.Configure<DatabaseSettings>(Configuration.GetSection(nameof(DatabaseSettings)));
+            services.AddSingleton(sp => sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
             services.AddSingleton(sp =>
             {
                 var settings = sp.GetRequiredService<DatabaseSettings>();
@@ -47,6 +51,12 @@ namespace NaturalSelectedCards
             });
             services.AddSingleton<IDeckRepository, MongoDeckRepository>();
             services.AddSingleton<ICardRepository, MongoCardRepository>();
+            services.AddSingleton<IUserRepository, MongoUserRepository>();
+
+            services.AddSingleton<Random>();
+            services.AddSingleton<CardMapper>();
+            services.AddSingleton<DeckMapper>();
+            services.AddSingleton<IDeckManager, DeckManager>();
 
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
             services.AddMvc(o => o.EnableEndpointRouting = false);

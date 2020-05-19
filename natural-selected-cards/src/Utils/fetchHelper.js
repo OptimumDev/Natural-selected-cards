@@ -1,23 +1,44 @@
 const standardOptions = {
     credentials: 'include',
-    cache: 'no-cache'
+    cache: 'no-cache',
+    headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+    }
 };
 
-export const get = url => fetch(url, standardOptions);
+const standardHandlers = {};
 
-export const post = (url, body) => {
+export const setStandardHandler = (code, handler) => standardHandlers[code] = handler;
+
+export const httpGet = url => sendRequest(url, 'GET');
+
+export const httpDelete = url => sendRequest(url, 'DELETE');
+
+export const httpPost = (url, body) => sendRequest(url, 'POST', body);
+
+export const httpPut = (url, body) => sendRequest(url, 'PUT', body);
+
+const sendRequest = (url, method, body) => {
     const options = {
         ...standardOptions,
-        method: 'POST'
+        method
     };
 
-    if (body !== undefined) {
-        options.headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-        };
+    if (body !== undefined)
         options.body = JSON.stringify(body);
-    }
 
-    return fetch(url, options);
+    return fetch(url, options)
+        .then(processResponse, logError);
+};
+
+const processResponse = response => {
+    const handler = standardHandlers[response.status];
+    if (handler)
+        handler(response);
+    return response;
+};
+
+const logError = error => {
+    console.log(error)
 };

@@ -21,10 +21,6 @@ export default class User extends React.Component {
         if (response.ok) {
             const user = await response.json();
             this.setState({user});
-        } else if (response.status === 401) {
-            this.props.onLogout();
-        } else {
-            console.log(`${response.status} ${response.statusText}`);
         }
     }
 
@@ -56,10 +52,7 @@ export default class User extends React.Component {
 
     logout = async () => {
         const response = await server.logoutUser();
-        if (response.ok || response.status === 401) {
+        if (response.ok)
             this.props.onLogout();
-        } else {
-            console.log(`${response.status} ${response.statusText}`);
-        }
-    }
+    };
 }

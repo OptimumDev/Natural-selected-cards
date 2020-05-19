@@ -1,30 +1,32 @@
 import React from "react";
-import {myDecks} from "../../../deckExamples";
 import ViewDeckPage from "../ViewDeckPage/ViewDeckPage";
+import * as server from "../../../Utils/server"
 
-const createDeck = () => {
-    const newDeck = {
-        name: '',
-        id: myDecks.length,
-        lastRepeatTime: null,
-        cardsCount: 0,
-        gamesCount: 0,
-        userRating: 0,
-        cards: [
-            {id: 0, front: '', back: ''}
-        ]
-    };
-    myDecks.push(newDeck);
-    return newDeck.id;
-};
+export default class CreatePage extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+        this.state = {
+            deckId: ''
+        }
+    }
 
-export default function CreatePage({onBack}) {
-    const id = createDeck();
-    return (
-        <ViewDeckPage
-            deckId={id}
-            isEditable={true}
-            onBack={onBack}
-        />
-    );
+    async componentDidMount() {
+        const response = await server.createDeck();
+        if (response.ok) {
+            const deckId = await response.json();
+            this.setState({deckId});
+        }
+    }
+
+    render() {
+        let {onBack} = this.props;
+        return (
+            <ViewDeckPage
+                deckId={this.state.deckId}
+                isEditable={true}
+                onBack={onBack}
+                deckName=''
+            />
+        );
+    }
 }
