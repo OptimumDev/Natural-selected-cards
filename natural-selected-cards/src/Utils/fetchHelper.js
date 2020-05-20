@@ -28,15 +28,15 @@ const sendRequest = (url, method, body) => {
     if (body !== undefined)
         options.body = JSON.stringify(body);
 
-    return fetch(url, options)
-        .then(processResponse, logError);
+    return fetch(url, options).then(processResponse, logError);
 };
 
-const processResponse = response => {
+const processResponse = async response => {
     const handler = standardHandlers[response.status];
     if (handler)
         handler(response);
-    return response;
+    const body = await response.text();
+    return body ? JSON.parse(body) : response;
 };
 
 const logError = error => {

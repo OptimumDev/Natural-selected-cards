@@ -1,7 +1,9 @@
 import React from "react";
-import FlipCard from "../../FlipCard/FlipCard";
 import './GamePage.css'
+
+import FlipCard from "../../FlipCard/FlipCard";
 import CardCarousel from "../../CardCarousel/CardsCorusel";
+import Loading from "../../Loading/Loading";
 
 import * as server from "../../../Utils/server";
 
@@ -11,40 +13,44 @@ export default class GamePage extends React.Component {
 
         this.state = {
             cardIndex: 0,
-            cards: [],
-            flipped: [],
-            knewCurrentCard: false
+            knewCurrentCard: false,
+            isLoading: true
         };
     }
-    
-    async componentDidMount() {
-        const response = await server.getGameCards(this.props.deckId);
 
-        if (response.ok) {
-            const cards = await response.json();
-            this.setState({cards, flipped: this.createFlipped(cards)})
-        }
+    async componentDidMount() {
+        const cards = await server.getGameCards(this.props.deckId);
+
+        this.setState({
+            cards,
+            flipped: this.createFlipped(cards),
+            isLoading: false
+        })
     }
 
     render() {
-        const {cards, cardIndex} = this.state;
-        const {deckName} = this.props;
-        return (
-            <div className='page game-page'>
-                <div className='page-name'>
-                    {deckName}
+        const {cards, cardIndex, isLoading} = this.state;
+        const {deckName, onEnd} = this.props;
+        return isLoading
+            ? <Loading/>
+            : (
+                <div className='page game-page'>
+                    <div className='page-name'>
+                        {deckName}
+                    </div>
+                    <div className='page-content'>
+                        <CardCarousel
+                            cardIndex={cardIndex}
+                            lastButton={
+                                this.createButton('Вернуться', onEnd, 'main-color back-button')
+                            }
+                            buttons={this.getButtons()}
+                        >
+                            {cards.map(this.getCard)}
+                        </CardCarousel>
+                    </div>
                 </div>
-                <div className='page-content'>
-                    <CardCarousel
-                        cardIndex={cardIndex}
-                        lastButton={this.createButton('Вернуться', this.props.onEnd, 'main-color back-button')}
-                        buttons={this.getButtons()}
-                    >
-                        {cards.map(this.getCard)}
-                    </CardCarousel>
-                </div>
-            </div>
-        );
+            );
     }
 
     getCard = (card, index) => (

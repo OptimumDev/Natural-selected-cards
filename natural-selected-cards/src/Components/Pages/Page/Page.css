@@ -4,6 +4,8 @@
     flex-direction: column;
     overflow-y: auto;
     overflow-x: hidden;
+    justify-content: center;
+    align-items: center;
 }
 
 .page-name {

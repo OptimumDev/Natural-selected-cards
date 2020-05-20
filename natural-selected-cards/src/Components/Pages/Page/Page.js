@@ -27,7 +27,9 @@ export default class Page extends React.Component {
     render() {
         const {pageName} = this.props;
 
-        return this.pageGettersByName[pageName]() || <h1>Can't find page with name {pageName}</h1>
+        const pageGetter = this.pageGettersByName[pageName];
+
+        return pageGetter ? pageGetter() : <h1>Can't find page with name {pageName}</h1>;
     }
 
     getMainPage = () => {

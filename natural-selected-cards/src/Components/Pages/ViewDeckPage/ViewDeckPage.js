@@ -1,12 +1,16 @@
 import React from "react";
+import './ViewDeckPage.css'
+
 import DeckSubview from "../../DeckSubview/DeckSubview";
 import CardCarousel from "../../CardCarousel/CardsCorusel";
 import FlipCard from "../../FlipCard/FlipCard";
-import './ViewDeckPage.css'
-import crossIcon from "../../../images/Flat_cross_icon.svg";
 import IconButton from "../../IconButton/IconButton";
+import Loading from "../../Loading/Loading";
 
 import * as server from "../../../Utils/server"
+
+import crossIcon from "../../../images/Flat_cross_icon.svg";
+
 
 export default class ViewDeckPage extends React.Component {
 
@@ -15,48 +19,47 @@ export default class ViewDeckPage extends React.Component {
 
         this.state = {
             cardIndex: 0,
-            flipped: [],
-            cards: [],
-            deckName: this.props.deckName
+            deckName: this.props.deckName,
+            isLoading: true
         };
     }
 
     async componentDidMount() {
-        const response = await server.getDeck(this.props.deckId);
+        const cards = await server.getDeck(this.props.deckId);
 
-        if (response.ok) {
-            const cards = await response.json();
-            this.setState({
-                cards,
-                flipped: this.createFlipped(cards)
-            });
-        }
+        this.setState({
+            cards,
+            flipped: this.createFlipped(cards),
+            isLoading: false
+        });
     }
 
     render() {
-        const {cardIndex, cards} = this.state;
-        return (
-            <div className='page view-page'>
-                <div className='page-name'>
-                    {this.getHeading()}
-                </div>
-                <div className='page-content'>
-                    <div className='middle'>
-                        <CardCarousel cardIndex={cardIndex} buttons={this.getButtons()}>
-                            {cards.map(this.renderCard)}
-                        </CardCarousel>
-                        <button className='main-color shadow return-button' onClick={this.props.onBack}>
-                            &lt; Вернуться
-                        </button>
+        const {cardIndex, cards, isLoading} = this.state;
+        return isLoading
+            ? <Loading/>
+            : (
+                <div className='page view-page'>
+                    <div className='page-name'>
+                        {this.getHeading()}
                     </div>
-                    <DeckSubview
-                        cards={this.state.cards}
-                        chosenIndex={this.state.cardIndex}
-                        onCardChoice={this.setCardIndex}
-                    />
+                    <div className='page-content'>
+                        <div className='middle'>
+                            <CardCarousel cardIndex={cardIndex} buttons={this.getButtons()}>
+                                {cards.map(this.renderCard)}
+                            </CardCarousel>
+                            <button className='main-color shadow return-button' onClick={this.props.onBack}>
+                                &lt; Вернуться
+                            </button>
+                        </div>
+                        <DeckSubview
+                            cards={this.state.cards}
+                            chosenIndex={this.state.cardIndex}
+                            onCardChoice={this.setCardIndex}
+                        />
+                    </div>
                 </div>
-            </div>
-        );
+            );
     }
 
     getHeading = () => {
@@ -141,10 +144,7 @@ export default class ViewDeckPage extends React.Component {
     create = async () => {
         const {cards, flipped} = this.state;
 
-        const response = await server.createCard(this.props.deckId);
-        if (!response.ok)
-            return;
-        const id = await response.json();
+        const id = await server.createCard(this.props.deckId);
 
         this.setState({
             cards: cards.concat({id, question: '', answer: ''}),

@@ -16,12 +16,8 @@ export default class User extends React.Component {
     }
 
     async componentDidMount() {
-        const response = await server.getUserInfo();
-
-        if (response.ok) {
-            const user = await response.json();
-            this.setState({user});
-        }
+        const user = await server.getUserInfo();
+        this.setState({user});
     }
 
     render() {

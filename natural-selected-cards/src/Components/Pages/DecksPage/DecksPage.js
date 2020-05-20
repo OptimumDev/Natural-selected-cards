@@ -3,6 +3,7 @@ import './DeckPage.css'
 
 import Deck from "../../Deck/Deck";
 import ChooseDialog from "../../ChooseDialog/ChooseDialog";
+import Loading from "../../Loading/Loading";
 
 import * as server from "../../../Utils/server";
 
@@ -12,8 +13,8 @@ export default class Decks extends React.Component {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            decks: [],
-            showBlackout: false
+            showBlackout: false,
+            isLoading: true
         }
     }
 
@@ -21,24 +22,26 @@ export default class Decks extends React.Component {
         const getFunc = this.props.isUsers ? server.getUserDecks : server.getStandardDecks;
         const response = await getFunc();
 
-        if (response.ok) {
-            const decks = (await response.json())
-                .map(deck => ({
-                    id: deck.id,
-                    name: deck.title,
-                    cardsCount: deck.cardsCount,
-                    gamesCount: deck.playedCount,
-                    userRating: deck.rating,
-                    lastRepeatTime: new Date(deck.lastRepetition)
-                }));
-            this.setState({decks});
-        }
+        const decks = response.map(deck => ({
+            id: deck.id,
+            name: deck.title,
+            cardsCount: deck.cardsCount,
+            gamesCount: deck.playedCount,
+            userRating: deck.rating,
+            lastRepeatTime: new Date(deck.lastRepetition)
+        }));
+
+        this.setState({
+            decks,
+            isLoading: false
+        });
     }
 
     render() {
         const {isUsers} = this.props;
-        return (
-            <>
+        return this.state.isLoading
+            ? <Loading/>
+            : (
                 <div className='page'>
                     <div className='page-name'>
                         {isUsers ? 'Мои колоды' : 'Стандартные колоды'}
@@ -47,17 +50,16 @@ export default class Decks extends React.Component {
                         {this.state.decks.map(this.createDeck)}
                         {isUsers && <div className='create-button' onClick={this.toggleChooseDialog}>+</div>}
                     </div>
+                    <ChooseDialog isShown={this.state.showBlackout} onCancel={this.toggleChooseDialog}>
+                        <div className='main-color shadow deck-like' onClick={this.create}>
+                            Создать новую колоду
+                        </div>
+                        <div className='main-color shadow deck-like' onClick={this.chooseStandard}>
+                            Выбрать из стандартных
+                        </div>
+                    </ChooseDialog>
                 </div>
-                <ChooseDialog isShown={this.state.showBlackout} onCancel={this.toggleChooseDialog}>
-                    <div className='main-color shadow deck-like' onClick={this.create}>
-                        Создать новую колоду
-                    </div>
-                    <div className='main-color shadow deck-like' onClick={this.chooseStandard}>
-                        Выбрать из стандартных
-                    </div>
-                </ChooseDialog>
-            </>
-        );
+            );
     }
 
     toggleChooseDialog = () => this.setState({showBlackout: !this.state.showBlackout});
