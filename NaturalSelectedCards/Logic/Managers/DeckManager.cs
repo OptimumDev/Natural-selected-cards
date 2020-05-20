@@ -198,6 +198,7 @@ namespace NaturalSelectedCards.Logic.Managers
             var overallRating = 0.0;
             var playedCount = 0;
             var lastRepetition = DateTime.MinValue;
+            var cardsWithRepetitionsCount = 0;
 
             foreach (var card in cards.Where(card => card.Repetitions > 0))
             {
@@ -208,11 +209,12 @@ namespace NaturalSelectedCards.Logic.Managers
                     lastRepetition = card.LastRepeat;
 
                 overallRating += GetCardRating(card);
+                cardsWithRepetitionsCount++;
             }
 
             deck.CardsCount = cards.Count;
             deck.PlayedCount = playedCount;
-            deck.Rating = overallRating / cards.Count;
+            deck.Rating = overallRating / Math.Max(1, cardsWithRepetitionsCount);
             deck.LastRepetition = lastRepetition;
         }
     }

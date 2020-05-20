@@ -38,7 +38,7 @@ const getLastRepeatTime = date => {
         return 'Неделю назад';
 
     interval = Math.floor(seconds / 60 / 60 / 24);
-    if (interval > 5)
+    if (interval > 4)
         return `${interval} дней назад`;
     if (interval > 1)
         return `${interval} дня назад`;
