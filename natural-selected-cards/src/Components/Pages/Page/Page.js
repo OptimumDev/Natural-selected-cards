@@ -7,6 +7,7 @@ import GamePage from "../GamePage/GamePage";
 import CreatePage from "../CreatePage/CreatePage";
 import ViewDeckPage from "../ViewDeckPage/ViewDeckPage";
 import * as server from "../../../Utils/server"
+import ErrorPage from "../ErrorPage/ErrorPage";
 
 export default class Page extends React.Component {
 
@@ -21,6 +22,7 @@ export default class Page extends React.Component {
             [PageNames.CREATE]: this.getCreatePage,
             [PageNames.EDIT]: this.getEditPage,
             [PageNames.VIEW]: this.getViewPage,
+            [PageNames.ERROR]: this.getErrorPage,
         }
     }
 
@@ -29,73 +31,62 @@ export default class Page extends React.Component {
 
         const pageGetter = this.pageGettersByName[pageName];
 
-        return pageGetter ? pageGetter() : <h1>Can't find page with name {pageName}</h1>;
+        return pageGetter ? pageGetter() : <h1>Can't find page with name {pageName}</h1>
     }
 
-    getMainPage = () => {
-        const {authorize, isDarkTheme} = this.props;
-        return (
-            <MainPage onLogin={authorize} isDarkTheme={isDarkTheme}/>
-        );
-    };
+    getMainPage = () => (
+        <MainPage onLogin={this.props.authorize} isDarkTheme={this.props.isDarkTheme}/>
+    );
 
-    getMyDecksPage = () => {
-        return (
-            <DecksPage
-                isUsers={true}
-                onPlay={this.play}
-                onView={this.edit}
-                onCreate={this.create}
-                onChooseStandard={this.showStandardDecks}
-                key={PageNames.MY_DECKS}
-            />
-        );
-    };
+    getMyDecksPage = () => (
+        <DecksPage
+            isUsers={true}
+            onPlay={this.play}
+            onView={this.edit}
+            onCreate={this.create}
+            onChooseStandard={this.showStandardDecks}
+            key={PageNames.MY_DECKS}
+        />
+    );
 
-    getStandardDecksPage = () => {
-        return (
-            <DecksPage
-                isUsers={false}
-                onView={this.view}
-                onAdd={this.add}
-                key={PageNames.STANDARD_DECKS}
-            />
-        );
-    };
+    getStandardDecksPage = () => (
+        <DecksPage
+            isUsers={false}
+            onView={this.view}
+            onAdd={this.add}
+            key={PageNames.STANDARD_DECKS}
+        />
+    );
 
-    getGamePage = () => {
-        return (
-            <GamePage deckId={this.deckId} onEnd={this.showMyDecks} deckName={this.deckName}/>
-        );
-    };
+    getGamePage = () => (
+        <GamePage deckId={this.deckId} onEnd={this.showMyDecks} deckName={this.deckName}/>
+    );
 
-    getCreatePage = () => {
-        return (
-            <CreatePage onBack={this.showMyDecks}/>
-        );
-    };
+    getCreatePage = () => (
+        <CreatePage onBack={this.showMyDecks}/>
+    );
 
-    getEditPage = () => {
-        return (
-            <ViewDeckPage
-                deckId={this.deckId}
-                isEditable={true}
-                onBack={this.showMyDecks}
-                deckName={this.deckName}
-            />
-        );
-    };
+    getEditPage = () => (
+        <ViewDeckPage
+            deckId={this.deckId}
+            isEditable={true}
+            onBack={this.showMyDecks}
+            deckName={this.deckName}
+        />
+    );
 
-    getViewPage = () => {
-        return (
-            <ViewDeckPage
-                deckId={this.deckId}
-                isEditable={false}
-                onBack={this.showStandardDecks}
-                deckName={this.deckName}
-            />
-        );
-    };
+    getViewPage = () => (
+        <ViewDeckPage
+            deckId={this.deckId}
+            isEditable={false}
+            onBack={this.showStandardDecks}
+            deckName={this.deckName}
+        />
+    );
+
+    getErrorPage = () => (
+        <ErrorPage/>
+    );
 
     play = (deckId, deckName) => {
         this.deckId = deckId;

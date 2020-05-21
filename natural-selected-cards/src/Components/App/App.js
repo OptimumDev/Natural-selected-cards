@@ -4,7 +4,7 @@ import './App.css';
 import AppHeader from "../AppHeader/AppHeader";
 import Page from "../Pages/Page/Page";
 
-import {setStandardHandler} from "../../Utils/fetchHelper";
+import {setErrorHandler, setStandardHandler} from "../../Utils/fetchHelper";
 import * as localStorageHelper from "../../Utils/localStorageHelper";
 import * as PageNames from "../../Constants/PageNames";
 import * as LocalStorageKeys from "../../Constants/LocalStorageKeys";
@@ -15,16 +15,18 @@ export default class App extends React.PureComponent {
         this.state = {
             pageName: PageNames.MY_DECKS,
             isAuthorized: true,
-            isDarkTheme: localStorageHelper.getOrDefault(LocalStorageKeys.IS_DARK_THEME_KEY, false)
+            isDarkTheme: localStorageHelper.getOrDefault(LocalStorageKeys.IS_DARK_THEME_KEY, false),
+            isError: false
         };
     }
 
     componentDidMount() {
         setStandardHandler(401, this.logOut);
+        setErrorHandler(this.handleError)
     }
 
     render() {
-        const {pageName, isDarkTheme, isAuthorized} = this.state;
+        const {isDarkTheme, isAuthorized} = this.state;
         return (
             <div className={`app ${isDarkTheme ? 'dark' : 'light'}`}>
                 <AppHeader
@@ -35,7 +37,7 @@ export default class App extends React.PureComponent {
                     toggleDarkTheme={this.toggleDarkTheme}
                 />
                 <Page
-                    pageName={isAuthorized ? pageName : PageNames.MAIN}
+                    pageName={this.getPageName()}
                     setPageName={this.setPageName}
                     authorize={this.authorize}
                     isDarkTheme={isDarkTheme}
@@ -43,6 +45,15 @@ export default class App extends React.PureComponent {
             </div>
         );
     }
+
+    getPageName = () => {
+        const {pageName, isAuthorized, isError} = this.state;
+        if (isError)
+            return PageNames.ERROR;
+        if (!isAuthorized)
+            return PageNames.MAIN;
+        return pageName;
+    };
 
     setPageName = pageName => this.setState({pageName});
 
@@ -56,4 +67,6 @@ export default class App extends React.PureComponent {
     logOut = () => this.setState({isAuthorized: false});
 
     authorize = () => this.setState({isAuthorized: true});
+
+    handleError = () => this.setState({isError: true});
 }

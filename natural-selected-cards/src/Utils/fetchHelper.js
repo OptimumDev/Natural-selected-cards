@@ -8,8 +8,11 @@ const standardOptions = {
 };
 
 const standardHandlers = {};
+let errorHandler = () => {};
 
 export const setStandardHandler = (code, handler) => standardHandlers[code] = handler;
+
+export const setErrorHandler = handler => errorHandler = handler;
 
 export const httpGet = url => sendRequest(url, 'GET');
 
@@ -19,7 +22,7 @@ export const httpPost = (url, body) => sendRequest(url, 'POST', body);
 
 export const httpPut = (url, body) => sendRequest(url, 'PUT', body);
 
-const sendRequest = (url, method, body) => {
+const sendRequest = async (url, method, body) => {
     const options = {
         ...standardOptions,
         method
@@ -28,7 +31,12 @@ const sendRequest = (url, method, body) => {
     if (body !== undefined)
         options.body = JSON.stringify(body);
 
-    return fetch(url, options).then(processResponse, logError);
+    try {
+        return await fetch(url, options).then(processResponse);
+    } catch (e) {
+        console.log(e);
+        errorHandler(e);
+    }
 };
 
 const processResponse = async response => {
@@ -37,8 +45,4 @@ const processResponse = async response => {
         handler(response);
     const body = await response.text();
     return body ? JSON.parse(body) : response;
-};
-
-const logError = error => {
-    console.log(error)
 };

@@ -22,7 +22,7 @@ export default class Decks extends React.Component {
         const getFunc = this.props.isUsers ? server.getUserDecks : server.getStandardDecks;
         const response = await getFunc();
 
-        const decks = response.map(deck => ({
+        const decks = response?.map(deck => ({
             id: deck.id,
             name: deck.title,
             cardsCount: deck.cardsCount,

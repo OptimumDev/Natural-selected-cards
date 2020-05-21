@@ -5,3 +5,4 @@ export const GAME = 'GAME';
 export const CREATE = 'CREATE';
 export const EDIT = 'EDIT';
 export const VIEW = 'VIEW';
+export const ERROR = 'ERROR';
