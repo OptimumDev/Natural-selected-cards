@@ -9,7 +9,7 @@ export default function ConfirmDialog({onAccept, onCancel, children}) {
                     {children}
                 </div>
                 <footer className='confirm-dialog-footer'>
-                    <button className='shadow main-color' onClick={onCancel}>
+                    <button className='shadow main-color-light' onClick={onCancel}>
                         Отмена
                     </button>
                     <button className='shadow red' onClick={onAccept}>

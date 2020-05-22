@@ -12,32 +12,37 @@
 }
 
 .confirm-dialog {
-    min-height: 20vw;
-    width: 50vw;
+    min-height: 15vw;
+    width: 40vw;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     padding: 20px;
     box-sizing: border-box;
     background-color: #eeeeee;
+    border-radius: 5px;
+}
+
+.dark .confirm-dialog {
+    background-color: #303030;
 }
 
 .confirm-message {
-    font-size: 4vw;
-    font-weight: 200;
+    font-size: 3vw;
+    font-weight: 300;
     flex-grow: 1;
 }
 
 .confirm-dialog-footer {
     display: flex;
     justify-content: flex-end;
-    margin-top: 5vw;
+    margin-top: 4vw;
 }
 
 .confirm-dialog-footer button {
-    width: 10vw;
-    height: 4vw;
+    width: 9vw;
+    height: 3.5vw;
     margin-left: 2vw;
-    font-size: 2vw;
+    font-size: 1.75vw;
     font-weight: 300;
 }
