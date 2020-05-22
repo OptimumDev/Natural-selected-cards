@@ -11,14 +11,6 @@
     justify-content: center;
 }
 
-.card-side input {
-    width: 95%;
-    text-align: center;
-    font-size: 4vw;
-    font-weight: 200;
-    border: #006778 solid 1px;
-}
-
 .dark .card-side input,
 .dark .deck-heading {
     background-color: black;

@@ -3,13 +3,11 @@ import './ViewDeckPage.css'
 
 import DeckSubview from "../../DeckSubview/DeckSubview";
 import CardCarousel from "../../CardCarousel/CardsCorusel";
-import FlipCard from "../../FlipCard/FlipCard";
-import IconButton from "../../IconButton/IconButton";
+import Card from "../../Card/Card";
 import Loading from "../../Loading/Loading";
+import ConfirmDialog from "../../ConfirmDialog/ConfirmDialog";
 
 import * as server from "../../../Utils/server"
-
-import crossIcon from "../../../images/Flat_cross_icon.svg";
 
 
 export default class ViewDeckPage extends React.Component {
@@ -20,7 +18,8 @@ export default class ViewDeckPage extends React.Component {
         this.state = {
             cardIndex: 0,
             deckName: this.props.deckName,
-            isLoading: true
+            isLoading: true,
+            isDeleteDialogShown: false
         };
     }
 
@@ -35,7 +34,7 @@ export default class ViewDeckPage extends React.Component {
     }
 
     render() {
-        const {cardIndex, cards, isLoading} = this.state;
+        const {cardIndex, cards, isLoading, isDeleteDialogShown} = this.state;
         return isLoading
             ? <Loading/>
             : (
@@ -53,11 +52,20 @@ export default class ViewDeckPage extends React.Component {
                             </button>
                         </div>
                         <DeckSubview
-                            cards={this.state.cards}
-                            chosenIndex={this.state.cardIndex}
+                            cards={cards}
+                            chosenIndex={cardIndex}
                             onCardChoice={this.setCardIndex}
                         />
                     </div>
+                    {
+                        isDeleteDialogShown &&
+                        <ConfirmDialog
+                            onCancel={this.toggleDeleteDialog}
+                            onAccept={this.deleteCard}
+                        >
+                            Удалить карточку "{cards[cardIndex].question}"?
+                        </ConfirmDialog>
+                    }
                 </div>
             );
     }
@@ -91,41 +99,20 @@ export default class ViewDeckPage extends React.Component {
         return buttons;
     };
 
-    renderCard = (card, i) => (
-        <FlipCard key={card.id} flipped={this.state.flipped[i]}>
-            {this.getCardSide(card.question, e => this.editCard({...card, question: e.target.value}))}
-            {this.getCardSide(card.answer, e => this.editCard({...card, answer: e.target.value}))}
-        </FlipCard>
-    );
+    renderCard = (card, i) => {
+        const {flipped, cards} = this.state;
+        const isOnly = cards.length === 1;
 
-    getCardSide = (label, onBlur) => {
-        const ref = React.createRef();
         return (
-            <div className='card-side'>
-                {
-                    this.props.isEditable
-                        ? <>
-                            <input
-                                type='text'
-                                defaultValue={label}
-                                onBlur={onBlur}
-                                ref={ref}
-                                onKeyPress={this.enterHandler(ref)}
-                            />
-                            {
-                                this.state.cards.length > 1 &&
-                                <IconButton
-                                    className='delete-button'
-                                    onClick={this.delete}
-                                    icon={crossIcon}
-                                    alt='X'
-                                    size='2.5vw'
-                                />
-                            }
-                        </>
-                        : label
-                }
-            </div>
+            <Card
+                key={card.id}
+                card={card}
+                isFlipped={flipped[i]}
+                isEditable={this.props.isEditable}
+                isOnly={isOnly}
+                onEdit={this.editCard}
+                onDelete={this.toggleDeleteDialog}
+            />
         );
     };
 
@@ -153,11 +140,12 @@ export default class ViewDeckPage extends React.Component {
         });
     };
 
-    delete = async () => {
+    deleteCard = async () => {
         const {cards, cardIndex} = this.state;
         this.setState({
             cards: cards.filter((c, i) => i !== cardIndex),
-            cardIndex: cardIndex === cards.length - 1 ? cardIndex - 1 : cardIndex
+            cardIndex: cardIndex === cards.length - 1 ? cardIndex - 1 : cardIndex,
+            isDeleteDialogShown: false
         });
         await server.deleteCard(cards[cardIndex].id);
     };
@@ -176,10 +164,14 @@ export default class ViewDeckPage extends React.Component {
         await server.updateCard(card.id, card.question, card.answer)
     };
 
+    createFlipped = cards => cards.map(_ => false);
+
     enterHandler = ref => e => {
         if (e.key === "Enter")
             ref.current.blur();
     };
 
-    createFlipped = cards => cards.map(_ => false);
+    toggleDeleteDialog = () => this.setState({
+        isDeleteDialogShown: !this.state.isDeleteDialogShown
+    });
 }
