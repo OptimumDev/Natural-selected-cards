@@ -21,9 +21,13 @@
     font-size: 4.5vw;
     font-weight: 200;
     overflow-x: hidden;
-    word-break: normal;
+    padding: 0 5px;
+    box-sizing: border-box;
+
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
     hyphens: auto;
-    margin: 0 5px;
 }
 
 .deck-info .deck-name {

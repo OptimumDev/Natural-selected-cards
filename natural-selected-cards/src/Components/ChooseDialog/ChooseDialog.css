@@ -8,6 +8,7 @@
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.25);
+    z-index: 110;
 }
 
 .blackout.shown {
@@ -33,7 +34,9 @@
     left: 0;
     bottom: -100vh;
     transition: bottom var(--duration);
-
+    overflow-y: auto;
+    z-index: 120;
+    box-sizing: border-box;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -48,7 +51,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 3vw;
+    margin: 3vw 0;
+    flex-shrink: 0;
 }
 
 .cancel-button {
@@ -56,6 +60,8 @@
     height: 4vw;
     font-size: 1.5vw;
     font-weight: 200;
+    flex-shrink: 0;
+    margin-bottom: 10px;
 }
 
 .choices *:hover {
