@@ -41,8 +41,14 @@ const sendRequest = async (url, method, body) => {
 
 const processResponse = async response => {
     const handler = standardHandlers[response.status];
-    if (handler)
+
+    if (handler) {
         handler(response);
+    } else if (!response.ok) {
+        errorHandler(response);
+        return;
+    }
+
     const body = await response.text();
     return body ? JSON.parse(body) : response;
 };

@@ -55,7 +55,10 @@ export default class App extends React.PureComponent {
         return pageName;
     };
 
-    setPageName = pageName => this.setState({pageName});
+    setPageName = pageName => this.setState({
+        pageName,
+        isError: false
+    });
 
     toggleDarkTheme = () => {
         const isDarkTheme = !this.state.isDarkTheme;
