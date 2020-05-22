@@ -1,0 +1,82 @@
+.app {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    font-family: Roboto, sans-serif;
+    cursor: default;
+    position: relative;
+    transition: background-color 0.5s, color 0.5s;
+}
+
+.light a {
+    color: #006778;
+}
+
+.dark a {
+    color: #66E2FF;
+}
+
+.shadow {
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+.light {
+    background-color: #eeeeee;
+}
+
+.dark {
+    background-color: #121212;
+    color: white;
+}
+
+.dark .main-color {
+    background-color: #303030;
+    color: #66E2FF;
+}
+
+.dark .main-color-light {
+    background-color: #444444;
+    color: #9FFFFF;
+}
+
+.dark .main-color-dark {
+    background-color: #006778;
+}
+
+.dark .red {
+    background-color: #b42122;
+}
+
+.dark .yellow {
+    background-color: #a59900;
+}
+
+.dark .green {
+    background-color: #279b35;
+}
+
+.light .main-color {
+    background-color: #66E2FF;
+}
+
+.light .main-color-light {
+    background-color: #9FFFFF;
+}
+
+.light .main-color-dark {
+    background-color: #006778;
+}
+
+.light .red {
+    background-color: #FF6966;
+}
+
+.light .yellow {
+    background-color: #FFDF4D;
+}
+
+.light .green {
+    background-color: #5DE388;
+}

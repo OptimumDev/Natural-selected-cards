@@ -1,0 +1,10 @@
+input {
+    font-family: Roboto, sans-serif;
+    border: #006778 solid 1px;
+}
+
+.dark input {
+    background-color: black;
+    color: white;
+    border-color: #66E2FF;
+}

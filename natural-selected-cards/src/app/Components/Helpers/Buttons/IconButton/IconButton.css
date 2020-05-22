@@ -1,0 +1,15 @@
+.icon-button {
+    background-color: transparent;
+    padding: 0;
+    line-height: 0;
+    box-shadow: none;
+}
+
+.icon-button:active {
+    box-shadow: none;
+    transform: none;
+}
+
+.icon-button:hover {
+    transform: scale(1.1);
+}
