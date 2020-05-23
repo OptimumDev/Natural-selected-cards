@@ -42,7 +42,7 @@ namespace NaturalSelectedCards.Controllers
             try
             {
                 var userId = this.GetUserId();
-                if (!await deckRepository.IsUsersDeckAsync(deckId, userId).ConfigureAwait(false))
+                if (!await deckRepository.IsUsersOrStandardDeckAsync(deckId, userId).ConfigureAwait(false))
                     return Forbid();
                 
                 var deck = await manager.GetAllCardsFromDeckAsync(deckId).ConfigureAwait(false);
@@ -215,7 +215,7 @@ namespace NaturalSelectedCards.Controllers
             try
             {
                 var userId = this.GetUserId();
-                if (!await deckRepository.IsUsersOrStandardDeckAsync(deckId, userId).ConfigureAwait(false))
+                if (!await deckRepository.IsUsersDeckAsync(deckId, userId).ConfigureAwait(false))
                     return Forbid();
                 
                 var gameDeck = await manager.GetCardsForGameAsync(deckId).ConfigureAwait(false);
