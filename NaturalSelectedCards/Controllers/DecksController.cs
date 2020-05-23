@@ -151,7 +151,7 @@ namespace NaturalSelectedCards.Controllers
             
                 if (decks == null)
                     return NotFound();
-                return Ok(decks);
+                return Ok(decks.Select(DeckResponse.FromDeck));
             }
             catch (Exception e)
             {
@@ -172,7 +172,7 @@ namespace NaturalSelectedCards.Controllers
 
                 if (standardDecks == null)
                     return StatusCode(500);
-                return Ok(standardDecks);
+                return Ok(standardDecks.Select(DeckResponse.FromDeck));
             }
             catch (Exception e)
             {
@@ -215,7 +215,7 @@ namespace NaturalSelectedCards.Controllers
             try
             {
                 var userId = this.GetUserId();
-                if (!await deckRepository.IsUsersDeckAsync(deckId, userId).ConfigureAwait(false))
+                if (!await deckRepository.IsUsersOrStandardDeckAsync(deckId, userId).ConfigureAwait(false))
                     return Forbid();
                 
                 var gameDeck = await manager.GetCardsForGameAsync(deckId).ConfigureAwait(false);
