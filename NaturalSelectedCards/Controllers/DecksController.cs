@@ -49,7 +49,7 @@ namespace NaturalSelectedCards.Controllers
                 if (deck == null)
                     return NotFound();
 
-                return Ok(deck);
+                return Ok(deck.Select(CardResponse.FromCard));
             }
             catch (Exception e)
             {
@@ -222,7 +222,7 @@ namespace NaturalSelectedCards.Controllers
 
                 if (gameDeck == null)
                     return NotFound();
-                return Ok(gameDeck);
+                return Ok(gameDeck.Select(CardResponse.FromCard));
             }
             catch (Exception e)
             {
