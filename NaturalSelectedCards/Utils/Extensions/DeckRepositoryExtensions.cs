@@ -12,5 +12,12 @@ namespace NaturalSelectedCards.Utils.Extensions
 
             return deck != null && deck.UserId == userId;
         }
+        
+        public static async Task<bool> IsUsersOrStandardDeckAsync(this IDeckRepository repository, Guid deckId, Guid userId)
+        {
+            var deck = await repository.FindByIdAsync(deckId).ConfigureAwait(false);
+
+            return deck != null && (deck.UserId == userId || deck.UserId == Guid.Empty);
+        }
     }
 }
