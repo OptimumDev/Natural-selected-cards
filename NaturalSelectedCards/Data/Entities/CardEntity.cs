@@ -20,16 +20,21 @@ namespace NaturalSelectedCards.Data.Entities
         }
 
         [BsonConstructor]
-        public CardEntity(Guid id, Guid deckId, string question, string answer,
-            int repetitions = 0, int correctAnswers = 0, DateTime lastRepeat = default)
+        public CardEntity(Guid id, Guid deckId, string question, string answer, int repetitions,
+            int correctAnswers, DateTime lastRepeat) : this(id, deckId, question, answer)
+        {
+            Repetitions = repetitions;
+            CorrectAnswers = correctAnswers;
+            LastRepeat = lastRepeat;
+        }
+
+        [BsonConstructor]
+        public CardEntity(Guid id, Guid deckId, string question, string answer)
         {
             Id = id;
             DeckId = deckId;
             Question = question;
             Answer = answer;
-            Repetitions = repetitions;
-            CorrectAnswers = correctAnswers;
-            LastRepeat = lastRepeat;
         }
     }
 }
