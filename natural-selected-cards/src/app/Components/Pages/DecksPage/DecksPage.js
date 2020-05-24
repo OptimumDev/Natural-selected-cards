@@ -56,11 +56,11 @@ export default class Decks extends React.Component {
     toggleChooseDialog = () => this.setState({showBlackout: !this.state.showBlackout});
 
     getDeck = deck => {
-        const {isUsers, onView, onPlay, onAdd} = this.props;
+        const {isUsers, onView, onPlay} = this.props;
 
         const playDeck = () => onPlay(deck.id, deck.name);
         const viewDeck = () => onView(deck.id, deck.name);
-        const addDeck = () => onAdd(deck.id);
+        const addDeck = () => this.addDeck(deck.id);
         const deleteDeck = () => this.deleteDeck(deck.id);
 
         const sameProps = {
@@ -84,6 +84,12 @@ export default class Decks extends React.Component {
         this.toggleChooseDialog();
         this.props.onCreate();
     };
+
+    addDeck = async deckId => {
+        this.setState({isLoading: true})
+        await server.copyDeck(deckId);
+        this.props.onAdd();
+    }
 
     chooseStandard = () => {
         this.toggleChooseDialog();
