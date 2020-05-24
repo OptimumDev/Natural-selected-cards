@@ -1,13 +1,13 @@
 import React from "react";
 import './DeckStatistics.css';
 
-export default function DeckStatistics({cardsCount, gamesCount, userRating, lastRepeatTime}) {
+export default function DeckStatistics({isUsers, cardsCount, gamesCount, userRating, lastRepeatTime}) {
     const playedBefore = isOk(gamesCount) && gamesCount > 0;
     return (
         <div className='deck-statistics'>
             <div>Колличество карт: {cardsCount}</div>
             {
-                isOk(gamesCount) &&
+                isOk(gamesCount) && isUsers &&
                 <div>Колличество игр: {gamesCount}</div>
             }
             {

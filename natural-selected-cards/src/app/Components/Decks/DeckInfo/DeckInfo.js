@@ -12,6 +12,7 @@ export default function DeckInfo({deck, isUsers, onView, onPlay, onAdd, onDelete
                 {deck.name}
             </div>
             <DeckStatistics
+                isUsers={isUsers}
                 cardsCount={deck.cardsCount}
                 gamesCount={deck.gamesCount}
                 userRating={deck.userRating}

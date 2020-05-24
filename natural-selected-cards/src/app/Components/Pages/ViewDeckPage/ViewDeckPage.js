@@ -36,6 +36,8 @@ export default class ViewDeckPage extends React.Component {
 
     render() {
         const {cardIndex, cards, isLoading, isDeleteDialogShown} = this.state;
+        const {isEditable} = this.props;
+
         return isLoading
             ? <Loading/>
             : (
@@ -48,8 +50,8 @@ export default class ViewDeckPage extends React.Component {
                             <CardCarousel cardIndex={cardIndex} buttons={this.getButtons()}>
                                 {cards.map(this.renderCard)}
                             </CardCarousel>
-                            <Button className='main-color return-button' onClick={this.props.onBack}>
-                                &lt; Вернуться
+                            <Button className='main-color return-button' onClick={this.goBack}>
+                                {isEditable ? 'Сохранить' : '< Вернуться'}
                             </Button>
                         </div>
                         <DeckSubview
@@ -160,4 +162,15 @@ export default class ViewDeckPage extends React.Component {
     toggleDeleteDialog = () => this.setState({
         isDeleteDialogShown: !this.state.isDeleteDialogShown
     });
+
+    goBack = async () => {
+        const {isEditable, onBack} = this.props;
+
+        if (isEditable) {
+            this.setState({isLoading: true})
+            await this.editDeckHeading(this.state.deckName);
+        }
+
+        onBack();
+    }
 }

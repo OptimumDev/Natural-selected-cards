@@ -19,16 +19,7 @@ export default class Decks extends React.Component {
 
     async componentDidMount() {
         const getFunc = this.props.isUsers ? server.getUserDecks : server.getStandardDecks;
-        const response = await getFunc();
-
-        const decks = response?.map(deck => ({
-            id: deck.id,
-            name: deck.title,
-            cardsCount: deck.cardsCount,
-            gamesCount: deck.playedCount,
-            userRating: deck.rating,
-            lastRepeatTime: new Date(deck.lastRepetition)
-        }));
+        const decks = await getFunc();
 
         this.setState({
             decks,
