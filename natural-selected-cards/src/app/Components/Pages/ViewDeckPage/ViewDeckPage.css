@@ -1,0 +1,29 @@
+.view-page .page-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.middle {
+    position: relative;
+    flex: 1 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.deck-heading {
+    width: 30vw;
+    font-size: inherit;
+    font-weight: inherit;
+    text-align: center;
+}
+
+.return-button {
+    position: absolute;
+    bottom: 2vw;
+    left: 2vw;
+    width: 15vw;
+    height: 3vw;
+    font-size: 2vw;
+    font-weight: 200;
+}

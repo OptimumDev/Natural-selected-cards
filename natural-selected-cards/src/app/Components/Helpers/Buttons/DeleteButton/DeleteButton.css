@@ -1,0 +1,7 @@
+.delete-button {
+    position: absolute;
+    top: -1vw;
+    right: -1vw;
+    border-radius: 50%;
+    box-sizing: border-box;
+}

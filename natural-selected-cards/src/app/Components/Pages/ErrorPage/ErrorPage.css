@@ -1,0 +1,12 @@
+.error-page .page-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.error-message {
+    text-align: center;
+    font-size: 4vw;
+    font-weight: 200;
+    margin-top: -6vw;
+}
