@@ -32,16 +32,15 @@ namespace NaturalSelectedCards.Data.Repositories
 
         public async Task<UserEntity> InsertAsync(UserEntity user)
         {
-            if (user.Id == Guid.Empty)
-                user = new UserEntity(Guid.NewGuid(), user.GoogleId);
-
-            await _userCollection.ReplaceOneAsync(
+            return await _userCollection.FindOneAndUpdateAsync<UserEntity>(
                 u => u.GoogleId == user.GoogleId,
-                user,
-                new ReplaceOptions {IsUpsert = true}
-            );
-
-            return user;
+                Builders<UserEntity>.Update
+                    .SetOnInsert(u => u.Id, Guid.NewGuid()),
+                new FindOneAndUpdateOptions<UserEntity, UserEntity>
+                {
+                    IsUpsert = true,
+                    ReturnDocument = ReturnDocument.After
+                });
         }
 
         public async Task<UserEntity> UpdateAsync(UserEntity user)

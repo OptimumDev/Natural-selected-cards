@@ -87,6 +87,7 @@ namespace NaturalSelectedCards
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "NSCards Api");
             });
 
+            app.UseHttpsRedirection();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseRouting();
